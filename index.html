@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="华泰证券研究所中国宏观脉搏研究终端。" />
     <title>中国宏观脉搏 | 华泰证券研究所</title>
+    <script>
+      (function () {
+        var theme = localStorage.getItem("ht-macro-theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
