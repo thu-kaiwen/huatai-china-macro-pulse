@@ -569,7 +569,7 @@ Expected: `file` reports a PNG image. Define light and dark tokens for `--bg`, `
 
 - [ ] **Step 4: Implement accessible brand and navigation components**
 
-Navigation anchors are `overview`, `monthly`, `weekly`, `markets`, `industry`, `policy`, `outlook`, and `sources`. `BrandLockup` displays the local SVG, “华泰证券”, “HUATAI SECURITIES”, and product name. `TickerTape` uses the latest verified observation for GDP, exports, CPI, PPI, social financing, Brent, RMB/USD, and second-hand housing.
+Navigation anchors are `overview`, `monthly`, `weekly`, `markets`, `industry`, `policy`, `outlook`, and `sources`. `BrandLockup` displays the local PNG, “华泰证券”, “HUATAI SECURITIES”, and product name. `TickerTape` uses the latest verified observation for GDP, exports, CPI, PPI, social financing, Brent, RMB/USD, and second-hand housing.
 
 - [ ] **Step 5: Implement theme initialization without flash**
 
