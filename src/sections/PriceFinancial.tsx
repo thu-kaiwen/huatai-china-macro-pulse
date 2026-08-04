@@ -70,6 +70,7 @@ const comparisonLabels: Record<ComparisonType, string> = {
 const sourcePrecisionByObservationId: Readonly<Record<string, number>> = {
   "weekly-csi-300-change": 2,
   "weekly-one-year-government-yield-change": 2,
+  "weekly-rebar-price-change": 1,
   "weekly-ten-year-government-yield-change": 2,
   "weekly-rmb-usd-change": 2,
   "weekly-rmb-basket-change": 2,

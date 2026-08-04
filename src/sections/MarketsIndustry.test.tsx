@@ -18,6 +18,7 @@ describe("market conditions and industry matrix", () => {
     expect(screen.getByText("+1.03")).toBeInTheDocument();
     expect(screen.getByText("-1.54")).toBeInTheDocument();
     expect(screen.getByText("+0.25")).toBeInTheDocument();
+    expect(screen.getByText("-2.0")).toBeInTheDocument();
   });
 
   it("renders a semantic industry matrix table with labeled axes and pressure-row industries", () => {
