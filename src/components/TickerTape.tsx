@@ -12,7 +12,7 @@ const tickerMetrics = [
   { metricId: "ppi-yoy", label: "PPI" },
   { metricId: "new-social-financing", label: "社融" },
   { metricId: "brent-usd", label: "Brent" },
-  { metricId: "rmb-usd-change", label: "人民币/美元" },
+  { metricId: "rmb-usd-change", label: "人民币对美元周变动" },
   { metricId: "second-home-area-yoy", label: "二手房" },
 ] as const;
 
