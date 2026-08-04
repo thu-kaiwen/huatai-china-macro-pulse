@@ -5,7 +5,9 @@ import { ViewFilter } from "../components/ViewFilter";
 import { macroDataset } from "../data/dataset";
 import type { ViewMode } from "../domain/types";
 import { MacroOverview } from "../sections/MacroOverview";
+import { IndustryMatrix } from "../sections/IndustryMatrix";
 import { MonthlyFundamentals } from "../sections/MonthlyFundamentals";
+import { PriceFinancial } from "../sections/PriceFinancial";
 import { WeeklyPulse } from "../sections/WeeklyPulse";
 
 export function App() {
@@ -23,6 +25,8 @@ export function App() {
         <MacroOverview dataset={macroDataset} view={view} />
         <MonthlyFundamentals dataset={macroDataset} view={view} />
         <WeeklyPulse dataset={macroDataset} view={view} />
+        <PriceFinancial dataset={macroDataset} view={view} />
+        <IndustryMatrix dataset={macroDataset} view={view} />
       </main>
     </>
   );

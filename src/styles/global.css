@@ -68,3 +68,52 @@ nav a:hover, nav a:focus-visible, nav a[aria-current="page"] { background: var(-
   .brand-copy { display: none; }
   .ticker-items { padding: 0 0.75rem; }
 }
+
+.fundamentals-section, .price-financial-section, .industry-matrix-section { margin-top: 4.5rem; }
+.fundamentals-heading p { margin: 0 0 0.4rem; color: var(--ht-red); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; }
+.fundamentals-heading h2 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.25rem); letter-spacing: -0.03em; }
+.metric-group, .market-group { margin-top: 1.5rem; }
+.metric-group > h3, .market-group > h4 { margin: 0 0 0.75rem; font-size: 0.95rem; }
+.metric-card-grid, .market-reading-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.75rem; }
+.metric-card, .market-reading, .industry-matrix-cell { border: 1px solid var(--line); border-radius: 0.4rem; background: var(--panel); }
+.metric-card { padding: 1rem; }
+.metric-card-header, .market-reading > div { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+.metric-card h4, .market-reading h4, .industry-matrix-cell h3 { margin: 0; font-size: 0.9rem; }
+.metric-card-header span, .market-reading > div span, .market-reading > p:last-of-type { color: var(--ink-muted); font-size: 0.72rem; }
+.metric-value, .market-reading-value { display: flex; align-items: baseline; gap: 0.3rem; margin: 0.7rem 0 0.25rem; }
+.metric-value strong, .market-reading-value strong { font-size: 1.35rem; letter-spacing: -0.02em; }
+.metric-value > span, .market-reading-value > span { color: var(--ink-muted); font-size: 0.76rem; }
+.metric-disclosure-toggle, .market-reading summary, .industry-matrix-cell button { color: var(--ht-red); cursor: pointer; font-size: 0.78rem; }
+.metric-disclosure-toggle, .industry-matrix-cell button { margin-top: 0.85rem; padding: 0; border: 0; background: transparent; }
+.metric-disclosure { margin-top: 0.75rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-size: 0.78rem; line-height: 1.55; }
+.delta-bars { display: grid; gap: 0.35rem; margin-top: 0.75rem; }
+.delta-bar-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem; align-items: center; font-size: 0.72rem; }
+.delta-bar-track { height: 0.35rem; overflow: hidden; border-radius: 999px; background: var(--panel-muted); }
+.delta-bar { display: block; height: 100%; border-radius: inherit; }
+.delta-bar-positive { background: var(--up); }
+.delta-bar-negative { background: var(--down); }
+.market-method-note, .industry-matrix-note { max-width: 52rem; margin: 0.85rem 0 1.5rem; color: var(--ink-muted); font-size: 0.86rem; line-height: 1.6; }
+.market-period + .market-period { margin-top: 2rem; }
+.market-period-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid var(--line); }
+.market-period-heading h3 { margin: 0; font-size: 1.05rem; }
+.market-period-heading p { margin: 0; color: var(--ink-muted); font-size: 0.76rem; }
+.market-group-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.25rem; }
+.market-reading { padding: 0.85rem; }
+.market-reading details { margin-top: 0.65rem; color: var(--ink-muted); font-size: 0.76rem; line-height: 1.5; }
+.market-reading details p { margin: 0.5rem 0 0; }
+.industry-matrix-grid { position: relative; padding: 2rem 0 0 2rem; }
+.industry-axis { position: absolute; color: var(--ink-muted); font-size: 0.75rem; }
+.industry-axis-x { inset: 0 0 auto 2rem; text-align: center; }
+.industry-axis-y { top: 50%; left: 0; width: 7rem; transform: translate(-35%, -50%) rotate(-90deg); text-align: center; }
+.industry-matrix-cell { display: flex; flex-direction: column; justify-content: space-between; min-height: 7rem; padding: 0.9rem; }
+.industry-matrix-cell p { margin: 0.4rem 0; color: var(--ink-muted); font-size: 0.78rem; line-height: 1.45; }
+.industry-source-explanation { padding-top: 0.65rem; border-top: 1px solid var(--line); }
+
+@media (max-width: 700px) {
+  .market-period-heading { display: block; }
+  .market-period-heading p { margin-top: 0.35rem; }
+  .industry-matrix-grid { grid-template-columns: 1fr !important; grid-template-rows: none !important; padding: 1.5rem 0 0 !important; }
+  .industry-matrix-cell { grid-column: auto !important; grid-row: auto !important; }
+  .industry-axis-y { display: none; }
+  .industry-axis-x { left: 0; text-align: left; }
+}
