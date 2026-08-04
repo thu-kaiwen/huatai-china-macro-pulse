@@ -66,9 +66,25 @@ const comparisonLabels: Record<ComparisonType, string> = {
   none: "当期点位",
 };
 
+// These observations retain the decimal precision disclosed in their approved source text.
+const sourcePrecisionByObservationId: Readonly<Record<string, number>> = {
+  "weekly-csi-300-change": 2,
+  "weekly-one-year-government-yield-change": 2,
+  "weekly-ten-year-government-yield-change": 2,
+  "weekly-rmb-usd-change": 2,
+  "weekly-rmb-basket-change": 2,
+  "monthly-rmb-usd-change": 2,
+  "monthly-rmb-basket-change": 2,
+};
+
 function formatValue(observation: MetricObservation, definition: MetricDefinition): string {
   if (definition.unit === "%" || definition.unit === "bp") {
-    return observation.value.toFixed(1);
+    const sourcePrecision = sourcePrecisionByObservationId[observation.id];
+    if (sourcePrecision !== undefined) {
+      return observation.value.toFixed(sourcePrecision);
+    }
+
+    return observation.value.toString();
   }
 
   return observation.value.toLocaleString("en-US", {

@@ -11,6 +11,7 @@ interface IndustryItem {
   name: string;
   classification: string;
   sourceExplanation: string;
+  sourceUrl?: string;
 }
 
 function sourceText(observation: MetricObservation | undefined): string {
@@ -33,6 +34,11 @@ function MatrixCell({ item }: { item: IndustryItem }) {
         {isSourceVisible ? "收起来源说明" : "查看来源说明"}
       </button>
       {isSourceVisible ? <p className="industry-source-explanation">来源说明：{item.sourceExplanation}</p> : null}
+      {isSourceVisible && item.sourceUrl ? (
+        <a href={item.sourceUrl} rel="noreferrer" target="_blank">
+          查看周报原文
+        </a>
+      ) : null}
     </article>
   );
 }
@@ -47,28 +53,27 @@ export function IndustryMatrix({ dataset, view }: IndustryMatrixProps) {
   const observationByMetric = new Map(
     weeklyObservations.map((observation) => [observation.metricId, observation]),
   );
-  const items: IndustryItem[] = [
-    {
-      name: "半导体",
-      classification: "高位 · 观察项",
-      sourceExplanation: `本期获批周报未提供半导体的可量化周度观测；本项仅列为观察项。来源报告：《${weeklyReport?.title ?? "未命名周报"}》。`,
-    },
-    {
-      name: "光伏设备",
-      classification: "低景气 · 价格承压",
-      sourceExplanation: sourceText(observationByMetric.get("pv-module-price-change")),
-    },
-    {
-      name: "水泥",
-      classification: "低景气 · 价格承压",
-      sourceExplanation: sourceText(observationByMetric.get("cement-price-change")),
-    },
-    {
-      name: "有色金属",
-      classification: "混合 · 高价观察",
-      sourceExplanation: `${sourceText(observationByMetric.get("copper-price-change"))} 高价观察仅指报告所述供给冲击下的价格观察，不代表未披露的现货点位。`,
-    },
-  ];
+  const semiconductor: IndustryItem = {
+    name: "半导体",
+    classification: "未坐标化观察项",
+    sourceExplanation: `本期报告没有足以确定象限的量化观测；因此未纳入矩阵坐标。来源报告：《${weeklyReport?.title ?? "未命名周报"}》。`,
+    sourceUrl: weeklyReport?.sourceUrl,
+  };
+  const photovoltaic: IndustryItem = {
+    name: "光伏设备",
+    classification: "供需承压 · 边际承压",
+    sourceExplanation: sourceText(observationByMetric.get("pv-module-price-change")),
+  };
+  const cement: IndustryItem = {
+    name: "水泥",
+    classification: "供需承压 · 边际承压",
+    sourceExplanation: sourceText(observationByMetric.get("cement-price-change")),
+  };
+  const nonferrous: IndustryItem = {
+    name: "有色金属",
+    classification: "高价观察 · 边际混合",
+    sourceExplanation: `${sourceText(observationByMetric.get("copper-price-change"))} “高价观察”不代表未披露的现货点位。`,
+  };
 
   return (
     <section aria-labelledby="industry-matrix-heading" className="industry-matrix-section" id="industry">
@@ -84,37 +89,41 @@ export function IndustryMatrix({ dataset, view }: IndustryMatrixProps) {
         <thead>
           <tr>
             <th scope="col">
-              <span>边际变化</span> \ <span>景气强度</span>
+              <span>边际变化</span> \ <span>供需状态</span>
             </th>
-            <th scope="col">景气压力</th>
-            <th scope="col">景气修复</th>
-            <th scope="col">景气高位</th>
+            <th scope="col">供需改善</th>
+            <th scope="col">高价观察</th>
+            <th scope="col">供需承压</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th scope="row">走强</th>
+            <th scope="row">改善</th>
             <td />
             <td />
-            <td><MatrixCell item={items[0]} /></td>
+            <td />
           </tr>
           <tr>
-            <th scope="row">观察</th>
+            <th scope="row">混合</th>
             <td />
+            <td><MatrixCell item={nonferrous} /></td>
             <td />
-            <td><MatrixCell item={items[3]} /></td>
           </tr>
           <tr>
             <th scope="row">承压</th>
+            <td />
+            <td />
             <td>
-              <MatrixCell item={items[2]} />
-              <MatrixCell item={items[1]} />
+              <MatrixCell item={cement} />
+              <MatrixCell item={photovoltaic} />
             </td>
-            <td />
-            <td />
           </tr>
         </tbody>
       </table>
+      <section aria-labelledby="unmapped-observations-heading" className="industry-unmapped-observations">
+        <h3 id="unmapped-observations-heading">未坐标化观察项</h3>
+        <MatrixCell item={semiconductor} />
+      </section>
     </section>
   );
 }
