@@ -8,6 +8,9 @@ import { MacroOverview } from "../sections/MacroOverview";
 import { IndustryMatrix } from "../sections/IndustryMatrix";
 import { MonthlyFundamentals } from "../sections/MonthlyFundamentals";
 import { PriceFinancial } from "../sections/PriceFinancial";
+import { OutlookRisks } from "../sections/OutlookRisks";
+import { PolicyTimeline } from "../sections/PolicyTimeline";
+import { SourcesArchive } from "../sections/SourcesArchive";
 import { WeeklyPulse } from "../sections/WeeklyPulse";
 
 export function App() {
@@ -27,6 +30,9 @@ export function App() {
         <WeeklyPulse dataset={macroDataset} view={view} />
         <PriceFinancial dataset={macroDataset} view={view} />
         <IndustryMatrix dataset={macroDataset} view={view} />
+        <PolicyTimeline events={macroDataset.policyEvents} reports={macroDataset.reports} view={view} />
+        <OutlookRisks items={macroDataset.risks} reports={macroDataset.reports} view={view} />
+        <SourcesArchive reports={macroDataset.reports} />
       </main>
     </>
   );
