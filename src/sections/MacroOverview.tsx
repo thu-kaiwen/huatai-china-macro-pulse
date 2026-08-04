@@ -1,26 +1,19 @@
 import { SignalPill } from "../components/SignalPill";
-import type { Narrative, Report, ViewMode } from "../domain/types";
+import { selectNarratives, selectReports } from "../domain/selectors";
+import type { MacroDataset, ViewMode } from "../domain/types";
 
 interface MacroOverviewProps {
-  reports: Report[];
-  narratives: Narrative[];
+  dataset: MacroDataset;
   view: ViewMode;
 }
 
-function matchesView(frequency: Report["frequency"], view: ViewMode) {
-  return view === "combined" || frequency === view;
-}
-
-function frequencyLabel(frequency: Report["frequency"]) {
+function frequencyLabel(frequency: "weekly" | "monthly") {
   return frequency === "weekly" ? "周报" : "月报";
 }
 
-export function MacroOverview({ reports, narratives, view }: MacroOverviewProps) {
-  const visibleReports = [...reports]
-    .filter((report) => matchesView(report.frequency, view))
-    .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
-  const visibleReportIds = new Set(visibleReports.map((report) => report.id));
-  const visibleNarratives = narratives.filter((narrative) => visibleReportIds.has(narrative.reportId));
+export function MacroOverview({ dataset, view }: MacroOverviewProps) {
+  const visibleReports = selectReports(dataset, view);
+  const visibleNarratives = selectNarratives(dataset, view);
 
   return (
     <section aria-labelledby="macro-overview-heading" className="macro-overview">

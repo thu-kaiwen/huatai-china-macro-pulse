@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import type { MacroDataset, MetricObservation } from "./types";
+import type { MacroDataset, MetricObservation, Narrative } from "./types";
 import { validateDataset } from "./validateDataset";
 import {
   canShowCrossFrequencyTrend,
   canShowNativeTrend,
   selectLatestObservation,
+  selectNarratives,
   selectObservations,
+  selectReports,
 } from "./selectors";
 
 const weeklyBrentOlder: MetricObservation = {
@@ -76,6 +78,25 @@ const reports = [
   },
 ];
 
+const narratives: Narrative[] = [
+  {
+    id: "monthly-demand",
+    reportId: "monthly-1",
+    topic: "domestic-demand",
+    title: "Monthly demand",
+    summary: "Monthly demand summary.",
+    signal: "watch",
+  },
+  {
+    id: "weekly-policy",
+    reportId: "weekly-2",
+    topic: "policy",
+    title: "Weekly policy",
+    summary: "Weekly policy summary.",
+    signal: "improving",
+  },
+];
+
 const validDataset: MacroDataset = {
   reports,
   metricDefinitions: [
@@ -90,7 +111,7 @@ const validDataset: MacroDataset = {
     },
   ],
   observations: [weeklyBrentLatest, monthlyBrent, weeklyBrentOlder],
-  narratives: [],
+  narratives,
   policyEvents: [],
   risks: [],
 };
@@ -145,6 +166,16 @@ describe("macro data domain", () => {
 
   it("selects the latest observation visible in the chosen view", () => {
     expect(selectLatestObservation(validDataset, "brent", "combined")?.value).toBe(90.12);
+  });
+
+  it("selects reports and their narratives for the chosen view", () => {
+    expect(selectReports(validDataset, "weekly").map((report) => report.id)).toEqual([
+      "weekly-2",
+      "weekly-1",
+    ]);
+    expect(selectNarratives(validDataset, "weekly").map((narrative) => narrative.id)).toEqual([
+      "weekly-policy",
+    ]);
   });
 
   it("reports duplicate IDs, unknown reports, non-finite values, empty excerpts, and frequency mismatches", () => {

@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Header } from "../components/Header";
 import { SectionHeading } from "../components/SectionHeading";
 import { ViewFilter } from "../components/ViewFilter";
-import { narratives } from "../data/narratives";
-import { reports } from "../data/reports";
+import { macroDataset } from "../data/dataset";
 import type { ViewMode } from "../domain/types";
 import { MacroOverview } from "../sections/MacroOverview";
 
@@ -19,7 +18,7 @@ export function App() {
           连接月度与周度数据，呈现中国宏观经济的最新脉动。
         </SectionHeading>
         <ViewFilter onChange={setView} value={view} />
-        <MacroOverview narratives={narratives} reports={reports} view={view} />
+        <MacroOverview dataset={macroDataset} view={view} />
       </main>
     </>
   );
