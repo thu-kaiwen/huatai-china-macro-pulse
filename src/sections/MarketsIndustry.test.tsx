@@ -16,7 +16,18 @@ describe("market conditions and industry matrix", () => {
     expect(screen.getByText("月度锚点")).toBeInTheDocument();
   });
 
-  it("renders an accessible industry matrix whose source explanations can be opened", async () => {
+  it("renders a semantic industry matrix table with labeled axes and pressure-row industries", () => {
+    renderApp(<App />);
+
+    expect(screen.getByRole("table", { name: "行业景气矩阵" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "景气压力" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "景气修复" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "景气高位" })).toBeInTheDocument();
+    expect(screen.getByRole("rowheader", { name: "承压" })).toBeInTheDocument();
+    expect(screen.getByRole("row", { name: /承压.*水泥.*光伏设备/ })).toBeInTheDocument();
+  });
+
+  it("explains that semiconductor is an observation item without a quantitative weekly observation", async () => {
     const { user } = renderApp(<App />);
 
     expect(screen.getByRole("heading", { name: "行业景气矩阵" })).toBeInTheDocument();
@@ -29,6 +40,6 @@ describe("market conditions and industry matrix", () => {
 
     await user.click(screen.getByRole("button", { name: "查看半导体来源说明" }));
 
-    expect(screen.getByText(/来源说明：周报摘要提及产业创新与科技金融部署/)).toBeInTheDocument();
+    expect(screen.getByText(/本期获批周报未提供半导体的可量化周度观测/)).toBeInTheDocument();
   });
 });

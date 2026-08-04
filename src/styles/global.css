@@ -101,19 +101,18 @@ nav a:hover, nav a:focus-visible, nav a[aria-current="page"] { background: var(-
 .market-reading { padding: 0.85rem; }
 .market-reading details { margin-top: 0.65rem; color: var(--ink-muted); font-size: 0.76rem; line-height: 1.5; }
 .market-reading details p { margin: 0.5rem 0 0; }
-.industry-matrix-grid { position: relative; padding: 2rem 0 0 2rem; }
-.industry-axis { position: absolute; color: var(--ink-muted); font-size: 0.75rem; }
-.industry-axis-x { inset: 0 0 auto 2rem; text-align: center; }
-.industry-axis-y { top: 50%; left: 0; width: 7rem; transform: translate(-35%, -50%) rotate(-90deg); text-align: center; }
-.industry-matrix-cell { display: flex; flex-direction: column; justify-content: space-between; min-height: 7rem; padding: 0.9rem; }
+.industry-matrix-table { width: 100%; border-collapse: separate; border-spacing: 0.75rem; table-layout: fixed; }
+.industry-matrix-table caption { padding-bottom: 0.5rem; color: var(--ink-muted); text-align: left; font-size: 0.78rem; }
+.industry-matrix-table th { color: var(--ink-muted); font-size: 0.75rem; font-weight: 650; text-align: left; vertical-align: bottom; }
+.industry-matrix-table td { padding: 0; vertical-align: top; }
+.industry-matrix-cell { display: flex; flex-direction: column; justify-content: space-between; min-height: 7rem; margin-bottom: 0.75rem; padding: 0.9rem; }
+.industry-matrix-table td .industry-matrix-cell:last-child { margin-bottom: 0; }
 .industry-matrix-cell p { margin: 0.4rem 0; color: var(--ink-muted); font-size: 0.78rem; line-height: 1.45; }
 .industry-source-explanation { padding-top: 0.65rem; border-top: 1px solid var(--line); }
 
 @media (max-width: 700px) {
   .market-period-heading { display: block; }
   .market-period-heading p { margin-top: 0.35rem; }
-  .industry-matrix-grid { grid-template-columns: 1fr !important; grid-template-rows: none !important; padding: 1.5rem 0 0 !important; }
-  .industry-matrix-cell { grid-column: auto !important; grid-row: auto !important; }
-  .industry-axis-y { display: none; }
-  .industry-axis-x { left: 0; text-align: left; }
+  .industry-matrix-table { display: block; overflow-x: auto; border-spacing: 0.5rem; }
+  .industry-matrix-table th, .industry-matrix-table td { min-width: 10rem; }
 }
