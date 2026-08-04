@@ -5,6 +5,8 @@ import { ViewFilter } from "../components/ViewFilter";
 import { macroDataset } from "../data/dataset";
 import type { ViewMode } from "../domain/types";
 import { MacroOverview } from "../sections/MacroOverview";
+import { MonthlyFundamentals } from "../sections/MonthlyFundamentals";
+import { WeeklyPulse } from "../sections/WeeklyPulse";
 
 export function App() {
   const [activeSection, setActiveSection] = useState("overview");
@@ -19,6 +21,8 @@ export function App() {
         </SectionHeading>
         <ViewFilter onChange={setView} value={view} />
         <MacroOverview dataset={macroDataset} view={view} />
+        <MonthlyFundamentals dataset={macroDataset} view={view} />
+        <WeeklyPulse dataset={macroDataset} view={view} />
       </main>
     </>
   );
