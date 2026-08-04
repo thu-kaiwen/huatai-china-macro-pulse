@@ -28,11 +28,16 @@ export function MacroOverview({ dataset, view }: MacroOverviewProps) {
             <div>
               <span className="macro-source-badge">华泰证券研究所获批报告</span>
               <span className="macro-report-frequency">{frequencyLabel(report.frequency)}</span>
+              <span className="macro-report-published">发布日期 {report.publishedAt}</span>
+              <span className="macro-report-period">
+                统计期 {report.periodStart} 至 {report.periodEnd}
+              </span>
               <span className="macro-report-date">截至 {report.periodEnd}</span>
             </div>
             <a href={report.sourceUrl} rel="noreferrer" target="_blank">
               {report.title}
             </a>
+            <p className="macro-report-summary">{report.summary}</p>
           </article>
         ))}
       </div>
