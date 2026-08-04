@@ -1,7 +1,7 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import App from "./App";
+import { renderApp } from "../test/renderApp";
 
 describe("App", () => {
   beforeEach(() => {
@@ -14,13 +14,13 @@ describe("App", () => {
   });
 
   it("renders the approved product identity", () => {
-    render(<App />);
+    renderApp(<App />);
     expect(screen.getByRole("heading", { name: "中国宏观脉搏" })).toBeInTheDocument();
     expect(screen.getByText("华泰证券研究所")).toBeInTheDocument();
   });
 
   it("renders the terminal shell with accessible navigation and source status", () => {
-    render(<App />);
+    renderApp(<App />);
 
     expect(screen.getByRole("banner")).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "章节导航" })).toBeInTheDocument();
@@ -31,13 +31,30 @@ describe("App", () => {
   });
 
   it("switches to dark theme and persists the preference", async () => {
-    const user = userEvent.setup();
-    render(<App />);
+    const { user } = renderApp(<App />);
 
     await user.click(screen.getByRole("button", { name: "切换至深色主题" }));
 
     expect(document.documentElement).toHaveAttribute("data-theme", "dark");
     expect(localStorage.getItem("ht-macro-theme")).toBe("dark");
     expect(screen.getByRole("button", { name: "切换至浅色主题" })).toBeInTheDocument();
+  });
+
+  it("renders the combined overview with the latest report headline and all narrative signals", () => {
+    renderApp(<App />);
+
+    expect(screen.getByRole("button", { name: "综合" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("heading", { name: /出口维持高增/ })).toBeInTheDocument();
+    expect(screen.getAllByTestId("macro-signal")).toHaveLength(5);
+  });
+
+  it("filters the overview to the weekly approved report", async () => {
+    const { user } = renderApp(<App />);
+
+    await user.click(screen.getByRole("button", { name: "周报" }));
+
+    expect(screen.getByRole("button", { name: "周报" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getAllByText("截至 2026-08-02").length).toBeGreaterThan(0);
+    expect(screen.getAllByTestId("macro-signal")).toHaveLength(1);
   });
 });
