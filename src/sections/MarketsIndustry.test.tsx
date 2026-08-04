@@ -15,9 +15,9 @@ describe("market conditions and industry matrix", () => {
     expect(screen.getByText("周度最新脉搏")).toBeInTheDocument();
     expect(screen.getByText("月度锚点")).toBeInTheDocument();
     expect(screen.getByText("-1.31")).toBeInTheDocument();
-    expect(screen.getByText("1.03")).toBeInTheDocument();
+    expect(screen.getByText("+1.03")).toBeInTheDocument();
     expect(screen.getByText("-1.54")).toBeInTheDocument();
-    expect(screen.getByText("0.25")).toBeInTheDocument();
+    expect(screen.getByText("+0.25")).toBeInTheDocument();
   });
 
   it("renders a semantic industry matrix table with labeled axes and pressure-row industries", () => {

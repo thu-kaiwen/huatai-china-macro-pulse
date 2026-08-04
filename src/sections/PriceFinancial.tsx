@@ -78,19 +78,23 @@ const sourcePrecisionByObservationId: Readonly<Record<string, number>> = {
 };
 
 function formatValue(observation: MetricObservation, definition: MetricDefinition): string {
+  let valueText: string;
+
   if (definition.unit === "%" || definition.unit === "bp") {
     const sourcePrecision = sourcePrecisionByObservationId[observation.id];
     if (sourcePrecision !== undefined) {
-      return observation.value.toFixed(sourcePrecision);
+      valueText = observation.value.toFixed(sourcePrecision);
+    } else {
+      valueText = observation.value.toString();
     }
-
-    return observation.value.toString();
+  } else {
+    valueText = observation.value.toLocaleString("en-US", {
+      minimumFractionDigits: observation.value % 1 === 0 ? 1 : 0,
+      maximumFractionDigits: 2,
+    });
   }
 
-  return observation.value.toLocaleString("en-US", {
-    minimumFractionDigits: observation.value % 1 === 0 ? 1 : 0,
-    maximumFractionDigits: 2,
-  });
+  return observation.comparisonType !== "none" && observation.value > 0 ? `+${valueText}` : valueText;
 }
 
 function MarketReading({
