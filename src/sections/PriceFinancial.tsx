@@ -158,7 +158,7 @@ function MarketPeriod({
           }
 
           return (
-            <section aria-labelledby={`${frequency}-${group.title}`} className="market-group" key={group.title}>
+            <section aria-label={`${title}：${group.title}`} className="market-group" key={group.title}>
               <h4 id={`${frequency}-${group.title}`}>{group.title}</h4>
               <div className="market-reading-grid">
                 {observations.map((observation) => {

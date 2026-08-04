@@ -1,0 +1,81 @@
+@media (max-width: 1024px) {
+  .macro-signal-grid,
+  .metric-card-grid,
+  .market-group-grid,
+  .market-reading-grid,
+  .research-list-grid,
+  .source-archive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .command-bar { gap: 0.8rem; }
+  .product-name { font-size: 0.75rem; }
+}
+
+@media (max-width: 640px) {
+  body { padding-top: 130px; }
+  [id] { scroll-margin-top: 9rem; }
+
+  .command-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 54px 36px;
+    gap: 0;
+    height: 92px;
+    padding: 0 1rem;
+  }
+
+  .brand-lockup { min-width: 0; gap: 0.35rem; }
+  .brand-lockup img { width: 20px; height: 20px; }
+  .brand-copy { flex: 0 0 auto; }
+  .brand-name { font-size: 0.72rem; }
+  .brand-english { display: none; }
+  .product-name { min-width: 0; padding-left: 0.35rem; overflow: hidden; font-size: 0.66rem; text-overflow: ellipsis; white-space: nowrap; }
+  .header-utilities { grid-column: 2; grid-row: 1; }
+  .theme-toggle { width: 1.9rem; height: 1.9rem; }
+
+  nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 0 -1rem;
+    padding: 0 1rem 0.35rem;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  nav a { padding: 0.35rem 0.55rem; font-size: 0.78rem; }
+  .ticker-items { min-width: max-content; padding: 0 1rem; }
+  .terminal-main { padding: 2rem 1rem 4rem; }
+
+  .macro-report-list,
+  .macro-signal-grid,
+  .metric-card-grid,
+  .market-group-grid,
+  .market-reading-grid,
+  .research-list-grid,
+  .source-archive-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section-heading h1,
+  .section-heading h2 { font-size: clamp(2rem, 12vw, 2.8rem); }
+  .fundamentals-section, .price-financial-section, .industry-matrix-section, .research-section { margin-top: 3.5rem; }
+  .market-period-heading { display: block; }
+  .market-period-heading p { margin-top: 0.35rem; }
+  .industry-matrix-table { display: block; width: 100%; overflow-x: auto; border-spacing: 0.5rem; overscroll-behavior-x: contain; }
+  .industry-matrix-table th, .industry-matrix-table td { min-width: 10rem; }
+  .policy-day { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+  .policy-day > time { padding-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .ticker-items { animation: none !important; }
+  .metric-card:hover, .market-reading:hover, .industry-matrix-cell:hover { transform: none; }
+}

@@ -13,7 +13,7 @@ const options: Array<{ value: ViewMode; label: string }> = [
 
 export function ViewFilter({ value, onChange }: ViewFilterProps) {
   return (
-    <div aria-label="报告频率" className="view-filter" role="group">
+    <div aria-label="报告视图" className="view-filter" role="group">
       {options.map((option) => (
         <button
           aria-pressed={value === option.value}

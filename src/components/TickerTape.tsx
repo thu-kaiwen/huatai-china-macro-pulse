@@ -37,7 +37,7 @@ export function TickerTape({ observations, definitions }: TickerTapeProps) {
   });
 
   return (
-    <div className="ticker-tape" aria-label="最新宏观指标">
+    <div className="ticker-tape" aria-label="最新宏观指标" role="region" tabIndex={0}>
       <div className="ticker-items">
         {items.map(({ label, observation, definition }) => (
           <span className="ticker-item" key={observation.id} title={observation.sourceText}>
