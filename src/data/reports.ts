@@ -1,7 +1,5 @@
 import type { Report } from "../domain/types";
 
-const authors = ["易峘", "吴宛忆", "王洺硕", "常慧丽"];
-
 export const reports: Report[] = [
   {
     id: "weekly-2026-08-02",
@@ -11,7 +9,7 @@ export const reports: Report[] = [
     periodStart: "2026-07-27",
     periodEnd: "2026-08-02",
     sourceUrl: "https://mp.weixin.qq.com/s/i8Js6xpAwblqlMOmsNZFeQ",
-    authors,
+    authors: ["易峘", "吴宛忆", "王洺硕", "常慧丽"],
     summary: "跟踪七月末政策部署、国内高频需求、价格与流动性变化。",
   },
   {
@@ -22,7 +20,7 @@ export const reports: Report[] = [
     periodStart: "2026-07-01",
     periodEnd: "2026-07-31",
     sourceUrl: "https://mp.weixin.qq.com/s/OXLQFLNXvQoI8GVX9MJ4CA",
-    authors,
+    authors: ["易峘", "王洺硕", "吴宛忆", "常慧丽"],
     summary: "月度宏观数据反映外需韧性与内需修复仍受供给冲击扰动。",
   },
 ];

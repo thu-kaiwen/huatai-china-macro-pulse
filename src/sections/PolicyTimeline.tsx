@@ -14,8 +14,10 @@ export function PolicyTimeline({ events, reports, view }: PolicyTimelineProps) {
   const reportById = new Map(reports.map((report) => [report.id, report]));
   const groupedEvents = events
     .filter((event) => {
-      const report = reportById.get(event.reportId);
-      return report !== undefined && (view === "combined" || report.frequency === view);
+      const eventReports = (event.reportIds ?? [event.reportId])
+        .map((reportId) => reportById.get(reportId))
+        .filter((report): report is Report => report !== undefined);
+      return eventReports.some((report) => view === "combined" || report.frequency === view);
     })
     .sort((left, right) => left.date.localeCompare(right.date))
     .reduce<Map<string, PolicyEvent[]>>((groups, event) => {
@@ -40,7 +42,12 @@ export function PolicyTimeline({ events, reports, view }: PolicyTimelineProps) {
               <time dateTime={date}>{date}</time>
               <div className="policy-day-events">
                 {sameDayEvents.map((event) => {
-                  const report = reportById.get(event.reportId);
+                  const eventReports = (event.reportIds ?? [event.reportId])
+                    .map((reportId) => reportById.get(reportId))
+                    .filter((report): report is Report => report !== undefined);
+                  const report = eventReports.find((candidate) => view !== "combined" && candidate.frequency === view)
+                    ?? reportById.get(event.reportId)
+                    ?? eventReports[0];
                   if (!report) {
                     return null;
                   }

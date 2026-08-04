@@ -78,6 +78,9 @@ export function validateDataset(dataset: MacroDataset): string[] {
   }
   for (const policyEvent of dataset.policyEvents) {
     validateReportReference("Policy event", policyEvent.id, policyEvent.reportId, reportIds, errors);
+    for (const reportId of policyEvent.reportIds ?? []) {
+      validateReportReference("Policy event", policyEvent.id, reportId, reportIds, errors);
+    }
   }
   for (const risk of dataset.risks) {
     validateReportReference("Risk", risk.id, risk.reportId, reportIds, errors);

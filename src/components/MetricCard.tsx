@@ -18,7 +18,12 @@ const comparisonLabels: Record<ComparisonType, string> = {
   none: "当期值",
 };
 
-function formatValue(value: number, unit: string): string {
+function formatValue(observation: MetricObservation, unit: string): string {
+  const { sourceValueText, value } = observation;
+  if (sourceValueText !== undefined) {
+    return `${sourceValueText}${unit}`;
+  }
+
   if (unit === "%" || unit === "bp" || unit === "指数") {
     return `${value.toFixed(1)}${unit}`;
   }
@@ -38,9 +43,9 @@ export function MetricCard({ definition, primary, secondary, report }: MetricCar
       </div>
       <p className="metric-value">
         <strong>
-          {definition.unit === "指数" ? primary.value.toFixed(1) : formatValue(primary.value, definition.unit)}
+          {definition.unit === "指数" ? primary.sourceValueText ?? primary.value.toFixed(1) : formatValue(primary, definition.unit)}
         </strong>
-        <span>{definition.unit === "指数" ? "指数 · " : ""}截至 {primary.periodEnd}</span>
+        <span>{definition.unit === "指数" ? "指数 · " : ""}{primary.periodEndLabel ?? "截至"} {primary.periodEnd}</span>
       </p>
       {previousValue !== undefined ? (
         <DeltaBars

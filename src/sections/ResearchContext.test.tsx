@@ -23,7 +23,8 @@ describe("policy, outlook, and source research context", () => {
     expect(screen.getByText("报告标题：【华泰宏观 | 图解国内周报】出口维持高增但地产成交边际降温")).toBeInTheDocument();
     expect(screen.getAllByText("发布日期 2026-08-02").length).toBeGreaterThan(0);
     expect(screen.getAllByText("统计期").length).toBeGreaterThan(0);
-    expect(screen.getAllByRole("link", { name: "查看政策所引周报原文" })).toHaveLength(7);
+    expect(screen.getAllByRole("link", { name: "查看政策所引周报原文" })).toHaveLength(4);
+    expect(screen.getAllByRole("link", { name: "查看政策所引月报原文" })).toHaveLength(3);
     expect(screen.getAllByText(/易峘/).length).toBeGreaterThan(0);
     expect(screen.getByText(/不构成对任何人的投资建议/)).toBeInTheDocument();
   });

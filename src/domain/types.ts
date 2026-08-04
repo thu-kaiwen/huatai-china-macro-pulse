@@ -1,4 +1,5 @@
 export type Frequency = "weekly" | "monthly";
+export type NativeFrequency = Frequency | "quarterly" | "mixed";
 export type ViewMode = "combined" | Frequency;
 export type Confidence = "verified" | "partial";
 export type ComparisonType = "yoy" | "mom" | "wow" | "previous-week" | "basis-points" | "none";
@@ -28,7 +29,7 @@ export interface MetricDefinition {
   name: string;
   category: "activity" | "property" | "prices" | "financial" | "money" | "industry";
   unit: string;
-  nativeFrequency: Frequency | "mixed";
+  nativeFrequency: NativeFrequency;
   directionMeaning: "improvement" | "deterioration" | "neutral";
   methodology: string;
 }
@@ -44,6 +45,8 @@ export interface MetricObservation {
   comparisonType: ComparisonType;
   change?: number;
   sourceText: string;
+  sourceValueText?: string;
+  periodEndLabel?: "截至" | "报告周截至";
   confidence: Confidence;
 }
 
@@ -59,6 +62,7 @@ export interface Narrative {
 export interface PolicyEvent {
   id: string;
   reportId: string;
+  reportIds?: string[];
   date: string;
   title: string;
   summary: string;

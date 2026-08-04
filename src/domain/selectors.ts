@@ -1,9 +1,11 @@
 import type {
   Frequency,
   MacroDataset,
+  MetricDefinition,
   MetricObservation,
   Narrative,
   ObservationFilter,
+  PolicyEvent,
   Report,
   ViewMode,
 } from "./types";
@@ -22,6 +24,14 @@ export function selectNarratives(dataset: MacroDataset, view: ViewMode): Narrati
   const reportIds = new Set(selectReports(dataset, view).map((report) => report.id));
 
   return dataset.narratives.filter((narrative) => reportIds.has(narrative.reportId));
+}
+
+export function selectPolicyEvents(dataset: MacroDataset, view: ViewMode): PolicyEvent[] {
+  const visibleReportIds = new Set(selectReports(dataset, view).map((report) => report.id));
+
+  return dataset.policyEvents
+    .filter((event) => (event.reportIds ?? [event.reportId]).some((reportId) => visibleReportIds.has(reportId)))
+    .sort((left, right) => left.date.localeCompare(right.date));
 }
 
 export function selectObservations(
@@ -48,31 +58,60 @@ export function canShowNativeTrend(
   observations: MetricObservation[],
   frequency: Frequency,
 ): boolean {
-  return observations.filter(
-    (observation) => observation.frequency === frequency && observation.confidence === "verified",
-  ).length >= 2;
-}
-
-export function canShowCrossFrequencyTrend(observations: MetricObservation[]): boolean {
-  const observationsByMetric = new Map<string, MetricObservation[]>();
+  const uniquePeriodsBySeries = new Map<string, Set<string>>();
 
   for (const observation of observations) {
-    if (observation.confidence !== "verified") {
+    if (observation.frequency !== frequency || observation.confidence !== "verified") {
       continue;
     }
-    observationsByMetric.set(observation.metricId, [
-      ...(observationsByMetric.get(observation.metricId) ?? []),
-      observation,
-    ]);
+
+    const seriesKey = `${observation.metricId}\u0000${observation.frequency}\u0000${observation.comparisonType}`;
+    const uniquePeriods = uniquePeriodsBySeries.get(seriesKey) ?? new Set<string>();
+    uniquePeriods.add(observation.periodEnd);
+    uniquePeriodsBySeries.set(seriesKey, uniquePeriods);
   }
 
-  return [...observationsByMetric.values()].some((metricObservations) => {
-    const comparisonTypes = new Set(metricObservations.map((observation) => observation.comparisonType));
+  if (uniquePeriodsBySeries.size !== 1) {
+    return false;
+  }
 
-    return (
-      canShowNativeTrend(metricObservations, "weekly") &&
-      metricObservations.some((observation) => observation.frequency === "monthly") &&
-      comparisonTypes.size === 1
-    );
-  });
+  return [...uniquePeriodsBySeries.values()][0].size >= 2;
+}
+
+export function canShowCrossFrequencyTrend(
+  observations: MetricObservation[],
+  definition: MetricDefinition,
+): boolean {
+  if (
+    definition.nativeFrequency !== "mixed" ||
+    definition.unit.trim().length === 0 ||
+    definition.methodology.trim().length === 0
+  ) {
+    return false;
+  }
+
+  const periodsByComparison = new Map<MetricObservation["comparisonType"], {
+    weekly: Set<string>;
+    monthly: Set<string>;
+  }>();
+
+  for (const observation of observations) {
+    if (observation.confidence !== "verified" || observation.metricId !== definition.id) {
+      continue;
+    }
+
+    const periods = periodsByComparison.get(observation.comparisonType) ?? {
+      weekly: new Set<string>(),
+      monthly: new Set<string>(),
+    };
+    periods[observation.frequency].add(observation.periodEnd);
+    periodsByComparison.set(observation.comparisonType, periods);
+  }
+
+  if (periodsByComparison.size !== 1) {
+    return false;
+  }
+
+  const [{ weekly, monthly }] = periodsByComparison.values();
+  return weekly.size >= 2 && monthly.size >= 1;
 }

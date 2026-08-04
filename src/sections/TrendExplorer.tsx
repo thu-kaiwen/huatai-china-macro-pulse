@@ -37,7 +37,7 @@ function selectTrendSeries(dataset: MacroDataset, view: ViewMode): TrendSeries[]
     if (
       view === "combined" &&
       definition.nativeFrequency === "mixed" &&
-      canShowCrossFrequencyTrend(observations)
+      canShowCrossFrequencyTrend(observations, definition)
     ) {
       return [{ definition, weekly, monthly }];
     }

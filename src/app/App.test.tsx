@@ -54,7 +54,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "周报" }));
 
     expect(screen.getByRole("button", { name: "周报" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getAllByText("截至 2026-08-02").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("报告周截至 2026-08-02")).toHaveLength(20);
     expect(screen.getAllByTestId("macro-signal")).toHaveLength(1);
   });
 });

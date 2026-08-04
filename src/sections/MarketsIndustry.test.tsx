@@ -11,7 +11,9 @@ describe("market conditions and industry matrix", () => {
 
     expect(screen.getByRole("heading", { name: "价格与金融条件" })).toBeInTheDocument();
     expect(screen.getByText("90.12")).toBeInTheDocument();
-    expect(screen.getByText("4,163.0")).toBeInTheDocument();
+    expect(screen.getByText("89")).toBeInTheDocument();
+    expect(screen.getByText("4,163")).toBeInTheDocument();
+    expect(screen.getByText("-1,436")).toBeInTheDocument();
     expect(screen.getByText("周度最新脉搏")).toBeInTheDocument();
     expect(screen.getByText("月度锚点")).toBeInTheDocument();
     expect(screen.getByText("-1.31")).toBeInTheDocument();
@@ -19,6 +21,7 @@ describe("market conditions and industry matrix", () => {
     expect(screen.getByText("-1.54")).toBeInTheDocument();
     expect(screen.getByText("+0.25")).toBeInTheDocument();
     expect(screen.getByText("-2.0")).toBeInTheDocument();
+    expect(screen.getAllByText("报告周截至 2026-08-02")).toHaveLength(20);
   });
 
   it("renders a semantic industry matrix table with labeled axes and pressure-row industries", () => {

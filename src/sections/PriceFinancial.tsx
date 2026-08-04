@@ -66,34 +66,10 @@ const comparisonLabels: Record<ComparisonType, string> = {
   none: "当期点位",
 };
 
-// These observations retain the decimal precision disclosed in their approved source text.
-const sourcePrecisionByObservationId: Readonly<Record<string, number>> = {
-  "weekly-csi-300-change": 2,
-  "weekly-one-year-government-yield-change": 2,
-  "weekly-rebar-price-change": 1,
-  "weekly-ten-year-government-yield-change": 2,
-  "weekly-rmb-usd-change": 2,
-  "weekly-rmb-basket-change": 2,
-  "monthly-rmb-usd-change": 2,
-  "monthly-rmb-basket-change": 2,
-};
-
-function formatValue(observation: MetricObservation, definition: MetricDefinition): string {
-  let valueText: string;
-
-  if (definition.unit === "%" || definition.unit === "bp") {
-    const sourcePrecision = sourcePrecisionByObservationId[observation.id];
-    if (sourcePrecision !== undefined) {
-      valueText = observation.value.toFixed(sourcePrecision);
-    } else {
-      valueText = observation.value.toString();
-    }
-  } else {
-    valueText = observation.value.toLocaleString("en-US", {
-      minimumFractionDigits: observation.value % 1 === 0 ? 1 : 0,
-      maximumFractionDigits: 2,
-    });
-  }
+function formatValue(observation: MetricObservation): string {
+  const valueText = observation.sourceValueText ?? observation.value.toLocaleString("en-US", {
+    maximumFractionDigits: 20,
+  });
 
   return observation.comparisonType !== "none" && observation.value > 0 ? `+${valueText}` : valueText;
 }
@@ -112,10 +88,10 @@ function MarketReading({
         <span>{comparisonLabels[observation.comparisonType]}</span>
       </div>
       <p className="market-reading-value">
-        <strong>{formatValue(observation, definition)}</strong>
+        <strong>{formatValue(observation)}</strong>
         <span>{definition.unit}</span>
       </p>
-      <p>截至 {observation.periodEnd}</p>
+      <p>{observation.periodEndLabel ?? "截至"} {observation.periodEnd}</p>
       <details>
         <summary>查看来源摘录</summary>
         <p>{observation.sourceText}</p>

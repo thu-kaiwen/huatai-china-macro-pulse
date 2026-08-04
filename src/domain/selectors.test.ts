@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { MacroDataset, MetricObservation, Narrative } from "./types";
+import type { MacroDataset, MetricDefinition, MetricObservation, Narrative } from "./types";
 import { validateDataset } from "./validateDataset";
 import {
   canShowCrossFrequencyTrend,
@@ -116,6 +116,8 @@ const validDataset: MacroDataset = {
   risks: [],
 };
 
+const brentDefinition: MetricDefinition = validDataset.metricDefinitions[0];
+
 const danglingDataset: MacroDataset = {
   ...validDataset,
   observations: [
@@ -159,9 +161,29 @@ describe("macro data domain", () => {
     expect(canShowNativeTrend([monthlyBrent], "monthly")).toBe(false);
   });
 
+  it("counts unique period ends within one metric, frequency, and comparison type for native trends", () => {
+    expect(canShowNativeTrend([
+      weeklyBrentOlder,
+      { ...weeklyBrentLatest, periodEnd: weeklyBrentOlder.periodEnd },
+    ], "weekly")).toBe(false);
+    expect(canShowNativeTrend([
+      weeklyBrentOlder,
+      { ...weeklyBrentLatest, metricId: "other" },
+    ], "weekly")).toBe(false);
+    expect(canShowNativeTrend([
+      weeklyBrentOlder,
+      { ...weeklyBrentLatest, comparisonType: "wow" },
+    ], "weekly")).toBe(false);
+    expect(canShowNativeTrend([
+      weeklyBrentOlder,
+      weeklyBrentLatest,
+      { ...weeklyBrentLatest, id: "obs-weekly-third", periodEnd: "2026-08-02", comparisonType: "wow" },
+    ], "weekly")).toBe(false);
+  });
+
   it("requires two weekly and one monthly verified observation for the same metric", () => {
-    expect(canShowCrossFrequencyTrend([weeklyBrentOlder, weeklyBrentLatest, monthlyBrent])).toBe(true);
-    expect(canShowCrossFrequencyTrend([weeklyBrentOlder, weeklyBrentLatest, { ...monthlyBrent, metricId: "other" }])).toBe(false);
+    expect(canShowCrossFrequencyTrend([weeklyBrentOlder, weeklyBrentLatest, monthlyBrent], brentDefinition)).toBe(true);
+    expect(canShowCrossFrequencyTrend([weeklyBrentOlder, weeklyBrentLatest, { ...monthlyBrent, metricId: "other" }], brentDefinition)).toBe(false);
   });
 
   it("does not combine cross-frequency observations with different comparison types", () => {
@@ -170,8 +192,27 @@ describe("macro data domain", () => {
         { ...weeklyBrentOlder, comparisonType: "wow" },
         { ...weeklyBrentLatest, comparisonType: "wow" },
         { ...monthlyBrent, comparisonType: "mom" },
-      ]),
+      ], brentDefinition),
     ).toBe(false);
+  });
+
+  it("rejects duplicate weekly dates and incompatible cross-frequency definitions", () => {
+    const duplicateDate = { ...weeklyBrentLatest, periodEnd: weeklyBrentOlder.periodEnd };
+    expect(canShowCrossFrequencyTrend([weeklyBrentOlder, duplicateDate, monthlyBrent], brentDefinition)).toBe(false);
+    expect(canShowCrossFrequencyTrend(
+      [weeklyBrentOlder, weeklyBrentLatest, monthlyBrent],
+      { ...brentDefinition, nativeFrequency: "weekly" },
+    )).toBe(false);
+    expect(canShowCrossFrequencyTrend(
+      [weeklyBrentOlder, weeklyBrentLatest, monthlyBrent],
+      { ...brentDefinition, unit: "" },
+    )).toBe(false);
+    expect(canShowCrossFrequencyTrend([
+      weeklyBrentOlder,
+      weeklyBrentLatest,
+      monthlyBrent,
+      { ...weeklyBrentLatest, id: "obs-weekly-wow", comparisonType: "wow" },
+    ], brentDefinition)).toBe(false);
   });
 
   it("selects the latest observation visible in the chosen view", () => {
