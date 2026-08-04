@@ -12,6 +12,7 @@ import { OutlookRisks } from "../sections/OutlookRisks";
 import { PolicyTimeline } from "../sections/PolicyTimeline";
 import { SourcesArchive } from "../sections/SourcesArchive";
 import { WeeklyPulse } from "../sections/WeeklyPulse";
+import { TrendExplorer } from "../sections/TrendExplorer";
 
 export function App() {
   const [activeSection, setActiveSection] = useState("overview");
@@ -29,6 +30,7 @@ export function App() {
         <MonthlyFundamentals dataset={macroDataset} view={view} />
         <WeeklyPulse dataset={macroDataset} view={view} />
         <PriceFinancial dataset={macroDataset} view={view} />
+        <TrendExplorer dataset={macroDataset} view={view} />
         <IndustryMatrix dataset={macroDataset} view={view} />
         <PolicyTimeline events={macroDataset.policyEvents} reports={macroDataset.reports} view={view} />
         <OutlookRisks items={macroDataset.risks} reports={macroDataset.reports} view={view} />
