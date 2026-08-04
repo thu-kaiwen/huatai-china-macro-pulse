@@ -1,5 +1,4 @@
-import { metricDefinitions } from "../data/metricDefinitions";
-import { observations } from "../data/observations";
+import { macroDataset } from "../data/dataset";
 import { BrandLockup } from "./BrandLockup";
 import { SourceBadge } from "./SourceBadge";
 import { SectionErrorBoundary } from "./SectionErrorBoundary";
@@ -9,6 +8,7 @@ import { TickerTape } from "./TickerTape";
 interface HeaderProps {
   activeSection: string;
   onNavigate: (section: string) => void;
+  TickerComponent?: typeof TickerTape;
   visibleSectionIds: readonly string[];
 }
 
@@ -23,7 +23,12 @@ const navigationItems = [
   { id: "sources", label: "来源" },
 ];
 
-export function Header({ activeSection, onNavigate, visibleSectionIds }: HeaderProps) {
+export function Header({
+  activeSection,
+  onNavigate,
+  TickerComponent = TickerTape,
+  visibleSectionIds,
+}: HeaderProps) {
   return (
     <header className="terminal-header">
       <div className="command-bar">
@@ -45,8 +50,8 @@ export function Header({ activeSection, onNavigate, visibleSectionIds }: HeaderP
           <ThemeToggle />
         </div>
       </div>
-      <SectionErrorBoundary sectionName="关键指标带">
-        <TickerTape observations={observations} definitions={metricDefinitions} />
+      <SectionErrorBoundary sectionId="ticker" sectionName="关键指标带">
+        <TickerComponent dataset={macroDataset} />
       </SectionErrorBoundary>
     </header>
   );

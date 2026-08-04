@@ -51,7 +51,7 @@ export function OutlookRisks({ items, reports, view }: OutlookRisksProps) {
   });
 
   return (
-    <section aria-labelledby="outlook-risks-heading" className="research-section" id="outlook">
+    <section aria-labelledby="outlook-risks-heading" className="research-section">
       <div className="fundamentals-heading">
         <p>仅呈现报告已披露的观察项和风险边界</p>
         <h2 id="outlook-risks-heading">展望与风险</h2>

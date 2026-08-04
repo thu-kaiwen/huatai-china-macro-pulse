@@ -76,7 +76,7 @@ export function IndustryMatrix({ dataset, view }: IndustryMatrixProps) {
   };
 
   return (
-    <section aria-labelledby="industry-matrix-heading" className="industry-matrix-section" id="industry">
+    <section aria-labelledby="industry-matrix-heading" className="industry-matrix-section">
       <div className="fundamentals-heading">
         <p>仅限获批报告的定性行业观察</p>
         <h2 id="industry-matrix-heading">行业景气矩阵</h2>

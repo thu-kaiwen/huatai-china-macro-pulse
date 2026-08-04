@@ -136,6 +136,37 @@ export function selectLatestObservation(
   }).sort((left, right) => compareObservationRecency(reportsById, left, right))[0];
 }
 
+export function selectCanonicalTrendObservations(
+  dataset: MacroDataset,
+  filter: ObservationFilter,
+): MetricObservation[] {
+  const reportsById = new Map(dataset.reports.map((report) => [report.id, report]));
+  const latestBySeriesPeriod = new Map<string, MetricObservation>();
+
+  for (const observation of selectObservations(dataset, filter)) {
+    const key = [
+      observation.metricId,
+      observation.frequency,
+      observation.comparisonType,
+      observation.periodEnd,
+    ].join("\u0000");
+    const current = latestBySeriesPeriod.get(key);
+
+    if (!current || compareObservationRecency(reportsById, observation, current) < 0) {
+      latestBySeriesPeriod.set(key, observation);
+    }
+  }
+
+  return [...latestBySeriesPeriod.values()].sort(
+    (left, right) =>
+      left.periodEnd.localeCompare(right.periodEnd) ||
+      left.metricId.localeCompare(right.metricId) ||
+      left.frequency.localeCompare(right.frequency) ||
+      left.comparisonType.localeCompare(right.comparisonType) ||
+      left.id.localeCompare(right.id),
+  );
+}
+
 export function canShowNativeTrend(
   observations: MetricObservation[],
   frequency: Frequency,

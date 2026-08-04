@@ -47,7 +47,7 @@ export function MonthlyFundamentals({ dataset, view }: MonthlyFundamentalsProps)
   const definitions = new Map(dataset.metricDefinitions.map((definition) => [definition.id, definition]));
 
   return (
-    <section aria-labelledby="monthly-fundamentals-heading" id="monthly" className="fundamentals-section">
+    <section aria-labelledby="monthly-fundamentals-heading" className="fundamentals-section">
       <div className="fundamentals-heading">
         <p>月度宏观数据</p>
         <h2 id="monthly-fundamentals-heading">月度基本盘</h2>

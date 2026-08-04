@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
+import { BackToTop } from "../components/BackToTop";
 import { SectionErrorBoundary } from "../components/SectionErrorBoundary";
 import { SectionHeading } from "../components/SectionHeading";
 import { ViewFilter } from "../components/ViewFilter";
@@ -14,6 +15,37 @@ import { PolicyTimeline } from "../sections/PolicyTimeline";
 import { SourcesArchive } from "../sections/SourcesArchive";
 import { WeeklyPulse } from "../sections/WeeklyPulse";
 import { TrendExplorer } from "../sections/TrendExplorer";
+import { TickerTape } from "../components/TickerTape";
+
+export interface AppComponents {
+  tickerTape: typeof TickerTape;
+  macroOverview: typeof MacroOverview;
+  monthlyFundamentals: typeof MonthlyFundamentals;
+  weeklyPulse: typeof WeeklyPulse;
+  priceFinancial: typeof PriceFinancial;
+  trendExplorer: typeof TrendExplorer;
+  industryMatrix: typeof IndustryMatrix;
+  policyTimeline: typeof PolicyTimeline;
+  outlookRisks: typeof OutlookRisks;
+  sourcesArchive: typeof SourcesArchive;
+}
+
+interface AppProps {
+  components?: Partial<AppComponents>;
+}
+
+const defaultComponents: AppComponents = {
+  tickerTape: TickerTape,
+  macroOverview: MacroOverview,
+  monthlyFundamentals: MonthlyFundamentals,
+  weeklyPulse: WeeklyPulse,
+  priceFinancial: PriceFinancial,
+  trendExplorer: TrendExplorer,
+  industryMatrix: IndustryMatrix,
+  policyTimeline: PolicyTimeline,
+  outlookRisks: OutlookRisks,
+  sourcesArchive: SourcesArchive,
+};
 
 const allSectionIds = ["overview", "monthly", "weekly", "markets", "industry", "policy", "outlook", "sources"];
 
@@ -27,10 +59,21 @@ function sectionIdsForView(view: ViewMode): string[] {
   });
 }
 
-export function App() {
+export function App({ components: componentOverrides }: AppProps = {}) {
   const [activeSection, setActiveSection] = useState("overview");
   const [view, setView] = useState<ViewMode>("combined");
   const visibleSectionIds = sectionIdsForView(view);
+  const components = { ...defaultComponents, ...componentOverrides };
+  const TickerComponent = components.tickerTape;
+  const MacroOverviewComponent = components.macroOverview;
+  const MonthlyFundamentalsComponent = components.monthlyFundamentals;
+  const WeeklyPulseComponent = components.weeklyPulse;
+  const PriceFinancialComponent = components.priceFinancial;
+  const TrendExplorerComponent = components.trendExplorer;
+  const IndustryMatrixComponent = components.industryMatrix;
+  const PolicyTimelineComponent = components.policyTimeline;
+  const OutlookRisksComponent = components.outlookRisks;
+  const SourcesArchiveComponent = components.sourcesArchive;
 
   function changeView(nextView: ViewMode) {
     setView(nextView);
@@ -74,7 +117,12 @@ export function App() {
 
   return (
     <>
-      <Header activeSection={activeSection} onNavigate={setActiveSection} visibleSectionIds={visibleSectionIds} />
+      <Header
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+        TickerComponent={TickerComponent}
+        visibleSectionIds={visibleSectionIds}
+      />
       <main className="terminal-main">
         <section aria-labelledby="terminal-title" className="terminal-intro" id="overview">
           <SectionHeading as="h1" eyebrow="华泰证券研究所" id="terminal-title" title="中国宏观脉搏">
@@ -82,34 +130,35 @@ export function App() {
           </SectionHeading>
           <ViewFilter onChange={changeView} value={view} />
           <SectionErrorBoundary sectionName="宏观总览">
-            <MacroOverview dataset={macroDataset} view={view} />
+            <MacroOverviewComponent dataset={macroDataset} view={view} />
           </SectionErrorBoundary>
         </section>
-        <SectionErrorBoundary sectionName="月度基本盘">
-          <MonthlyFundamentals dataset={macroDataset} view={view} />
+        <SectionErrorBoundary sectionId="monthly" sectionName="月度基本盘">
+          <MonthlyFundamentalsComponent dataset={macroDataset} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="周度高频脉搏">
-          <WeeklyPulse dataset={macroDataset} view={view} />
+        <SectionErrorBoundary sectionId="weekly" sectionName="周度高频脉搏">
+          <WeeklyPulseComponent dataset={macroDataset} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="价格与金融条件">
-          <PriceFinancial dataset={macroDataset} view={view} />
+        <SectionErrorBoundary sectionId="markets" sectionName="价格与金融条件">
+          <PriceFinancialComponent dataset={macroDataset} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="趋势浏览器">
-          <TrendExplorer dataset={macroDataset} view={view} />
+        <SectionErrorBoundary sectionId="trends" sectionName="趋势浏览器">
+          <TrendExplorerComponent dataset={macroDataset} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="行业景气矩阵">
-          <IndustryMatrix dataset={macroDataset} view={view} />
+        <SectionErrorBoundary sectionId="industry" sectionName="行业景气矩阵">
+          <IndustryMatrixComponent dataset={macroDataset} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="政策与事件">
-          <PolicyTimeline events={macroDataset.policyEvents} reports={macroDataset.reports} view={view} />
+        <SectionErrorBoundary sectionId="policy" sectionName="政策与事件">
+          <PolicyTimelineComponent events={macroDataset.policyEvents} reports={macroDataset.reports} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="后续观察与风险">
-          <OutlookRisks items={macroDataset.risks} reports={macroDataset.reports} view={view} />
+        <SectionErrorBoundary sectionId="outlook" sectionName="后续观察与风险">
+          <OutlookRisksComponent items={macroDataset.risks} reports={macroDataset.reports} view={view} />
         </SectionErrorBoundary>
-        <SectionErrorBoundary sectionName="来源、方法与归档">
-          <SourcesArchive reports={macroDataset.reports} />
+        <SectionErrorBoundary sectionId="sources" sectionName="来源、方法与归档">
+          <SourcesArchiveComponent reports={macroDataset.reports} />
         </SectionErrorBoundary>
       </main>
+      <BackToTop />
     </>
   );
 }

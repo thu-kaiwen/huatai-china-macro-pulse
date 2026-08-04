@@ -55,7 +55,7 @@ export function WeeklyPulse({ dataset, view }: WeeklyPulseProps) {
   const definitions = new Map(dataset.metricDefinitions.map((definition) => [definition.id, definition]));
 
   return (
-    <section aria-labelledby="weekly-pulse-heading" id="weekly" className="fundamentals-section">
+    <section aria-labelledby="weekly-pulse-heading" className="fundamentals-section">
       <div className="fundamentals-heading">
         <p>周度高频数据</p>
         <h2 id="weekly-pulse-heading">周度高频脉搏</h2>

@@ -10,7 +10,7 @@ function frequencyLabel(frequency: Report["frequency"]): string {
 
 export function SourcesArchive({ reports }: SourcesArchiveProps) {
   return (
-    <section aria-labelledby="sources-archive-heading" className="research-section sources-archive" id="sources">
+    <section aria-labelledby="sources-archive-heading" className="research-section sources-archive">
       <div className="fundamentals-heading">
         <p>获批公开推送档案</p>
         <h2 id="sources-archive-heading">来源与方法</h2>

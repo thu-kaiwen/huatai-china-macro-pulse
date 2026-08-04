@@ -1,6 +1,10 @@
 import type { ReactElement } from "react";
 import { TrendChart } from "../components/TrendChart";
-import { canShowCrossFrequencyTrend, canShowNativeTrend, selectObservations } from "../domain/selectors";
+import {
+  canShowCrossFrequencyTrend,
+  canShowNativeTrend,
+  selectCanonicalTrendObservations,
+} from "../domain/selectors";
 import type { MacroDataset, MetricDefinition, MetricObservation, ViewMode } from "../domain/types";
 
 interface TrendExplorerProps {
@@ -18,7 +22,7 @@ function selectTrendSeries(dataset: MacroDataset, view: ViewMode): TrendSeries[]
   const definitions = new Map(dataset.metricDefinitions.map((definition) => [definition.id, definition]));
   const observationsByMetric = new Map<string, MetricObservation[]>();
 
-  for (const observation of selectObservations(dataset, { view, verifiedOnly: true })) {
+  for (const observation of selectCanonicalTrendObservations(dataset, { view, verifiedOnly: true })) {
     observationsByMetric.set(observation.metricId, [
       ...(observationsByMetric.get(observation.metricId) ?? []),
       observation,
@@ -89,7 +93,13 @@ export function TrendExplorer({ dataset, view }: TrendExplorerProps): ReactEleme
       </div>
       <p className="market-method-note">仅在同一指标、单位与口径一致，且满足各频率样本门槛时绘制；不以单点外推趋势。</p>
       {series.map(({ definition, weekly, monthly }) => (
-        <TrendChart definition={definition} key={definition.id} monthly={monthly} weekly={weekly} />
+        <TrendChart
+          definition={definition}
+          key={definition.id}
+          monthly={monthly}
+          reports={dataset.reports}
+          weekly={weekly}
+        />
       ))}
     </section>
   );

@@ -44,7 +44,10 @@
   }
 
   nav a { padding: 0.35rem 0.55rem; font-size: 0.78rem; }
+  .ticker-track { animation: none; }
   .ticker-items { min-width: max-content; padding: 0 1rem; }
+  .ticker-copy { display: none; }
+  .back-to-top { right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); }
   .terminal-main { padding: 2rem 1rem 4rem; }
 
   .macro-report-list,
@@ -76,6 +79,8 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .ticker-items { animation: none !important; }
+  .ticker-tape { overflow-x: auto !important; }
+  .ticker-track { animation: none !important; transform: none !important; }
+  .ticker-copy { display: none; }
   .metric-card:hover, .market-reading:hover, .industry-matrix-cell:hover { transform: none; }
 }

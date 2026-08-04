@@ -28,7 +28,7 @@ export function PolicyTimeline({ events, reports, view }: PolicyTimelineProps) {
     }, new Map());
 
   return (
-    <section aria-labelledby="policy-timeline-heading" className="research-section" id="policy">
+    <section aria-labelledby="policy-timeline-heading" className="research-section">
       <div className="fundamentals-heading">
         <p>仅限获批报告记录的政策事项</p>
         <h2 id="policy-timeline-heading">政策时间线</h2>

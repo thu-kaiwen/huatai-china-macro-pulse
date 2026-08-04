@@ -68,6 +68,59 @@ test("collapses multi-column market groups to two columns at 1024px", async ({ p
   expect(columnCount).toBe(2);
 });
 
+test("returns to the top after an actual page scroll", async ({ page }) => {
+  await page.goto("/");
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const backToTop = page.getByRole("button", { name: "回到顶部" });
+  await expect(backToTop).toBeVisible();
+  await backToTop.click();
+
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5);
+  await expect(page.getByRole("heading", { name: "中国宏观脉搏", level: 1 })).toBeInViewport();
+});
+
+test("uses desktop marquee motion and mobile manual ticker scrolling", async ({ page }) => {
+  await page.goto("/");
+  const viewportWidth = page.viewportSize()!.width;
+  const ticker = page.getByRole("region", { name: "最新宏观指标" });
+  const track = ticker.locator(".ticker-track");
+  const duplicate = ticker.locator('.ticker-items[aria-hidden="true"]');
+
+  if (viewportWidth > 640) {
+    await expect(track).toHaveCSS("animation-name", "ticker-marquee");
+    await expect(ticker).toHaveCSS("overflow-x", "hidden");
+    await expect(duplicate).toHaveCSS("display", "flex");
+
+    await ticker.hover();
+    await expect(track).toHaveCSS("animation-play-state", "paused");
+    await ticker.focus();
+    await expect(track).toHaveCSS("animation-play-state", "paused");
+  } else {
+    await expect(track).toHaveCSS("animation-name", "none");
+    await expect(ticker).toHaveCSS("overflow-x", "auto");
+    await expect(duplicate).toHaveCSS("display", "none");
+    const scrollLeft = await ticker.evaluate((element) => {
+      element.scrollLeft = 100;
+      return element.scrollLeft;
+    });
+    expect(scrollLeft).toBeGreaterThan(0);
+  }
+});
+
+test.describe("reduced motion", () => {
+  test("disables ticker marquee duplication and keeps manual scrolling", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    const ticker = page.getByRole("region", { name: "最新宏观指标" });
+
+    expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(true);
+    await expect(ticker.locator(".ticker-track")).toHaveCSS("animation-name", "none");
+    await expect(ticker).toHaveCSS("overflow-x", "auto");
+    await expect(ticker.locator('.ticker-items[aria-hidden="true"]')).toHaveCSS("display", "none");
+  });
+});
+
 for (const theme of ["light", "dark"] as const) {
   test(`${theme} theme has no automatically detectable accessibility violations`, async ({ page }) => {
     await page.goto("/");

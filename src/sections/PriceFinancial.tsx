@@ -154,7 +154,7 @@ function MarketPeriod({
 
 export function PriceFinancial({ dataset, view }: PriceFinancialProps) {
   return (
-    <section aria-labelledby="price-financial-heading" className="price-financial-section" id="markets">
+    <section aria-labelledby="price-financial-heading" className="price-financial-section">
       <div className="fundamentals-heading">
         <p>价格、利率、汇率与权益</p>
         <h2 id="price-financial-heading">价格与金融条件</h2>

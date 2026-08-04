@@ -4,6 +4,7 @@ import { validateDataset } from "./validateDataset";
 import {
   canShowCrossFrequencyTrend,
   canShowNativeTrend,
+  selectCanonicalTrendObservations,
   selectLatestObservation,
   selectNarratives,
   selectObservations,
@@ -311,6 +312,37 @@ describe("macro data domain", () => {
         .selectLatestObservations?.(dataset, { view: "combined", verifiedOnly: true })
         .map((observation) => observation.id),
     ).toEqual(["obs-monthly", "obs-weekly-newest"]);
+  });
+
+  it("canonicalizes same-period trend revisions by report publication recency", () => {
+    const revisedReport = {
+      ...reports[2],
+      id: "weekly-2-revision",
+      publishedAt: "2026-07-28",
+      title: "Week 30 macro pulse revision",
+    };
+    const oldRevision: MetricObservation = {
+      ...weeklyBrentLatest,
+      id: "obs-weekly-old-revision",
+      value: 90.01,
+      sourceText: "The first release reported 90.01 dollars per barrel.",
+    };
+    const newRevision: MetricObservation = {
+      ...weeklyBrentLatest,
+      id: "obs-weekly-new-revision",
+      reportId: revisedReport.id,
+      value: 90.22,
+      sourceText: "The revised release reported 90.22 dollars per barrel.",
+    };
+    const dataset: MacroDataset = {
+      ...validDataset,
+      reports: [...reports, revisedReport],
+      observations: [weeklyBrentOlder, oldRevision, newRevision],
+    };
+    expect(
+      selectCanonicalTrendObservations(dataset, { view: "weekly", verifiedOnly: true })
+        .map((observation) => observation.id),
+    ).toEqual(["obs-weekly-older", "obs-weekly-new-revision"]);
   });
 
   it("reports duplicate IDs, unknown reports, non-finite values, empty excerpts, and frequency mismatches", () => {

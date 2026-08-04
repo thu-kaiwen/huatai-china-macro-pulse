@@ -1,10 +1,11 @@
 import type { ReactElement } from "react";
-import type { MetricDefinition, MetricObservation } from "../domain/types";
+import type { MetricDefinition, MetricObservation, Report } from "../domain/types";
 
 interface TrendChartProps {
   definition: MetricDefinition;
   weekly: MetricObservation[];
   monthly: MetricObservation[];
+  reports: Report[];
 }
 
 const width = 680;
@@ -15,8 +16,28 @@ function sortByPeriod(observations: MetricObservation[]): MetricObservation[] {
   return [...observations].sort((left, right) => left.periodEnd.localeCompare(right.periodEnd));
 }
 
-function formatObservation(observation: MetricObservation, unit: string): string {
-  return `${observation.periodEnd}：${observation.value}${unit}`;
+function formatValue(observation: MetricObservation): string {
+  return observation.sourceValueText ?? observation.value.toLocaleString("zh-CN", {
+    maximumFractionDigits: 20,
+  });
+}
+
+function frequencyLabel(frequency: MetricObservation["frequency"]): string {
+  return frequency === "weekly" ? "周频" : "月频";
+}
+
+function formatObservation(
+  observation: MetricObservation,
+  unit: string,
+  report?: Report,
+): string {
+  return [
+    frequencyLabel(observation.frequency),
+    `${observation.periodEndLabel ?? "截至"}${observation.periodEnd}`,
+    `${formatValue(observation)}${unit}`,
+    observation.sourceText,
+    report?.title ?? "关联报告不可用",
+  ].join("，");
 }
 
 function chartLabel(definition: MetricDefinition, weekly: MetricObservation[], monthly: MetricObservation[]): string {
@@ -46,7 +67,19 @@ function areCompatible(
   );
 }
 
-export function TrendChart({ definition, weekly, monthly }: TrendChartProps): ReactElement {
+function dataTableLabel(
+  definition: MetricDefinition,
+  weekly: MetricObservation[],
+  monthly: MetricObservation[],
+): string {
+  const frequency = weekly.length > 0 && monthly.length > 0
+    ? "周频与月频"
+    : weekly.length > 0 ? "周频" : "月频";
+
+  return `${definition.name}${frequency}趋势数据`;
+}
+
+export function TrendChart({ definition, weekly, monthly, reports }: TrendChartProps): ReactElement {
   if (!areCompatible(definition, weekly, monthly)) {
     return <></>;
   }
@@ -75,7 +108,11 @@ export function TrendChart({ definition, weekly, monthly }: TrendChartProps): Re
     padding.top + plotHeight - ((observation.value - minimumValue) / valueRange) * plotHeight;
   const pointList = (series: MetricObservation[]) => series.map((observation) => `${x(observation)},${y(observation)}`).join(" ");
   const label = chartLabel(definition, sortedWeekly, sortedMonthly);
-  const description = observations.map((observation) => formatObservation(observation, definition.unit)).join("；");
+  const reportsById = new Map(reports.map((report) => [report.id, report]));
+  const tableLabel = dataTableLabel(definition, sortedWeekly, sortedMonthly);
+  const description = observations
+    .map((observation) => formatObservation(observation, definition.unit, reportsById.get(observation.reportId)))
+    .join("；");
 
   return (
     <figure>
@@ -87,7 +124,8 @@ export function TrendChart({ definition, weekly, monthly }: TrendChartProps): Re
         viewBox={`0 0 ${width} ${height}`}
         width="100%"
       >
-        <title>{`${label}。${description}`}</title>
+        <title>{label}</title>
+        <desc>{description}</desc>
         <line x1={padding.left} x2={width - padding.right} y1={height - padding.bottom} y2={height - padding.bottom} />
         <line x1={padding.left} x2={padding.left} y1={padding.top} y2={height - padding.bottom} />
         {sortedWeekly.length > 1 ? <polyline fill="none" points={pointList(sortedWeekly)} stroke="currentColor" strokeWidth="2" /> : null}
@@ -96,7 +134,7 @@ export function TrendChart({ definition, weekly, monthly }: TrendChartProps): Re
         ) : null}
         {sortedWeekly.map((observation) => (
           <circle cx={x(observation)} cy={y(observation)} fill="currentColor" key={observation.id} r="4">
-            <title>{formatObservation(observation, definition.unit)}</title>
+            <title>{formatObservation(observation, definition.unit, reportsById.get(observation.reportId))}</title>
           </circle>
         ))}
         {sortedMonthly.map((observation) => {
@@ -109,11 +147,46 @@ export function TrendChart({ definition, weekly, monthly }: TrendChartProps): Re
               key={observation.id}
               points={`${pointX},${pointY - 5} ${pointX + 5},${pointY} ${pointX},${pointY + 5} ${pointX - 5},${pointY}`}
             >
-              <title>{formatObservation(observation, definition.unit)}</title>
+              <title>{formatObservation(observation, definition.unit, reportsById.get(observation.reportId))}</title>
             </polygon>
           );
         })}
       </svg>
+      <details className="trend-data-disclosure">
+        <summary>查看图表数据与来源</summary>
+        <div className="trend-data-table-wrap">
+          <table aria-label={tableLabel} className="trend-data-table">
+            <thead>
+              <tr>
+                <th scope="col">频率</th>
+                <th scope="col">统计期</th>
+                <th scope="col">数值</th>
+                <th scope="col">来源依据</th>
+                <th scope="col">关联报告</th>
+              </tr>
+            </thead>
+            <tbody>
+              {observations.map((observation) => {
+                const report = reportsById.get(observation.reportId);
+
+                return (
+                  <tr key={observation.id}>
+                    <td>{frequencyLabel(observation.frequency)}</td>
+                    <td>{observation.periodEndLabel ?? "截至"} {observation.periodEnd}</td>
+                    <td>{formatValue(observation)} {definition.unit}</td>
+                    <td>{observation.sourceText}</td>
+                    <td>
+                      {report ? (
+                        <a href={report.sourceUrl} rel="noreferrer" target="_blank">{report.title}</a>
+                      ) : "关联报告不可用"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </figure>
   );
 }

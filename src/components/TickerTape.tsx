@@ -1,8 +1,8 @@
-import type { ComparisonType, MetricDefinition, MetricObservation, NativeFrequency } from "../domain/types";
+import { selectLatestObservation } from "../domain/selectors";
+import type { ComparisonType, MacroDataset, MetricDefinition, MetricObservation, NativeFrequency } from "../domain/types";
 
 interface TickerTapeProps {
-  observations: MetricObservation[];
-  definitions: MetricDefinition[];
+  dataset: MacroDataset;
 }
 
 const tickerMetrics = [
@@ -16,14 +16,8 @@ const tickerMetrics = [
   { metricId: "second-home-area-yoy", label: "二手房" },
 ] as const;
 
-function latestVerifiedObservation(observations: MetricObservation[], metricId: string) {
-  return observations
-    .filter((observation) => observation.metricId === metricId && observation.confidence === "verified")
-    .sort((left, right) => right.periodEnd.localeCompare(left.periodEnd))[0];
-}
-
 function formatValue(observation: MetricObservation, definition?: MetricDefinition) {
-  const value = observation.value.toLocaleString("zh-CN", { maximumFractionDigits: 2 });
+  const value = observation.sourceValueText ?? observation.value.toLocaleString("zh-CN", { maximumFractionDigits: 2 });
   return `${observation.value > 0 && observation.comparisonType !== "none" ? "+" : ""}${value}${definition?.unit ?? ""}`;
 }
 
@@ -53,10 +47,10 @@ function frequencyLabel(nativeFrequency: NativeFrequency | undefined, observatio
   return labels[frequency];
 }
 
-export function TickerTape({ observations, definitions }: TickerTapeProps) {
-  const definitionsById = new Map(definitions.map((definition) => [definition.id, definition]));
+export function TickerTape({ dataset }: TickerTapeProps) {
+  const definitionsById = new Map(dataset.metricDefinitions.map((definition) => [definition.id, definition]));
   const items = tickerMetrics.flatMap(({ metricId, label, ...options }) => {
-    const observation = latestVerifiedObservation(observations, metricId);
+    const observation = selectLatestObservation(dataset, metricId, "combined");
     if (!observation) return [];
 
     const displayLabel = "comparisonAware" in options
@@ -65,18 +59,27 @@ export function TickerTape({ observations, definitions }: TickerTapeProps) {
 
     return [{ label: displayLabel, observation, definition: definitionsById.get(metricId) }];
   });
+  const renderItems = (isDuplicate: boolean) => (
+    <div
+      aria-hidden={isDuplicate ? "true" : undefined}
+      className={`ticker-items${isDuplicate ? " ticker-copy" : ""}`}
+    >
+      {items.map(({ label, observation, definition }) => (
+        <span className="ticker-item" key={observation.id} title={observation.sourceText}>
+          <span>{label}</span>
+          <strong>{formatValue(observation, definition)}</strong>
+          <span className="ticker-item-meta">{frequencyLabel(definition?.nativeFrequency, observation)}</span>
+          <span className="ticker-item-meta">{observation.periodEndLabel ?? "截至"} {observation.periodEnd}</span>
+        </span>
+      ))}
+    </div>
+  );
 
   return (
     <div className="ticker-tape" aria-label="最新宏观指标" role="region" tabIndex={0}>
-      <div className="ticker-items">
-        {items.map(({ label, observation, definition }) => (
-          <span className="ticker-item" key={observation.id} title={observation.sourceText}>
-            <span>{label}</span>
-            <strong>{formatValue(observation, definition)}</strong>
-            <span className="ticker-item-meta">{frequencyLabel(definition?.nativeFrequency, observation)}</span>
-            <span className="ticker-item-meta">{observation.periodEndLabel ?? "截至"} {observation.periodEnd}</span>
-          </span>
-        ))}
+      <div className="ticker-track">
+        {renderItems(false)}
+        {renderItems(true)}
       </div>
     </div>
   );
