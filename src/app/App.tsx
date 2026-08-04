@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
+import { SectionErrorBoundary } from "../components/SectionErrorBoundary";
 import { SectionHeading } from "../components/SectionHeading";
 import { ViewFilter } from "../components/ViewFilter";
 import { macroDataset } from "../data/dataset";
@@ -80,16 +81,34 @@ export function App() {
             连接月度与周度数据，呈现中国宏观经济的最新脉动。
           </SectionHeading>
           <ViewFilter onChange={changeView} value={view} />
-          <MacroOverview dataset={macroDataset} view={view} />
+          <SectionErrorBoundary sectionName="宏观总览">
+            <MacroOverview dataset={macroDataset} view={view} />
+          </SectionErrorBoundary>
         </section>
-        <MonthlyFundamentals dataset={macroDataset} view={view} />
-        <WeeklyPulse dataset={macroDataset} view={view} />
-        <PriceFinancial dataset={macroDataset} view={view} />
-        <TrendExplorer dataset={macroDataset} view={view} />
-        <IndustryMatrix dataset={macroDataset} view={view} />
-        <PolicyTimeline events={macroDataset.policyEvents} reports={macroDataset.reports} view={view} />
-        <OutlookRisks items={macroDataset.risks} reports={macroDataset.reports} view={view} />
-        <SourcesArchive reports={macroDataset.reports} />
+        <SectionErrorBoundary sectionName="月度基本盘">
+          <MonthlyFundamentals dataset={macroDataset} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="周度高频脉搏">
+          <WeeklyPulse dataset={macroDataset} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="价格与金融条件">
+          <PriceFinancial dataset={macroDataset} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="趋势浏览器">
+          <TrendExplorer dataset={macroDataset} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="行业景气矩阵">
+          <IndustryMatrix dataset={macroDataset} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="政策与事件">
+          <PolicyTimeline events={macroDataset.policyEvents} reports={macroDataset.reports} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="后续观察与风险">
+          <OutlookRisks items={macroDataset.risks} reports={macroDataset.reports} view={view} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary sectionName="来源、方法与归档">
+          <SourcesArchive reports={macroDataset.reports} />
+        </SectionErrorBoundary>
       </main>
     </>
   );

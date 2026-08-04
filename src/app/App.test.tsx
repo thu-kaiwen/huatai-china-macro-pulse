@@ -1,4 +1,4 @@
-import { cleanup, screen } from "@testing-library/react";
+import { cleanup, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import App from "./App";
 import { renderApp } from "../test/renderApp";
@@ -54,7 +54,8 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "周报" }));
 
     expect(screen.getByRole("button", { name: "周报" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getAllByText("报告周截至 2026-08-02")).toHaveLength(20);
+    const marketSection = screen.getByRole("heading", { name: "价格与金融条件" }).closest("section")!;
+    expect(within(marketSection).getAllByText("报告周截至 2026-08-02")).toHaveLength(20);
     expect(screen.getAllByTestId("macro-signal")).toHaveLength(1);
   });
 });

@@ -2,6 +2,7 @@ import { metricDefinitions } from "../data/metricDefinitions";
 import { observations } from "../data/observations";
 import { BrandLockup } from "./BrandLockup";
 import { SourceBadge } from "./SourceBadge";
+import { SectionErrorBoundary } from "./SectionErrorBoundary";
 import { ThemeToggle } from "./ThemeToggle";
 import { TickerTape } from "./TickerTape";
 
@@ -44,7 +45,9 @@ export function Header({ activeSection, onNavigate, visibleSectionIds }: HeaderP
           <ThemeToggle />
         </div>
       </div>
-      <TickerTape observations={observations} definitions={metricDefinitions} />
+      <SectionErrorBoundary sectionName="关键指标带">
+        <TickerTape observations={observations} definitions={metricDefinitions} />
+      </SectionErrorBoundary>
     </header>
   );
 }

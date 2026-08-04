@@ -1,4 +1,4 @@
-import { selectObservations } from "../domain/selectors";
+import { selectLatestObservations } from "../domain/selectors";
 import type { ComparisonType, MacroDataset, MetricDefinition, MetricObservation, ViewMode } from "../domain/types";
 
 interface PriceFinancialProps {
@@ -123,7 +123,7 @@ function MarketPeriod({
       </div>
       <div className="market-group-grid">
         {marketGroups.map((group) => {
-          const observations = selectObservations(dataset, {
+          const observations = selectLatestObservations(dataset, {
             view: frequency,
             metricIds: group.metricIds,
             verifiedOnly: true,

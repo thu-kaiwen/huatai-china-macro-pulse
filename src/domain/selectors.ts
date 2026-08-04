@@ -14,16 +14,73 @@ function matchesView(frequency: Frequency, view: ViewMode): boolean {
   return view === "combined" || frequency === view;
 }
 
+function compareReportRecency(left: Report, right: Report): number {
+  return (
+    right.publishedAt.localeCompare(left.publishedAt) ||
+    right.periodEnd.localeCompare(left.periodEnd) ||
+    right.id.localeCompare(left.id)
+  );
+}
+
+function compareObservationRecency(
+  reportsById: ReadonlyMap<string, Report>,
+  left: MetricObservation,
+  right: MetricObservation,
+): number {
+  const leftReport = reportsById.get(left.reportId);
+  const rightReport = reportsById.get(right.reportId);
+  const reportComparison =
+    (rightReport?.publishedAt ?? "").localeCompare(leftReport?.publishedAt ?? "") ||
+    (rightReport?.periodEnd ?? "").localeCompare(leftReport?.periodEnd ?? "");
+
+  return reportComparison || right.periodEnd.localeCompare(left.periodEnd) || right.id.localeCompare(left.id);
+}
+
 export function selectReports(dataset: MacroDataset, view: ViewMode): Report[] {
   return [...dataset.reports]
     .filter((report) => matchesView(report.frequency, view))
-    .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
+    .sort(compareReportRecency);
+}
+
+export function selectLatestReports(dataset: MacroDataset, view: ViewMode): Report[] {
+  const frequencies = new Set<Frequency>();
+
+  return selectReports(dataset, view).filter((report) => {
+    if (frequencies.has(report.frequency)) {
+      return false;
+    }
+
+    frequencies.add(report.frequency);
+    return true;
+  });
 }
 
 export function selectNarratives(dataset: MacroDataset, view: ViewMode): Narrative[] {
   const reportIds = new Set(selectReports(dataset, view).map((report) => report.id));
 
   return dataset.narratives.filter((narrative) => reportIds.has(narrative.reportId));
+}
+
+export function selectLatestNarratives(dataset: MacroDataset, view: ViewMode): Narrative[] {
+  const reportsById = new Map(dataset.reports.map((report) => [report.id, report]));
+  const latestByTopicAndFrequency = new Map<string, Narrative>();
+
+  for (const narrative of dataset.narratives) {
+    const report = reportsById.get(narrative.reportId);
+    if (!report || !matchesView(report.frequency, view)) {
+      continue;
+    }
+
+    const key = `${narrative.topic}\u0000${report.frequency}`;
+    const current = latestByTopicAndFrequency.get(key);
+    const currentReport = current ? reportsById.get(current.reportId) : undefined;
+
+    if (!current || !currentReport || compareReportRecency(report, currentReport) < 0) {
+      latestByTopicAndFrequency.set(key, narrative);
+    }
+  }
+
+  return [...latestByTopicAndFrequency.values()];
 }
 
 export function selectPolicyEvents(dataset: MacroDataset, view: ViewMode): PolicyEvent[] {
@@ -46,12 +103,37 @@ export function selectObservations(
     .sort((left, right) => left.periodEnd.localeCompare(right.periodEnd));
 }
 
+export function selectLatestObservations(
+  dataset: MacroDataset,
+  filter: ObservationFilter,
+): MetricObservation[] {
+  const reportsById = new Map(dataset.reports.map((report) => [report.id, report]));
+  const latestByMetricAndFrequency = new Map<string, MetricObservation>();
+
+  for (const observation of selectObservations(dataset, filter)) {
+    const key = `${observation.metricId}\u0000${observation.frequency}`;
+    const current = latestByMetricAndFrequency.get(key);
+
+    if (!current || compareObservationRecency(reportsById, observation, current) < 0) {
+      latestByMetricAndFrequency.set(key, observation);
+    }
+  }
+
+  return [...latestByMetricAndFrequency.values()];
+}
+
 export function selectLatestObservation(
   dataset: MacroDataset,
   metricId: string,
   view: ViewMode,
 ): MetricObservation | undefined {
-  return selectObservations(dataset, { view, metricIds: [metricId] }).at(-1);
+  const reportsById = new Map(dataset.reports.map((report) => [report.id, report]));
+
+  return selectLatestObservations(dataset, {
+    view,
+    metricIds: [metricId],
+    verifiedOnly: true,
+  }).sort((left, right) => compareObservationRecency(reportsById, left, right))[0];
 }
 
 export function canShowNativeTrend(

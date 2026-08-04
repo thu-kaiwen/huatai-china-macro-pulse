@@ -9,6 +9,7 @@ import {
   selectObservations,
   selectReports,
 } from "./selectors";
+import * as selectors from "./selectors";
 
 const weeklyBrentOlder: MetricObservation = {
   id: "obs-weekly-older",
@@ -227,6 +228,89 @@ describe("macro data domain", () => {
     expect(selectNarratives(validDataset, "weekly").map((narrative) => narrative.id)).toEqual([
       "weekly-policy",
     ]);
+  });
+
+  it("selects only the newest report and narrative for each frequency and topic", () => {
+    const futureWeeklyReport = {
+      ...reports[2],
+      id: "weekly-3",
+      publishedAt: "2026-08-03",
+      periodStart: "2026-07-27",
+      periodEnd: "2026-08-02",
+      title: "Week 31 macro pulse",
+    };
+    const dataset: MacroDataset = {
+      ...validDataset,
+      reports: [...reports, futureWeeklyReport],
+      narratives: [
+        ...narratives,
+        {
+          ...narratives[1],
+          id: "weekly-policy-new",
+          reportId: futureWeeklyReport.id,
+          title: "Newest weekly policy",
+        },
+      ],
+    };
+    const currentSelectors = selectors as typeof selectors & {
+      selectLatestReports?: typeof selectReports;
+      selectLatestNarratives?: typeof selectNarratives;
+    };
+
+    expect(currentSelectors.selectLatestReports?.(dataset, "weekly").map((report) => report.id)).toEqual([
+      "weekly-3",
+    ]);
+    expect(
+      currentSelectors.selectLatestNarratives?.(dataset, "weekly").map((narrative) => narrative.id),
+    ).toEqual(["weekly-policy-new"]);
+  });
+
+  it("selects one newest verified observation per metric and frequency", () => {
+    const futureWeeklyReport = {
+      ...reports[2],
+      id: "weekly-3",
+      publishedAt: "2026-08-03",
+      periodStart: "2026-07-27",
+      periodEnd: "2026-08-02",
+      title: "Week 31 macro pulse",
+    };
+    const newestWeeklyBrent: MetricObservation = {
+      ...weeklyBrentLatest,
+      id: "obs-weekly-newest",
+      reportId: futureWeeklyReport.id,
+      periodEnd: "2026-08-02",
+      value: 91.23,
+    };
+    const partialLaterBrent: MetricObservation = {
+      ...newestWeeklyBrent,
+      id: "obs-weekly-partial",
+      periodEnd: "2026-08-03",
+      confidence: "partial",
+      value: 99,
+    };
+    const dataset: MacroDataset = {
+      ...validDataset,
+      reports: [...reports, futureWeeklyReport],
+      observations: [
+        weeklyBrentOlder,
+        weeklyBrentLatest,
+        monthlyBrent,
+        newestWeeklyBrent,
+        partialLaterBrent,
+      ],
+    };
+    const currentSelectors = selectors as typeof selectors & {
+      selectLatestObservations?: (
+        dataset: MacroDataset,
+        filter: Parameters<typeof selectObservations>[1],
+      ) => MetricObservation[];
+    };
+
+    expect(
+      currentSelectors
+        .selectLatestObservations?.(dataset, { view: "combined", verifiedOnly: true })
+        .map((observation) => observation.id),
+    ).toEqual(["obs-monthly", "obs-weekly-newest"]);
   });
 
   it("reports duplicate IDs, unknown reports, non-finite values, empty excerpts, and frequency mismatches", () => {

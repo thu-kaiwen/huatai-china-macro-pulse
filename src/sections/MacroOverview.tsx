@@ -1,5 +1,5 @@
 import { SignalPill } from "../components/SignalPill";
-import { selectNarratives, selectReports } from "../domain/selectors";
+import { selectLatestNarratives, selectLatestReports } from "../domain/selectors";
 import type { MacroDataset, ViewMode } from "../domain/types";
 
 interface MacroOverviewProps {
@@ -12,8 +12,8 @@ function frequencyLabel(frequency: "weekly" | "monthly") {
 }
 
 export function MacroOverview({ dataset, view }: MacroOverviewProps) {
-  const visibleReports = selectReports(dataset, view);
-  const visibleNarratives = selectNarratives(dataset, view);
+  const visibleReports = selectLatestReports(dataset, view);
+  const visibleNarratives = selectLatestNarratives(dataset, view);
 
   return (
     <section aria-labelledby="macro-overview-heading" className="macro-overview">

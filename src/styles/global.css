@@ -68,10 +68,17 @@ nav a:focus-visible { color: var(--ht-red); }
 
 .ticker-tape { display: flex; align-items: center; height: 38px; overflow-x: auto; overflow-y: hidden; background: var(--panel-muted); scrollbar-width: thin; }
 .ticker-items { display: flex; width: max-content; min-width: min(100%, 1240px); align-items: center; gap: 1.2rem; margin: 0 auto; padding: 0 1.5rem; }
-.ticker-item { display: inline-flex; gap: 0.4rem; color: var(--ink-muted); font-size: 0.76rem; white-space: nowrap; }
+.ticker-item { display: inline-flex; align-items: baseline; gap: 0.4rem; color: var(--ink-muted); font-size: 0.76rem; white-space: nowrap; }
 .ticker-item strong { color: var(--ink); font-weight: 650; }
+.ticker-item-meta { padding-left: 0.25rem; border-left: 1px solid var(--line); font-size: 0.68rem; }
 
 .terminal-main { width: min(100%, 1240px); margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+.section-error-card { margin-top: 4.5rem; padding: 1.25rem; border: 1px solid var(--line); border-left: 3px solid var(--amber); border-radius: 0.4rem; background: var(--panel); }
+.section-error-card h2 { margin: 0; font-size: 1rem; }
+.section-error-card p { margin: 0.5rem 0 0; color: var(--ink-muted); font-size: 0.84rem; line-height: 1.6; }
+.terminal-header > .section-error-card { height: 38px; margin: 0; padding: 0.55rem 1.5rem; overflow: hidden; border-width: 0 0 0 3px; border-radius: 0; background: var(--panel-muted); }
+.terminal-header > .section-error-card h2 { font-size: 0.76rem; }
+.terminal-header > .section-error-card p { display: none; }
 .section-heading { max-width: 48rem; }
 .section-heading p { margin: 0 0 0.6rem; color: var(--ht-red); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; }
 .section-heading h1, .section-heading h2 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.04em; }
