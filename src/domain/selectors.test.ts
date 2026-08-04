@@ -17,7 +17,7 @@ const weeklyBrentOlder: MetricObservation = {
   periodEnd: "2026-07-19",
   frequency: "weekly",
   value: 88.4,
-  comparisonType: "previous-week",
+  comparisonType: "none",
   sourceText: "Brent averaged 88.4 dollars per barrel.",
   confidence: "verified",
 };
@@ -38,7 +38,7 @@ const monthlyBrent: MetricObservation = {
   periodEnd: "2026-06-30",
   frequency: "monthly",
   value: 89.2,
-  comparisonType: "mom",
+  comparisonType: "none",
   sourceText: "Brent averaged 89.2 dollars per barrel in June.",
 };
 
@@ -162,6 +162,16 @@ describe("macro data domain", () => {
   it("requires two weekly and one monthly verified observation for the same metric", () => {
     expect(canShowCrossFrequencyTrend([weeklyBrentOlder, weeklyBrentLatest, monthlyBrent])).toBe(true);
     expect(canShowCrossFrequencyTrend([weeklyBrentOlder, weeklyBrentLatest, { ...monthlyBrent, metricId: "other" }])).toBe(false);
+  });
+
+  it("does not combine cross-frequency observations with different comparison types", () => {
+    expect(
+      canShowCrossFrequencyTrend([
+        { ...weeklyBrentOlder, comparisonType: "wow" },
+        { ...weeklyBrentLatest, comparisonType: "wow" },
+        { ...monthlyBrent, comparisonType: "mom" },
+      ]),
+    ).toBe(false);
   });
 
   it("selects the latest observation visible in the chosen view", () => {

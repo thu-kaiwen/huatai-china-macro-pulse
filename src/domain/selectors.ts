@@ -66,8 +66,13 @@ export function canShowCrossFrequencyTrend(observations: MetricObservation[]): b
     ]);
   }
 
-  return [...observationsByMetric.values()].some((metricObservations) =>
-    canShowNativeTrend(metricObservations, "weekly") &&
-    metricObservations.some((observation) => observation.frequency === "monthly"),
-  );
+  return [...observationsByMetric.values()].some((metricObservations) => {
+    const comparisonTypes = new Set(metricObservations.map((observation) => observation.comparisonType));
+
+    return (
+      canShowNativeTrend(metricObservations, "weekly") &&
+      metricObservations.some((observation) => observation.frequency === "monthly") &&
+      comparisonTypes.size === 1
+    );
+  });
 }
