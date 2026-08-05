@@ -23,6 +23,9 @@
 - Create `build/pages-base.test.ts`: verifies local/Codex Sites behavior and transfer-safe repository-name behavior.
 - Modify `vite.config.ts`: sets Vite's `base` through the resolver without changing existing plugins.
 - Create `.github/workflows/pages.yml`: validates, builds, uploads, and deploys the static client artifact.
+- Move `public/huatai-logo.png` to `src/assets/huatai-logo.png`: routes the logo through Vite's base-aware asset pipeline.
+- Create `src/components/BrandLockup.test.tsx`: prevents regression to a root-absolute public logo URL.
+- Modify `src/components/BrandLockup.tsx`: renders Vite's imported logo asset URL.
 
 ---
 
@@ -196,6 +199,7 @@ jobs:
           path: dist/client
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -221,6 +225,8 @@ git diff --check
 ```
 
 Expected: the first command finds all five official action references; the second produces no matches; diff check passes.
+
+The deploy-job guard intentionally permits `workflow_dispatch` builds from any selected ref but allows the production deployment only when `github.ref` is `refs/heads/main`. Manual dispatch from `main` remains available for redeployment verification.
 
 - [ ] **Step 3: Reproduce the CI build locally**
 
@@ -331,7 +337,39 @@ gh api --method POST "repos/$github_login/huatai-china-macro-pulse/pages" -f bui
 
 Expected: Pages is created with workflow publishing enabled.
 
-- [ ] **Step 6: Add an SSH remote, verify its form, and push**
+- [ ] **Step 6: Restrict the `github-pages` environment to `main`**
+
+Resolve the authenticated identity at runtime, enable custom deployment branch policies on the environment, and add an exact `main` branch rule:
+
+```bash
+github_login="$(gh api user --jq .login)"
+repository="$github_login/huatai-china-macro-pulse"
+gh api --method PUT "repos/$repository/environments/github-pages" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  -F "deployment_branch_policy[protected_branches]=false" \
+  -F "deployment_branch_policy[custom_branch_policies]=true"
+gh api --method POST "repos/$repository/environments/github-pages/deployment-branch-policies" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  -f name=main \
+  -f type=branch
+```
+
+Verify both the environment mode and the sole allowed branch without embedding an account or organization name:
+
+```bash
+github_login="$(gh api user --jq .login)"
+repository="$github_login/huatai-china-macro-pulse"
+gh api "repos/$repository/environments/github-pages" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  --jq '.deployment_branch_policy'
+gh api "repos/$repository/environments/github-pages/deployment-branch-policies" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  --jq '[.branch_policies[].name]'
+```
+
+Expected: the environment reports `protected_branches: false` and `custom_branch_policies: true`; the policy list contains exactly one branch policy named `main`.
+
+- [ ] **Step 7: Add an SSH remote, verify its form, and push**
 
 Run:
 
