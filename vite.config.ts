@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { resolvePagesBase } from "./build/pages-base.ts";
 import { sites } from "./build/sites-vite-plugin.ts";
 
 export default defineConfig(async ({ mode }) => {
@@ -18,6 +19,7 @@ export default defineConfig(async ({ mode }) => {
   }
 
   return {
+    base: resolvePagesBase(process.env.PAGES_REPOSITORY_NAME),
     plugins: [
       react(),
       sites(),
