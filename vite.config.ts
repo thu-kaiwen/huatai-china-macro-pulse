@@ -20,7 +20,7 @@ export default defineConfig(async ({ mode }) => {
 
   return {
     // base: resolvePagesBase(process.env.PAGES_REPOSITORY_NAME),
-    base: resolvePagesBase(),
+    base: resolvePagesBase(""),
     plugins: [
       react(),
       sites(),
