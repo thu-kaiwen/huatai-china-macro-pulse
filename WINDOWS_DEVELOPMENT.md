@@ -46,7 +46,7 @@ Install the native Windows Codex app from an elevated or user-approved PowerShel
 winget install --id 9PLM9XGG6VKS -s msstore
 ```
 
-Open the app and complete sign-in there. The native Windows app uses the Windows/PowerShell sandbox by default; WSL2 is optional. Follow the current [Codex Windows app guide](https://learn.chatgpt.com/docs/windows/windows-app) and [Codex authentication guide](https://learn.chatgpt.com/docs/auth) for current availability and sign-in details.
+Open the app and complete sign-in there. Native Windows Codex defaults to PowerShell. Sandbox protections apply when the user selects **Ask for approval**; full-access mode can also be selected. For this repository, agents MUST keep **Ask for approval** and its sandbox boundaries enabled, and MUST NOT select full access merely to bypass a failure. WSL2 is optional. Follow the current [Codex Windows app guide](https://learn.chatgpt.com/docs/windows/windows-app) and [Codex authentication guide](https://learn.chatgpt.com/docs/auth) for current availability and sign-in details.
 
 If the Codex CLI is **already installed**, authenticate and check its state with:
 
