@@ -4,11 +4,11 @@
 
 ## FIRST: Required Reading Order
 
-Before making a product or data change, read this contract, then inspect `package.json`, `src/domain/types.ts`, `src/domain/validateDataset.ts`, and `src/domain/selectors.ts`. Next, read every relevant file in `src/data/`, the existing tests, `.github/workflows/pages.yml`, `vite.config.ts`, and `playwright.config.ts`. Treat checked-in code, tests, and deployment configuration as the current approved implementation unless the task explicitly changes them.
+Before making a product or data change, read this contract, then inspect `package.json`, `src/domain/types.ts`, `src/domain/validateDataset.ts`, and `src/domain/selectors.ts`. Next, read every relevant file in `src/data/`, the existing tests, `.github/workflows/pages.yml`, `vite.config.ts`, and `playwright.config.ts`. After Task 3, also read `WINDOWS_DEVELOPMENT.md` when it exists. Treat checked-in code, tests, and deployment configuration as the current approved implementation unless the task explicitly changes them.
 
 When a new report is supplied as a link or pasted content, the active coding-agent session MUST parse and check it during development. This work MUST NOT be delegated to browser/runtime tooling or a separate website parser. Preserve the evidence used for every record before changing the static dataset.
 
-Native Windows with PowerShell is the primary development workflow; WSL is optional. Follow [WINDOWS_DEVELOPMENT.md](WINDOWS_DEVELOPMENT.md) for the runbook.
+Native Windows with PowerShell is the primary development workflow; WSL is optional.
 
 ## Product Goal and Current State
 
@@ -42,7 +42,7 @@ The current dataset contains one weekly report ending 2026-08-02 and one monthly
 
 ## Data Trust and Provenance Contract
 
-Each incoming report must be represented once in `src/data/reports.ts`; include its title, publication date, covered period, source URL, and summary. No personal identity values belong in handoff documents. Source-approved byline metadata may remain in the normalized report dataset when required for provenance or content approval. Put metric identity and methodology in `src/data/metricDefinitions.ts`. Put each numeric record in `src/data/observations.ts`, with its report ID, `periodEnd`, frequency, comparison semantics, source text, and confidence. Put qualitative records in the matching narrative/event/risk files: `src/data/narratives.ts`, `src/data/policyEvents.ts`, or `src/data/risks.ts`.
+Each incoming report must be represented once in `src/data/reports.ts`; include its title, publication date, covered period, source URL, and summary. No personal identity values belong in handoff documents. Keep provenance guidance limited to report ID, source URL, publication and statistical periods, and approved source text as applicable. Put metric identity and methodology in `src/data/metricDefinitions.ts`. Put each numeric record in `src/data/observations.ts`, with its report ID, `periodEnd`, frequency, comparison semantics, source text, and confidence. Put qualitative records in the matching narrative/event/risk files: `src/data/narratives.ts`, `src/data/policyEvents.ts`, or `src/data/risks.ts`.
 
 Verified means the agent can directly support the value, period, and comparison from the provided report material. A source excerpt is required for an observation; use `sourceValueText` and period labeling when the report presentation makes those details material. Do not convert an assumption into a verified record merely to fill a chart or card.
 
