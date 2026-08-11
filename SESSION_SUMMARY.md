@@ -36,6 +36,10 @@ The project is a static, source-traceable macro-research site with normalized ch
 
 **Impact:** A normal ownership transfer does not require a source change when the repository name remains unchanged. CI validates, builds, uploads the static artifact, and deploys it with the required least-privilege permissions. The opaque Sites linkage remains unexposed.
 
+**Final-review outcome:** The logo now uses a base-path-safe imported asset; Pages deployment is guarded for the main branch and its protected environment; and the official Pages actions use Node 24-compatible major versions.
+
+**Impact:** Verification passed for the corrected asset path and deployment policy, while authored configuration remains owner-independent.
+
 ## Known Debt
 
 **Decision:** Preserve date-audit uncertainty from final review rather than presenting ambiguous anchors as certain.
