@@ -6,7 +6,9 @@
 
 Before making a product or data change, read this contract, then inspect `package.json`, `src/domain/types.ts`, `src/domain/validateDataset.ts`, and `src/domain/selectors.ts`. Next, read every relevant file in `src/data/`, the existing tests, `.github/workflows/pages.yml`, `vite.config.ts`, and `playwright.config.ts`. Treat checked-in code, tests, and deployment configuration as the current approved implementation unless the task explicitly changes them.
 
-When a new report is supplied as a link or pasted content, the coding agent parses and checks it during development. Preserve the evidence used for every record before changing the static dataset.
+When a new report is supplied as a link or pasted content, the active coding-agent session MUST parse and check it during development. This work MUST NOT be delegated to browser/runtime tooling or a separate website parser. Preserve the evidence used for every record before changing the static dataset.
+
+Native Windows with PowerShell is the primary development workflow; WSL is optional. Follow [WINDOWS_DEVELOPMENT.md](WINDOWS_DEVELOPMENT.md) for the runbook.
 
 ## Product Goal and Current State
 
@@ -18,7 +20,7 @@ The current dataset contains one weekly report ending 2026-08-02 and one monthly
 
 - Only verified observations may reach charts, ticker items, or metric cards. Do not display partial, inferred, or unverified values as product data.
 - Keep report-specific facts in normalized data. Components MUST NOT be edited to hard-code a report, metric value, date, or narrative.
-- Do report parsing and source checking in development tooling or the coding workflow; do not add a runtime ingestion path.
+- The active coding-agent session MUST perform report parsing and source checking during development; it MUST NOT use browser/runtime tooling or a separate website parser, and it MUST NOT add a runtime ingestion path.
 - Preserve the domain types, dataset validation, and selector rules as the contract between data and UI. Update their tests when intentionally changing that contract.
 
 ## Repository Map
@@ -40,13 +42,13 @@ The current dataset contains one weekly report ending 2026-08-02 and one monthly
 
 ## Data Trust and Provenance Contract
 
-Each incoming report must be represented once in `src/data/reports.ts`; include its title, publication date, covered period, source URL, authors, and summary. Put metric identity and methodology in `src/data/metricDefinitions.ts`. Put each numeric record in `src/data/observations.ts`, with its report ID, `periodEnd`, frequency, comparison semantics, source text, and confidence. Put qualitative records in the matching narrative/event/risk files: `src/data/narratives.ts`, `src/data/policyEvents.ts`, or `src/data/risks.ts`.
+Each incoming report must be represented once in `src/data/reports.ts`; include its title, publication date, covered period, source URL, and summary. No personal identity values belong in handoff documents. Source-approved byline metadata may remain in the normalized report dataset when required for provenance or content approval. Put metric identity and methodology in `src/data/metricDefinitions.ts`. Put each numeric record in `src/data/observations.ts`, with its report ID, `periodEnd`, frequency, comparison semantics, source text, and confidence. Put qualitative records in the matching narrative/event/risk files: `src/data/narratives.ts`, `src/data/policyEvents.ts`, or `src/data/risks.ts`.
 
 Verified means the agent can directly support the value, period, and comparison from the provided report material. A source excerpt is required for an observation; use `sourceValueText` and period labeling when the report presentation makes those details material. Do not convert an assumption into a verified record merely to fill a chart or card.
 
 ## Future Report Ingestion Procedure
 
-1. Obtain the report link or pasted content, then parse and check it during development against the source material.
+1. Obtain the report link or pasted content, then the active coding-agent session MUST parse and check it during development against the source material, not in browser/runtime tooling or a separate website parser.
 2. Add the report metadata to `src/data/reports.ts` and identify whether each candidate metric matches an existing metric definition or needs a new, documented definition.
 3. Add directly supported numeric records to `src/data/observations.ts`; add only matching qualitative content to the appropriate narrative, policy-event, or risk file.
 4. Mark a record `verified` only after validating its value, `periodEnd`, frequency, unit, methodology, and comparison semantics. Leave uncertain material out of product surfaces until verified.
