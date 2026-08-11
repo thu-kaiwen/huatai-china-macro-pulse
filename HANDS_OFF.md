@@ -4,9 +4,17 @@
 
 ## FIRST: Required Reading Order
 
-Before making a product or data change, read this contract, then inspect `package.json`, `src/domain/types.ts`, `src/domain/validateDataset.ts`, and `src/domain/selectors.ts`. Next, read every relevant file in `src/data/`, the existing tests, `.github/workflows/pages.yml`, `vite.config.ts`, and `playwright.config.ts`. After Task 3, also read `WINDOWS_DEVELOPMENT.md` when it exists. Treat checked-in code, tests, and deployment configuration as the current approved implementation unless the task explicitly changes them.
+Before making a product or data change, read in this order:
 
-When a new report is supplied as a link or pasted content, the active coding-agent session MUST parse and check it during development. This work MUST NOT be delegated to browser/runtime tooling or a separate website parser. Preserve the evidence used for every record before changing the static dataset.
+1. `HANDS_OFF.md`;
+2. `SESSION_SAMMARY.md`;
+3. `WINDOWS_DEVELOPMENT.md` when operating on Windows;
+4. `README.md` for the promised user workflow;
+5. relevant files under `docs/superpowers/specs/` and `docs/superpowers/plans/` when historical implementation detail is needed.
+
+After completing that reading order, inspect the current code, tests, data, and deployment configuration before editing. Treat checked-in code, tests, data, and deployment configuration as the current approved implementation unless the task explicitly changes them.
+
+When a new report is supplied as a link or pasted content, the active coding-agent development session MUST retrieve, parse, and check it against the approved source. Approved coding-agent tools, including browser or extraction tools, MAY retrieve and analyze a user-supplied approved source during that session. Preserve the evidence used for every record and write only reviewed normalized static data. The shipped React/browser application and its runtime MUST NOT retrieve, scrape, ingest, or parse reports.
 
 Native Windows with PowerShell is the primary development workflow; WSL is optional.
 
@@ -20,7 +28,7 @@ The current dataset contains one weekly report ending 2026-08-02 and one monthly
 
 - Only verified observations may reach charts, ticker items, or metric cards. Do not display partial, inferred, or unverified values as product data.
 - Keep report-specific facts in normalized data. Components MUST NOT be edited to hard-code a report, metric value, date, or narrative.
-- The active coding-agent session MUST perform report parsing and source checking during development; it MUST NOT use browser/runtime tooling or a separate website parser, and it MUST NOT add a runtime ingestion path.
+- The active coding-agent development session MUST perform report retrieval, parsing, and source checking. It MAY use approved coding-agent browser or extraction tools for a user-supplied approved source, but it MUST preserve evidence and write only reviewed normalized static data. The shipped React/browser application and its runtime MUST NOT retrieve, scrape, ingest, or parse reports, and no runtime ingestion path may be added.
 - Preserve the domain types, dataset validation, and selector rules as the contract between data and UI. Update their tests when intentionally changing that contract.
 
 ## Repository Map
@@ -44,14 +52,18 @@ The current dataset contains one weekly report ending 2026-08-02 and one monthly
 
 Each incoming report must be represented once in `src/data/reports.ts`; include its title, publication date, covered period, source URL, and summary. No personal identity values belong in handoff documents. Keep provenance guidance limited to report ID, source URL, publication and statistical periods, and approved source text as applicable. Put metric identity and methodology in `src/data/metricDefinitions.ts`. Put each numeric record in `src/data/observations.ts`, with its report ID, `periodEnd`, frequency, comparison semantics, source text, and confidence. Put qualitative records in the matching narrative/event/risk files: `src/data/narratives.ts`, `src/data/policyEvents.ts`, or `src/data/risks.ts`.
 
-Verified means the agent can directly support the value, period, and comparison from the provided report material. A source excerpt is required for an observation; use `sourceValueText` and period labeling when the report presentation makes those details material. Do not convert an assumption into a verified record merely to fill a chart or card.
+For every new numeric observation, `verified` requires direct source support for the numeric value, comparison, frequency, unit, methodology, and period. A source excerpt is required for an observation; use `sourceValueText` and period labeling when the report presentation makes those details material. Do not convert an assumption into a verified record merely to fill a chart or card.
+
+The current dataset has a documented legacy exception. The numeric values and comparisons of 20 market observations and four second-hand-housing observations are source-verified for the current point-in-time display, but their stored `periodEnd` anchors (`2026-08-02` and `2026-07-26`, respectively) are provisional pending an audit of the original chart axes or notes. These 24 records MUST NOT support new trend claims. Before future history makes any affected metric series trend-eligible, audit and correct its anchors or revise record eligibility and confidence consistently with the schema.
+
+Qualitative admission is separate from numeric verification. Narratives, policy events, and risks require direct source support, a report link, and accurate contextual labeling. They are not numeric verified observations and MUST NOT be rewritten as quantified facts.
 
 ## Future Report Ingestion Procedure
 
-1. Obtain the report link or pasted content, then the active coding-agent session MUST parse and check it during development against the source material, not in browser/runtime tooling or a separate website parser.
+1. Obtain the report link or pasted content. During the active coding-agent development session, approved coding-agent tools, including browser or extraction tools, MAY retrieve and analyze that user-supplied approved source. Preserve the retrieval and analysis evidence; the shipped React/browser application and its runtime MUST NOT retrieve, scrape, ingest, or parse the report.
 2. Add the report metadata to `src/data/reports.ts` and identify whether each candidate metric matches an existing metric definition or needs a new, documented definition.
-3. Add directly supported numeric records to `src/data/observations.ts`; add only matching qualitative content to the appropriate narrative, policy-event, or risk file.
-4. Mark a record `verified` only after validating its value, `periodEnd`, frequency, unit, methodology, and comparison semantics. Leave uncertain material out of product surfaces until verified.
+3. Add only reviewed, directly supported numeric records to `src/data/observations.ts`; add only reviewed qualitative content with direct source support, report linkage, and accurate contextual labels to the appropriate narrative, policy-event, or risk file.
+4. Mark a new numeric record `verified` only after validating its value, `periodEnd`, frequency, unit, methodology, and comparison semantics. Do not rewrite qualitative content as quantified facts. Leave uncertain material out of product surfaces until verified.
 5. Run dataset and selector tests, inspect the affected UI behavior, and run `npm run verify` before completion.
 
 ## Trend Eligibility Rules
@@ -74,7 +86,7 @@ Codex Sites retains its opaque linkage through the existing hosting configuratio
 
 ## Known Data Debt
 
-Twenty market observations anchored to `2026-08-02` remain date-audit debt until original chart axes or notes are verified. Four second-hand-housing observations anchored to `2026-07-26` also remain date-audit debt until their original chart axes or notes are verified. Keep these uncertainties visible to maintainers and do not extrapolate them into unsupported period claims.
+The numeric values and comparisons of 20 market observations and four second-hand-housing observations are source-verified for the current point-in-time display. Their stored `periodEnd` anchors—`2026-08-02` for the market observations and `2026-07-26` for the second-hand-housing observations—remain provisional until the original chart axes or notes are audited. These 24 records MUST NOT support new trend claims. Before future history makes an affected series trend-eligible, audit and correct the anchors or revise record eligibility and confidence consistently with the schema.
 
 ## Prioritized Next Work
 

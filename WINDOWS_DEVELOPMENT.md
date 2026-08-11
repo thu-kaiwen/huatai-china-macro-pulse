@@ -5,7 +5,7 @@
 ## FIRST: Operating Assumptions
 
 - This is a native Windows workflow. Use PowerShell 7 (`pwsh`) when available; Windows PowerShell 5.1 can run the basic commands, but PowerShell 7 is preferred.
-- Read `HANDS_OFF.md` first. It is the current contract; `SESSION_SUMMARY.md`, when present, is historical context only. Then follow the required-reading order in `HANDS_OFF.md` before changing product or data behavior.
+- Read `HANDS_OFF.md` first. It is the current contract; `SESSION_SAMMARY.md` is historical context. Then follow the required-reading order in `HANDS_OFF.md` before changing product or data behavior.
 - Work in a local clone, use PowerShell commands below as written, and keep WSL2 optional rather than a prerequisite.
 - Do not print, paste, or commit credentials, tokens, private keys, SSH fingerprints, opaque hosting linkage, or other sensitive configuration. Avoid sharing terminal output that could expose public account or repository metadata.
 
@@ -109,14 +109,18 @@ npm run dev -- --host 127.0.0.1 --port 5173
 For a production-style preview, first build with the Pages base-path context, then serve the built output locally:
 
 ```powershell
-$env:PAGES_REPOSITORY_NAME = (Split-Path -Leaf (Get-Location))
-npm run build
-Remove-Item Env:PAGES_REPOSITORY_NAME
-
-npx vite preview --host 127.0.0.1 --port 4173
+$repositoryName = Split-Path -Leaf (Get-Location)
+$env:PAGES_REPOSITORY_NAME = $repositoryName
+try {
+  npm run build
+  Write-Host "Open http://127.0.0.1:4173/$repositoryName/"
+  npx vite preview --host 127.0.0.1 --port 4173
+} finally {
+  Remove-Item Env:PAGES_REPOSITORY_NAME -ErrorAction SilentlyContinue
+}
 ```
 
-Open `http://127.0.0.1:4173`. Stop either server with `Ctrl+C`. The E2E runner also uses `127.0.0.1:4173`, so do not leave a stale server on that port before an E2E run.
+While preview is running, open the repository-subpath URL printed by the command, such as `http://127.0.0.1:4173/<repository-name>/`. Stop either server with `Ctrl+C`; the `finally` block then clears `PAGES_REPOSITORY_NAME`. The E2E runner also uses `127.0.0.1:4173`, so do not leave a stale server on that port before an E2E run.
 
 ## Test and Build Matrix
 
@@ -146,12 +150,16 @@ if ($missing) { throw "Missing package scripts: $($missing -join ', ')" }
 
 ## PowerShell Environment Variables
 
-The Pages build must derive its base path from the current clone directory. Use this exact temporary-variable pattern and clear the variable immediately afterward:
+The Pages build must derive its base path from the current clone directory. For a build without a preview server, use this temporary-variable pattern so cleanup also occurs if the build fails:
 
 ```powershell
-$env:PAGES_REPOSITORY_NAME = (Split-Path -Leaf (Get-Location))
-npm run build
-Remove-Item Env:PAGES_REPOSITORY_NAME
+$repositoryName = Split-Path -Leaf (Get-Location)
+$env:PAGES_REPOSITORY_NAME = $repositoryName
+try {
+  npm run build
+} finally {
+  Remove-Item Env:PAGES_REPOSITORY_NAME -ErrorAction SilentlyContinue
+}
 ```
 
 Do not replace `PAGES_REPOSITORY_NAME` with a hard-coded owner, repository name, URL, or hosting identifier. Do not put credentials in `$env:` commands or commit an environment file containing secrets.

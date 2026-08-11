@@ -8,13 +8,13 @@ The project is a static, source-traceable macro-research site with normalized ch
 
 ## Phase 1: Requirement Correction
 
-**Decision:** Correct report-session time parsing so publication, coverage, observation, and comparison periods are represented separately instead of treating a session or display time as the statistical period.
+**Decision:** Correct the architecture so report retrieval and parsing occur in the active coding-agent development session, never in the running site. Separately represent the report publication date, covered period, observation period or end date, and comparison period or basis.
 
-**Impact:** Data records must retain explicit period and comparison semantics, and unsupported date inferences must not reach product surfaces.
+**Impact:** “Session” describes where the agent performs development work; it is not a report date field. Data records must retain explicit publication, coverage, observation, and comparison semantics, and unsupported date inferences must not reach product surfaces.
 
 ## Phase 2: Data and Branding Approval
 
-**Decision:** Approve one weekly input and one monthly input as the initial dataset, and permit the Huatai brand treatment for an internal employee context.
+**Decision:** Approve the public Huatai macro-research WeChat weekly report ending `2026-08-02` and monthly report ending `2026-07-31` as the initial inputs, and permit the Huatai brand treatment for an internal employee context.
 
 **Impact:** The first release is intentionally limited to verified material from those approved inputs. The brand lockup is part of the approved presentation, while data remains traceable and subject to the product's research-disclaimer boundaries.
 
@@ -26,7 +26,7 @@ The project is a static, source-traceable macro-research site with normalized ch
 
 ## Phase 4: Validation and Deployment
 
-**Decision:** Make direct source support the trust model: only verified observations with the required metadata and source excerpt are eligible for charts, ticker items, and metric cards. Use static hosting, retaining the existing Sites configuration before adding GitHub Pages.
+**Decision:** Make direct source support the trust model. For new numeric observations, `verified` requires direct support for the numeric value, comparison, frequency, unit, methodology, and period. Qualitative narratives, policy events, and risks instead require direct source support, report linkage, and accurate contextual labeling; they are not numeric verified observations and must not be rewritten as quantified facts. Use static hosting, retaining the existing Sites configuration before adding GitHub Pages.
 
 **Impact:** Report parsing and checking stay in the active development session, never in the running site. Dataset validation and selectors enforce references, finite values, non-empty source excerpts, report-frequency consistency, and trend eligibility. The default local and Sites build base remains `/`.
 
@@ -44,7 +44,7 @@ The project is a static, source-traceable macro-research site with normalized ch
 
 **Decision:** Preserve date-audit uncertainty from final review rather than presenting ambiguous anchors as certain.
 
-**Impact:** Twenty market observations with an unverified `2026-08-02` anchor and four second-hand-housing observations with an unverified `2026-07-26` anchor require confirmation against original chart axes or notes before expanded trend analysis relies on them. Do not extrapolate from either set.
+**Impact:** The numeric values and comparisons of 20 market observations and four second-hand-housing observations are source-verified for the current point-in-time display. Their stored `periodEnd` anchors—`2026-08-02` and `2026-07-26`, respectively—are provisional pending an audit of the original chart axes or notes. These 24 records MUST NOT support new trend claims. Before future history makes an affected metric series trend-eligible, audit and correct the anchors or revise record eligibility and confidence consistently with the schema.
 
 ## Next Development Direction
 
