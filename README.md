@@ -43,8 +43,8 @@ npm run dev
 
 需要交接或继续维护时，请让开发代理阅读：
 
-- `HANDS_OFF.md`：当前工作约束与完成标准。
-- `SESSION_SAMMARY.md`：已作决定、背景和待处理事项。
-- `WINDOWS_DEVELOPMENT.md`：Windows PowerShell 的开发和排查说明。
+- [HANDS_OFF.md](HANDS_OFF.md)：当前工作约束与完成标准。
+- [SESSION_SAMMARY.md](SESSION_SAMMARY.md)：已作决定、背景和待处理事项。
+- [WINDOWS_DEVELOPMENT.md](WINDOWS_DEVELOPMENT.md)：Windows PowerShell 的开发和排查说明。
 
 页面内容仅应使用经审核允许的研究资料；发布前请按内部流程确认版权、免责声明、署名、引用精度与原文链接。
