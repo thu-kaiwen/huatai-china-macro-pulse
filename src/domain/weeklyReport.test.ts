@@ -18,6 +18,12 @@ describe("2022-07-31 weekly report page", () => {
 
     expect(charts).toHaveLength(4);
     expect(charts.every((chart) => chart.isHero)).toBe(true);
+    expect(charts.map((chart) => chart.id)).toEqual([
+      "heavy-industry-production",
+      "cement-starting-rate",
+      "land-transactions",
+      "industrial-commodities",
+    ]);
   });
 
   it("rejects a page whose hero references and chart flags do not form the same four-chart set", () => {
