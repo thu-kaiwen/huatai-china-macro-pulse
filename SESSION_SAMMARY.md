@@ -40,6 +40,14 @@ The project is a static, source-traceable macro-research site with normalized ch
 
 **Impact:** Verification passed for the corrected asset path and deployment policy, while authored configuration remains owner-independent.
 
+## Phase 6: Remote Reconciliation and Root-Base Deployment
+
+**Decision:** Reconcile the local handoff work with two later remote changes that intentionally switched Vite from the repository-derived Pages subpath to the root base `/`. Preserve both histories with a normal merge; do not rewrite or discard either side.
+
+**Impact:** `vite.config.ts` now calls `resolvePagesBase("")`. The Pages workflow still exports `PAGES_REPOSITORY_NAME`, and the legacy resolver tests still describe repository-subpath behavior, but that environment value is not an active input to the current Vite build. The root base matches the configured custom-domain deployment. A later custom-domain removal, repository transfer, or return to the default project Pages URL must review and migrate the Pages setting, Vite base, preview procedure, and tests together.
+
+**Verification outcome:** On 2026-08-12, linting, type checking, 64 unit tests, and the production build passed. The first in-sandbox E2E attempt could not start Vite because Node's `os.networkInterfaces()` was blocked by the execution environment; the same E2E suite then passed outside that restriction with 20 tests. The merged `main` was pushed over verified SSH, its local and remote commit hashes matched, the corresponding Pages workflow completed successfully, and the public project Pages endpoint redirected to the configured custom domain. Account names, repository-owner paths, commit hashes, authentication details, and the custom-domain hostname are intentionally omitted here.
+
 ## Known Debt
 
 **Decision:** Preserve date-audit uncertainty from final review rather than presenting ambiguous anchors as certain.
@@ -52,4 +60,4 @@ Add report histories only after the active coding-agent session has parsed and c
 
 ## Deliberately Omitted Information
 
-Personal identities, account handles, machine paths, credentials, authentication events, source-specific private details, and opaque hosting IDs were removed. This document intentionally preserves decisions and effects, not operational traces or a transcript.
+Personal identities, account handles, machine paths, credentials, authentication events, source-specific private details, custom-domain hostnames, and opaque hosting IDs were removed. This document intentionally preserves decisions and effects, not operational traces or a transcript.

@@ -45,7 +45,8 @@ The current dataset contains one weekly report ending 2026-08-02 and one monthly
 | `src/data/policyEvents.ts` | Qualitative policy and event records. |
 | `src/data/risks.ts` | Qualitative risk and watch records. |
 | `.github/workflows/pages.yml` | GitHub Pages build and deployment workflow. |
-| `vite.config.ts` | Vite base-path and hosting-plugin configuration. |
+| `vite.config.ts` | Vite root-base and hosting-plugin configuration. Its current `resolvePagesBase("")` call deliberately produces `/`. |
+| `build/pages-base.ts` | Legacy repository-subpath resolver retained with tests; it is not currently fed the Pages repository name by Vite. |
 | `playwright.config.ts` | End-to-end test projects and local test server. |
 
 ## Data Trust and Provenance Contract
@@ -80,7 +81,11 @@ Run focused tests whenever data, validation, selector, or display behavior chang
 
 ## Deployment Boundaries
 
-GitHub Pages derives the Vite base path from the repository name through `PAGES_REPOSITORY_NAME` in the Pages workflow. Preserve that repository-name context when changing deployment-related configuration.
+The current Vite build deliberately uses the root base `/` through `resolvePagesBase("")`. This matches the currently configured GitHub Pages custom-domain deployment, whose generated asset URLs are rooted at `/assets/...`. The Pages workflow still exports `PAGES_REPOSITORY_NAME`, but `vite.config.ts` does not currently consume it; do not describe that variable as controlling the active build.
+
+The repository-name resolver and its tests remain in `build/pages-base.ts` and `build/pages-base.test.ts` as legacy support for a repository-subpath deployment. A future transfer, custom-domain removal, or move back to the default `/<repository-name>/` Pages URL requires a coordinated change to the Pages setting, Vite base configuration, local preview instructions, and deployment tests. Do not change only one of those layers.
+
+As last checked on 2026-08-12, the Pages workflow for the then-current `main` completed successfully and the public project Pages endpoint redirected to the configured custom domain. Treat this as time-sensitive operational evidence: inspect the repository's current remote, Actions run, Deployments entry, Pages settings, and published asset URLs before any later deployment claim. Keep account-specific paths and the custom-domain hostname out of agent-facing handoff documents.
 
 Codex Sites retains its opaque linkage through the existing hosting configuration. Do not expose that linkage in documentation, UI, data, or environment examples.
 
@@ -96,4 +101,4 @@ The numeric values and comparisons of 20 market observations and four second-han
 
 ## Stop and Ask Conditions
 
-Stop and ask for direction before proceeding when source material is inaccessible or ambiguous, a value lacks a verifiable period or comparison basis, a proposed metric changes unit or methodology incompatibly, a product request would require runtime scraping or report parsing, or a deployment change would expose Codex Sites linkage. Also ask before bypassing `npm run verify`, changing the data model, or treating partial evidence as verified.
+Stop and ask for direction before proceeding when source material is inaccessible or ambiguous, a value lacks a verifiable period or comparison basis, a proposed metric changes unit or methodology incompatibly, a product request would require runtime scraping or report parsing, or a deployment change would expose Codex Sites linkage. Also ask before bypassing `npm run verify`, changing the data model, treating partial evidence as verified, removing or changing the Pages custom domain, or switching between root and repository-subpath deployment without an approved migration plan.

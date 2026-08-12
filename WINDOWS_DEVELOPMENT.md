@@ -106,21 +106,14 @@ Start the development server on the loopback interface and open the shown local 
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-For a production-style preview, first build with the Pages base-path context, then serve the built output locally:
+For a production-style preview, build with the current root-base configuration, then serve the built output locally:
 
 ```powershell
-$repositoryName = Split-Path -Leaf (Get-Location)
-$env:PAGES_REPOSITORY_NAME = $repositoryName
-try {
-  npm run build
-  Write-Host "Open http://127.0.0.1:4173/$repositoryName/"
-  npx vite preview --host 127.0.0.1 --port 4173
-} finally {
-  Remove-Item Env:PAGES_REPOSITORY_NAME -ErrorAction SilentlyContinue
-}
+npm run build
+npx vite preview --host 127.0.0.1 --port 4173
 ```
 
-While preview is running, open the repository-subpath URL printed by the command, such as `http://127.0.0.1:4173/<repository-name>/`. Stop either server with `Ctrl+C`; the `finally` block then clears `PAGES_REPOSITORY_NAME`. The E2E runner also uses `127.0.0.1:4173`, so do not leave a stale server on that port before an E2E run.
+While preview is running, open `http://127.0.0.1:4173/`. Stop either server with `Ctrl+C`. The E2E runner also uses `127.0.0.1:4173`, so do not leave a stale server on that port before an E2E run.
 
 ## Test and Build Matrix
 
@@ -150,19 +143,9 @@ if ($missing) { throw "Missing package scripts: $($missing -join ', ')" }
 
 ## PowerShell Environment Variables
 
-The Pages build must derive its base path from the current clone directory. For a build without a preview server, use this temporary-variable pattern so cleanup also occurs if the build fails:
+The current Vite build deliberately uses `/` and does not consume `PAGES_REPOSITORY_NAME`, even though the Pages workflow still exports that variable. Run `npm run build` without inventing a local repository-name override. `build/pages-base.ts` retains a tested repository-subpath resolver, but it is legacy support rather than the active Vite input.
 
-```powershell
-$repositoryName = Split-Path -Leaf (Get-Location)
-$env:PAGES_REPOSITORY_NAME = $repositoryName
-try {
-  npm run build
-} finally {
-  Remove-Item Env:PAGES_REPOSITORY_NAME -ErrorAction SilentlyContinue
-}
-```
-
-Do not replace `PAGES_REPOSITORY_NAME` with a hard-coded owner, repository name, URL, or hosting identifier. Do not put credentials in `$env:` commands or commit an environment file containing secrets.
+Do not hard-code an owner, repository name, custom-domain hostname, URL, or hosting identifier into scripts or environment examples. Do not put credentials in `$env:` commands or commit an environment file containing secrets.
 
 To emulate CI behavior for a single terminal session, if needed:
 
@@ -204,7 +187,7 @@ Get-NetTCPConnection -LocalPort 4173 -ErrorAction SilentlyContinue |
 - **Port already in use:** Stop the local process you own on 5173 or 4173, or choose another port for manual development. Keep Playwright on `127.0.0.1:4173` unless the test configuration changes.
 - **Firewall or endpoint security symptoms:** A browser that cannot reach a running loopback server, or a blocked browser download, may be caused by local security controls. Use `127.0.0.1`, review the approved security tooling, and ask the administrator rather than disabling firewall or endpoint protection.
 - **Native modules or install failures:** Reconfirm Node 24.15.0+ and rerun `npm ci` from a clean generated dependency directory. Capture only non-sensitive error details when escalating.
-- **Pages asset paths:** A page that works at `/` but not under the repository path was likely built without the temporary `PAGES_REPOSITORY_NAME` value. Rebuild using the documented pattern above.
+- **Pages asset paths:** The current build emits root-based asset URLs for the configured custom-domain deployment. If the custom domain is removed or the site must run at `/<repository-name>/`, do not patch the preview command alone; coordinate the Pages setting, `vite.config.ts`, workflow, preview documentation, and tests.
 
 ## Deployment-Safe Checks
 
@@ -213,14 +196,11 @@ Use the repository’s configured Pages workflow and repository UI to review dep
 Before handing off a deployment-related change:
 
 ```powershell
-$env:PAGES_REPOSITORY_NAME = (Split-Path -Leaf (Get-Location))
 npm run build
-Remove-Item Env:PAGES_REPOSITORY_NAME
-
 git diff --check
 ```
 
-Confirm the built artifact path and Pages workflow from checked-in configuration, keep the repository-name environment variable temporary, and use the repository UI for Pages rather than constructing a hosted URL.
+Confirm that `dist/client/index.html` references root-based `/assets/...` URLs, then review the Pages workflow, Deployments entry, Pages custom-domain setting, and published page through the repository UI. Repository ownership and domain settings may change independently of the source tree, so do not construct or document an owner-specific hosted URL.
 
 ## Readiness Checklist
 
@@ -229,7 +209,7 @@ Confirm the built artifact path and Pages workflow from checked-in configuration
 - [ ] `npm ci` completed from the lockfile on a clean checkout.
 - [ ] Chromium is installed with `npx playwright install chromium`.
 - [ ] Focused checks passed and `npm run verify` passed, or an exact environmental failure was recorded.
-- [ ] Deployment builds used the temporary `PAGES_REPOSITORY_NAME` pattern.
+- [ ] Deployment builds and previews use the current root-base contract; any subpath migration updates configuration, tests, and documentation together.
 - [ ] `git diff --check` passed and no secrets, private keys, SSH fingerprints, account details, or opaque hosting identifiers were added.
 - [ ] GitHub Pages was reviewed through the repository UI when deployment status or settings mattered.
 
