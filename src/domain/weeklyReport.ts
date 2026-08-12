@@ -59,6 +59,8 @@ export function validateWeeklyReportPage(page: WeeklyReportPage): string[] {
   const sectionIds = new Set<string>();
   const charts = page.sections.flatMap((section) => section.charts);
   const chartsById = new Map(charts.map((chart) => [chart.id, chart]));
+  const heroChartIds = new Set(charts.filter((chart) => chart.isHero).map((chart) => chart.id));
+  const heroReferenceIds = new Set(page.heroCharts);
 
   if (page.sections.length !== fixedSections.length || page.sections.some((section, index) =>
     section.id !== fixedSections[index]?.[0] || section.title !== fixedSections[index]?.[1]
@@ -83,6 +85,18 @@ export function validateWeeklyReportPage(page: WeeklyReportPage): string[] {
     const chart = chartsById.get(heroId);
     if (!chart) errors.push(`Hero chart reference ${heroId} is missing`);
     else if (!chart.isHero) errors.push(`Hero chart ${heroId} is not marked isHero`);
+  }
+  if (page.heroCharts.length !== 4 || heroReferenceIds.size !== 4) {
+    errors.push("Exactly four hero chart references are required");
+  }
+  if (heroChartIds.size !== 4) {
+    errors.push("Exactly four charts must be marked isHero");
+  }
+  if (
+    heroChartIds.size !== heroReferenceIds.size ||
+    [...heroChartIds].some((chartId) => !heroReferenceIds.has(chartId))
+  ) {
+    errors.push("Hero chart IDs and isHero chart IDs must match");
   }
   for (const metric of page.keyMetrics) {
     if (!metric.sourceText.trim()) errors.push(`Key metric ${metric.id} has an empty source text`);

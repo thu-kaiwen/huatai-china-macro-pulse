@@ -20,6 +20,17 @@ describe("2022-07-31 weekly report page", () => {
     expect(charts.every((chart) => chart.isHero)).toBe(true);
   });
 
+  it("rejects a page whose hero references and chart flags do not form the same four-chart set", () => {
+    const extraHero = structuredClone(weeklyReport0731);
+    extraHero.sections[0].charts[1].isHero = true;
+    expect(validateWeeklyReportPage(extraHero)).toContain("Exactly four charts must be marked isHero");
+
+    const missingHeroReference = structuredClone(weeklyReport0731);
+    missingHeroReference.heroCharts.pop();
+    expect(validateWeeklyReportPage(missingHeroReference)).toContain("Exactly four hero chart references are required");
+    expect(validateWeeklyReportPage(missingHeroReference)).toContain("Hero chart IDs and isHero chart IDs must match");
+  });
+
   it("rejects a chart with an empty static asset path", () => {
     const page = structuredClone(weeklyReport0731);
     page.sections[0].charts[0].assetPath = "";
