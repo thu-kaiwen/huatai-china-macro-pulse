@@ -50,8 +50,11 @@ const fixedSections: ReadonlyArray<readonly [WeeklySectionId, string]> = [
 ];
 
 export function selectHeroCharts(page: WeeklyReportPage): WeeklyChart[] {
-  const heroIds = new Set(page.heroCharts);
-  return page.sections.flatMap((section) => section.charts.filter((chart) => heroIds.has(chart.id)));
+  const chartsById = new Map(page.sections.flatMap((section) => section.charts).map((chart) => [chart.id, chart]));
+  return page.heroCharts.flatMap((heroId) => {
+    const chart = chartsById.get(heroId);
+    return chart ? [chart] : [];
+  });
 }
 
 export function validateWeeklyReportPage(page: WeeklyReportPage): string[] {
