@@ -1,4 +1,5 @@
 @media (max-width: 1024px) {
+  .weekly-hero-grid, .weekly-activity-grid { grid-template-columns: minmax(0, 1fr); }
   .macro-signal-grid,
   .metric-card-grid,
   .market-group-grid,
@@ -49,6 +50,13 @@
   .ticker-copy { display: none; }
   .back-to-top { right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); }
   .terminal-main { padding: 2rem 1rem 4rem; }
+  .weekly-report-lead h1 b { line-height: 1.25; }
+  .weekly-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .weekly-dashboard-card > header { display: block; }
+  .weekly-chart-current { margin-top: 0.55rem; text-align: left; }
+  .weekly-framework-heading { grid-template-columns: 2.6rem minmax(0, 1fr); }
+  .weekly-framework-heading > p { font-size: 2rem; }
+  .weekly-policy-layout { grid-template-columns: minmax(0, 1fr); }
 
   .macro-report-list,
   .macro-signal-grid,

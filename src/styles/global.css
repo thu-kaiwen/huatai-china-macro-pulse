@@ -59,6 +59,7 @@ a, button, summary, .metric-card, .market-reading, .industry-matrix-cell {
 nav { display: flex; min-width: 0; gap: 0.25rem; overflow-x: auto; }
 nav a { padding: 0.4rem 0.5rem; border-radius: 0.2rem; color: var(--ink-muted); font-size: 0.82rem; text-decoration: none; white-space: nowrap; }
 nav a:hover, nav a[aria-current="location"] { background: var(--panel-muted); color: var(--ht-red); }
+nav a[aria-current="location"] { color: #b91f29; font-weight: 750; }
 nav a:focus-visible { color: var(--ht-red); }
 
 .header-utilities { display: flex; flex: 0 0 auto; align-items: center; gap: 0.7rem; margin-left: auto; }
@@ -243,3 +244,94 @@ nav a:focus-visible { color: var(--ht-red); }
 .source-archive-card dd { margin: 0; }
 .archive-disclosure { max-width: 52rem; margin-top: 1rem; }
 .archive-disclosure h3 { font-size: 0.95rem; }
+
+/* Weekly report V4 — Huatai Macro blue/red editorial system */
+.weekly-report { margin-top: 2rem; }
+.weekly-report-lead { position: relative; max-width: none; overflow: hidden; padding: clamp(2rem, 5vw, 4.5rem); border-top: 5px solid #d9272e; border-radius: 0.8rem; background: linear-gradient(128deg, #0c2d50 0%, #174a7e 64%, #1d5c93 100%); box-shadow: 0 20px 50px color-mix(in srgb, #0c2d50 20%, transparent); }
+.weekly-report-lead::after { position: absolute; right: -3rem; bottom: -7rem; width: 24rem; height: 24rem; border: 1px solid color-mix(in srgb, white 16%, transparent); border-radius: 50%; content: ""; }
+.weekly-kicker { position: relative; z-index: 1; color: #c5dbed; letter-spacing: 0.12em; }
+.weekly-report-lead h1 { position: relative; z-index: 1; display: grid; max-width: 62rem; gap: 0.3rem; }
+.weekly-report-lead h1 span { color: #fff; font-size: clamp(2.7rem, 7vw, 5.5rem); font-weight: 850; letter-spacing: -0.055em; }
+.weekly-report-lead h1 b { color: #fff; font-size: clamp(1.5rem, 3.5vw, 2.8rem); font-weight: 650; letter-spacing: -0.035em; }
+.weekly-overview { position: relative; z-index: 1; max-width: 68rem; color: #e4eef6; font-size: 1.02rem; line-height: 1.95; }
+.weekly-key-changes { margin-top: 1.5rem; padding: clamp(1.2rem, 3vw, 2.3rem); border: 1px solid #d5e0e9; border-top: 4px solid #174a7e; border-radius: 0.8rem; box-shadow: 0 12px 34px color-mix(in srgb, #174a7e 8%, transparent); }
+.weekly-section-title p { color: #174a7e; }
+.weekly-section-title h2 { color: #102f50; font-size: clamp(1.65rem, 3vw, 2.4rem); }
+.weekly-metric-grid { gap: 0.85rem; }
+.weekly-metric-card { border: 1px solid #dbe3ea; border-top: 3px solid #d9272e; border-radius: 0.35rem; background: #f7fafc; }
+.weekly-metric-card strong { color: #102f50; }
+.weekly-metric-card span { color: #d9272e; }
+.weekly-hero-grid, .weekly-activity-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+.weekly-dashboard-card { min-width: 0; overflow: hidden; padding: 1rem; border: 1px solid #d8e1e8; border-radius: 0.55rem; background: var(--panel); }
+.weekly-dashboard-card > header { display: flex; min-height: 3.6rem; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.weekly-dashboard-card > header h3 { margin: 0; color: var(--ink); font-size: 1.04rem; }
+.weekly-dashboard-card > header p { margin: 0.3rem 0 0; color: var(--ink-muted); font-size: 0.72rem; }
+.weekly-chart-current { flex: 0 0 auto; text-align: right; }
+.weekly-chart-current strong, .weekly-chart-current span { display: block; }
+.weekly-chart-current strong { color: #102f50; font-size: 0.95rem; }
+.weekly-chart-current span { margin-top: 0.25rem; color: #d9272e; font-size: 0.7rem; font-weight: 750; }
+.weekly-line-chart, .weekly-bond-chart { display: block; width: 100%; height: auto; margin-top: 0.6rem; overflow: visible; }
+.weekly-chart-gridline { stroke: #dce4ea; stroke-width: 1; }
+.weekly-chart-baseline { stroke: #9aa8b4; stroke-dasharray: 4 4; stroke-width: 1; }
+.weekly-chart-axis-label { fill: #74808c; font-size: 10px; }
+.weekly-chart-endpoint text { fill: #d9272e; font-size: 11px; font-weight: 800; paint-order: stroke; stroke: var(--panel); stroke-width: 4px; }
+.weekly-chart-legend { display: flex; flex-wrap: wrap; gap: 0.45rem 0.85rem; margin: 0.25rem 0 0; padding: 0; list-style: none; }
+.weekly-chart-legend li { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--ink-muted); font-size: 0.68rem; }
+.weekly-chart-legend li > span { width: 1rem; height: 3px; border-radius: 3px; background: #174a7e; }
+.weekly-chart-legend li b { color: var(--ink); font-weight: 650; }
+.weekly-chart-legend li em { color: #d9272e; font-style: normal; font-weight: 700; }
+.weekly-chart-legend .weekly-legend-lightBlue > span { background: #9bb9d4; }
+.weekly-chart-legend .weekly-legend-blue > span { background: #174a7e; }
+.weekly-chart-legend .weekly-legend-red > span { background: #d9272e; }
+.weekly-chart-legend .weekly-legend-orange > span { background: #df7c25; }
+.weekly-chart-legend .weekly-legend-purple > span { background: #7666a8; }
+.weekly-chart-legend .weekly-legend-gray > span { background: #7d8895; }
+.weekly-chart-legend .weekly-legend-teal > span { background: #258b91; }
+.weekly-chart-reading { margin: 0.75rem 0 0; padding: 0.55rem 0.65rem; border-left: 3px solid #d9272e; background: color-mix(in srgb, #174a7e 5%, var(--panel)); color: var(--ink-muted); font-size: 0.75rem; line-height: 1.55; }
+.weekly-chart-source { display: block; margin-top: 0.65rem; color: var(--ink-muted); font-size: 0.62rem; }
+.weekly-chart-category { display: inline-block; margin: 0 0 0.35rem !important; padding: 0.17rem 0.45rem; border-radius: 999px; background: #174a7e; color: #fff !important; font-weight: 750; }
+.weekly-dashboard-card-activity { border-top: 3px solid #174a7e; }
+.weekly-dashboard-card-price { padding: 1.25rem; }
+.weekly-price-grid { display: grid; gap: 1rem; margin-top: 1.25rem; }
+.weekly-bond-group-title { fill: var(--ink); font-size: 10px; font-weight: 750; }
+.weekly-bond-total { fill: var(--ink); font-size: 9px; font-weight: 700; }
+.weekly-bond-separator { stroke: #a8b3bd; stroke-dasharray: 4 4; stroke-width: 1; }
+.weekly-bond-legend text { fill: var(--ink-muted); font-size: 8px; }
+.weekly-report-section { margin-top: 2rem; padding: clamp(1.25rem, 3vw, 2.25rem); border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+.weekly-framework-heading { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); align-items: start; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.weekly-framework-heading > p { margin: 0; color: #6c89a3; font-size: 3rem; font-weight: 850; line-height: 1; }
+.weekly-framework-heading h2 { margin: 0; color: #102f50; font-size: clamp(1.35rem, 2.8vw, 2rem); }
+.weekly-framework-heading span { display: block; max-width: 66rem; margin-top: 0.45rem; color: var(--ink-muted); font-size: 0.86rem; line-height: 1.65; }
+.weekly-section-disclosure { margin-top: 1rem; text-align: center; }
+.weekly-section-disclosure button { padding: 0.58rem 1rem; border: 1px solid #174a7e; border-radius: 999px; background: transparent; color: #174a7e; cursor: pointer; font-size: 0.78rem; font-weight: 750; }
+.weekly-section-disclosure button:hover { background: #174a7e; color: #fff; }
+.weekly-section-disclosure > p { max-width: 68rem; margin: 0.9rem auto 0; padding: 0.9rem 1rem; background: var(--panel-muted); color: var(--ink-muted); text-align: left; font-size: 0.84rem; line-height: 1.75; }
+.weekly-finance-table-wrap { margin-top: 1.3rem; overflow-x: auto; }
+.weekly-finance-table-wrap h3 { margin: 0 0 0.55rem; color: #174a7e; font-size: 0.95rem; }
+.weekly-finance-table { width: 100%; min-width: 46rem; border-collapse: collapse; }
+.weekly-finance-table th, .weekly-finance-table td { padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--line); text-align: left; font-size: 0.76rem; }
+.weekly-finance-table thead th { background: #174a7e; color: #fff; font-weight: 700; }
+.weekly-finance-table tbody th { color: var(--ink); }
+.weekly-finance-table tbody td { color: var(--ink-muted); }
+.weekly-finance-table tbody tr:hover { background: color-mix(in srgb, #174a7e 5%, var(--panel)); }
+.weekly-finance-table .weekly-direction-positive { color: #d9272e; font-weight: 750; }
+.weekly-finance-table .weekly-direction-negative { color: #174a7e; font-weight: 750; }
+.weekly-sparkline { display: block; width: 6rem; height: 2rem; }
+.weekly-policy-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 0.8fr); gap: 1.5rem; margin-top: 1.25rem; }
+.weekly-policy-timeline { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.weekly-policy-timeline li { position: relative; display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1rem; padding: 0 0 1.25rem; }
+.weekly-policy-timeline li::before { position: absolute; top: 0.45rem; bottom: -0.2rem; left: 4.58rem; border-left: 1px solid #a9bdcf; content: ""; }
+.weekly-policy-timeline li::after { position: absolute; top: 0.35rem; left: 4.32rem; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #d9272e; content: ""; }
+.weekly-policy-timeline time { color: #174a7e; font-size: 0.78rem; font-weight: 800; }
+.weekly-policy-timeline h3 { margin: 0; font-size: 0.92rem; }
+.weekly-policy-timeline p { margin: 0.35rem 0 0; color: var(--ink-muted); font-size: 0.78rem; line-height: 1.55; }
+.weekly-policy-calendar { padding: 1rem; border-top: 4px solid #d9272e; background: #f4f7fa; }
+.weekly-policy-calendar h3 { margin: 0; color: #102f50; font-size: 1rem; }
+.weekly-policy-calendar ul { display: grid; gap: 0.55rem; margin: 0.85rem 0 0; padding: 0; list-style: none; }
+.weekly-policy-calendar li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 0.65rem; font-size: 0.76rem; }
+.weekly-policy-calendar time { color: #d9272e; font-weight: 800; }
+.weekly-policy-calendar span { color: #475461; }
+:root[data-theme="dark"] .weekly-section-title h2, :root[data-theme="dark"] .weekly-framework-heading h2, :root[data-theme="dark"] .weekly-chart-current strong { color: var(--ink); }
+:root[data-theme="dark"] .weekly-dashboard-card, :root[data-theme="dark"] .weekly-key-changes { border-color: var(--line); }
+:root[data-theme="dark"] .weekly-policy-calendar { background: var(--panel-muted); }
+:root[data-theme="dark"] .weekly-policy-calendar span { color: var(--ink-muted); }

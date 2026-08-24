@@ -30,6 +30,98 @@ export interface WeeklySection {
   charts: WeeklyChart[];
 }
 
+export type WeeklySeriesTone = "lightBlue" | "blue" | "red" | "orange" | "purple" | "gray" | "teal";
+
+export interface WeeklyChartSeries {
+  id: string;
+  label: string;
+  values: Array<number | null>;
+  tone: WeeklySeriesTone;
+  dashed?: boolean;
+  weeklyChange?: string;
+}
+
+export interface WeeklyChartTick {
+  index: number;
+  label: string;
+}
+
+export interface WeeklyLineDashboardChart {
+  kind: "line";
+  id: string;
+  title: string;
+  subtitle: string;
+  unit: string;
+  totalPoints: number;
+  yDomain: readonly [number, number];
+  xTicks: WeeklyChartTick[];
+  series: WeeklyChartSeries[];
+  endpointLabel?: string;
+  currentValue?: string;
+  changeText?: string;
+  source: string;
+  interpretation?: string;
+  category?: string;
+}
+
+export interface WeeklyBondSegment {
+  label: string;
+  value: number;
+  tone: "red" | "blue" | "gray";
+}
+
+export interface WeeklyBondBar {
+  label: string;
+  segments: WeeklyBondSegment[];
+}
+
+export interface WeeklyBondGroup {
+  title: string;
+  scaleMax: number;
+  bars: WeeklyBondBar[];
+}
+
+export interface WeeklyBondDashboardChart {
+  kind: "bonds";
+  id: string;
+  title: string;
+  subtitle: string;
+  currentValue: string;
+  changeText: string;
+  source: string;
+  groups: WeeklyBondGroup[];
+}
+
+export interface WeeklyFinanceRow {
+  id: string;
+  label: string;
+  value: string;
+  change: string;
+  direction: "positive" | "negative" | "neutral";
+  trend: number[];
+  observation: string;
+}
+
+export interface WeeklyFinanceGroup {
+  title: string;
+  rows: WeeklyFinanceRow[];
+}
+
+export interface WeeklyPolicyItem {
+  date: string;
+  title: string;
+  detail: string;
+}
+
+export interface WeeklyDashboard {
+  heroCharts: Array<WeeklyLineDashboardChart | WeeklyBondDashboardChart>;
+  activityCharts: WeeklyLineDashboardChart[];
+  priceCharts: WeeklyLineDashboardChart[];
+  financeGroups: WeeklyFinanceGroup[];
+  policyEvents: WeeklyPolicyItem[];
+  policyCalendar: Array<{ date: string; label: string }>;
+}
+
 export interface WeeklyReportPage {
   id: string;
   publishedAt: string;
@@ -40,6 +132,7 @@ export interface WeeklyReportPage {
   sections: WeeklySection[];
   watchPoints: string[];
   risks: string[];
+  dashboard: WeeklyDashboard;
 }
 
 const fixedSections: ReadonlyArray<readonly [WeeklySectionId, string]> = [

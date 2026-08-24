@@ -46,4 +46,49 @@ describe("2026-08-09 weekly report page", () => {
       `Chart ${page.sections[0].charts[0].id} has an empty asset path`,
     );
   });
+
+  it("stores the approved V4 flight series on a fixed 52-week axis", () => {
+    const dashboard = weeklyReport0809.dashboard;
+    expect(dashboard).toBeDefined();
+    if (!dashboard) throw new Error("Expected V4 dashboard data");
+
+    const flight = dashboard.heroCharts.find((item) => item.id === "domestic-flights");
+    expect(flight?.kind).toBe("line");
+    if (!flight || flight.kind !== "line") throw new Error("Expected flight line chart");
+
+    const currentYear = flight.series.find((series) => series.label === "2026");
+    expect(flight.totalPoints).toBe(52);
+    expect(currentYear?.values).toHaveLength(52);
+    expect(currentYear?.values[31]).toBe(221_761);
+    expect(currentYear?.values.slice(32)).toEqual(Array(20).fill(null));
+    expect(flight.endpointLabel).toBe("周同比 +4.3%");
+  });
+
+  it("keeps the activity charts seasonal through December with 2024 to 2026 series", () => {
+    const dashboard = weeklyReport0809.dashboard;
+    expect(dashboard).toBeDefined();
+    if (!dashboard) throw new Error("Expected V4 dashboard data");
+
+    for (const chartId of ["coking-rate", "blast-furnace-rate", "construction-steel"]) {
+      const chart = dashboard.activityCharts.find((item) => item.id === chartId);
+      expect(chart?.totalPoints).toBe(52);
+      expect(chart?.xTicks.at(-1)?.label).toBe("12月");
+      expect(chart?.series.map((series) => series.label)).toEqual(["2024", "2025", "2026"]);
+      expect(chart?.series.at(-1)?.values.slice(32).every((value) => value === null)).toBe(true);
+    }
+  });
+
+  it("uses the approved normalized price groups and records every weekly change", () => {
+    const dashboard = weeklyReport0809.dashboard;
+    expect(dashboard).toBeDefined();
+    if (!dashboard) throw new Error("Expected V4 dashboard data");
+
+    const rawMaterials = dashboard.priceCharts.find((chart) => chart.id === "raw-materials");
+    const industrial = dashboard.priceCharts.find((chart) => chart.id === "industrial-products");
+
+    expect(rawMaterials?.subtitle).toContain("2025/1/1=100");
+    expect(rawMaterials?.series.map((series) => series.label)).not.toContain("COMEX黄金");
+    expect(industrial?.series.map((series) => series.label)).not.toContain("氯化钾");
+    expect(dashboard.priceCharts.flatMap((chart) => chart.series).every((series) => Boolean(series.weeklyChange))).toBe(true);
+  });
 });

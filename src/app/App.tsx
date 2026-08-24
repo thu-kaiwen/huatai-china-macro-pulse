@@ -51,6 +51,7 @@ export function App() {
     <>
       <Header activeSection={activeSection} onNavigate={setActiveSection} TickerComponent={TickerTape} visibleSectionIds={visibleSectionIds} />
       <main className="terminal-main">
+        <ViewFilter onChange={changeView} value={view} />
         {view === "weekly" ? (
           <SectionErrorBoundary sectionId="weekly" sectionName="周报">
             <WeeklyReport report={weeklyReport0809} />
@@ -61,7 +62,6 @@ export function App() {
               <SectionHeading as="h1" eyebrow="华泰证券宏观团队" id="terminal-title" title="中国宏观脉搏">
                 连接月度与周度数据，呈现中国宏观经济的最新脉动。
               </SectionHeading>
-              <ViewFilter onChange={changeView} value={view} />
               <SectionErrorBoundary sectionName="宏观总览">
                 <MacroOverview dataset={macroDataset} view={view} />
               </SectionErrorBoundary>

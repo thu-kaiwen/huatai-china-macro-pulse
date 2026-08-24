@@ -19,19 +19,27 @@ describe("weekly report app", () => {
   it("opens directly on the current weekly report", () => {
     renderApp(<App />);
 
-    expect(screen.getByRole("heading", { name: "天气因素对消费与开工的扰动减弱" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "国内周报｜天气因素对消费与开工的扰动减弱" })).toBeInTheDocument();
     expect(screen.getByText("华泰证券宏观团队 · 国内周报 · 2026-08-09")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "周度" })).toHaveAttribute("href", "#weekly");
     expect(screen.queryByRole("link", { name: "行业" })).not.toBeInTheDocument();
   });
 
-  it("exposes the activity charts only after its explanation is expanded", async () => {
+  it("shows the selected activity charts immediately and expands the written interpretation", async () => {
     const { user } = renderApp(<App />);
 
-    expect(screen.queryByText("全国重点电厂日均发电量同比下行5.9%")).not.toBeInTheDocument();
-    await user.click(screen.getAllByRole("button", { name: "展开解读" })[0]);
-    expect(screen.getByText("全国重点电厂日均发电量同比下行5.9%")).toBeInTheDocument();
-    expect(screen.getAllByRole("img")).toHaveLength(39);
+    expect(screen.getByRole("img", { name: "焦化企业开工率" })).toBeInTheDocument();
+    expect(screen.queryByText(/出行方面，国内航班数同比回升4.3%/)).not.toBeInTheDocument();
+    await user.click(screen.getAllByRole("button", { name: "展开完整解读" })[0]);
+    expect(screen.getByText(/出行方面，国内航班数同比回升4.3%/)).toBeInTheDocument();
+  });
+
+  it("keeps the monthly dashboard available from the weekly page", async () => {
+    const { user } = renderApp(<App />);
+
+    await user.click(screen.getByRole("button", { name: "月报" }));
+    expect(screen.getByRole("heading", { name: "中国宏观脉搏" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "月报" })).toHaveAttribute("aria-pressed", "true");
   });
 
   it("switches to dark theme and persists the preference", async () => {

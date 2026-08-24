@@ -1,4 +1,5 @@
 import type { WeeklyChart, WeeklyReportPage } from "../domain/weeklyReport";
+import { weeklyDashboard0809 } from "./weeklyDashboard";
 
 const reportDate = "2026-08-09";
 const reportSource = "华泰研究；图表数据来自 Wind、iFind、CEIC、CAPA、Mysteel 等，详见图表来源";
@@ -26,6 +27,7 @@ const part3 = "data-excel/国内周报Part3";
 
 export const weeklyReport0809: WeeklyReportPage = {
   id: "weekly-2026-08-09",
+  dashboard: weeklyDashboard0809,
   publishedAt: reportDate,
   title: "天气因素对消费与开工的扰动减弱",
   overview: "台风和洪涝等极端天气的扰动减弱，居民暑期出行和建筑及基建活动边际改善，利率债发行同比持续少增显示财政发力仍待提速。去哪儿数据显示7月下半月后暑期出游热度逐周攀升，国内航班数同比回升；8月7日北京进一步优化调整房地产政策，楼市传统淡季中一线城市成交相对稳健。7月出口增速放缓或显示全球贸易活动边际减速，7月除AI产品外的进口增速及核心CPI均有所下行或反映内需走弱，后续需关注财政政策力度能否提升。",
@@ -40,7 +42,7 @@ export const weeklyReport0809: WeeklyReportPage = {
     {
       id: "activity", title: "高频经济活动跟踪",
       summary: "极端天气扰动退坡后暑期出行热度边际升温，建筑活动边际改善，生产活动仍偏弱，一线地产成交维持韧性。",
-      detail: "出行方面，国内航班数同比回升4.3%；建筑钢材成交量环比上行10.7%，沥青开工率环比上行2.3个百分点；焦化与半钢胎开工率回落，高炉开工率小幅回升；44城新房成交同比降幅收窄，一线城市新房和二手房成交同比保持韧性。",
+      detail: "出行方面，国内航班数同比回升4.3%；建筑钢材成交量环比上行10.7%，沥青开工率环比上行2.3个百分点；焦化与半钢胎开工率回落，高炉开工率小幅回升；一线城市新房和二手房成交同比保持韧性。",
       charts: [
         chart(1, "activity", "power-generation", "全国重点电厂日均发电量同比下行5.9%", `${part1}/【1,5,6,9,12,14】电厂&螺纹钢产量&水泥发运率（Wind+iFind）.xlsx`, "【1】重点电厂日均发电量"),
         chart(2, "activity", "coal-port-inventory", "主流港口煤炭库存同比增加557.1万吨", `${part1}/【2,3,4】周报-投资活动跟踪-焦化&高炉开工率&煤炭港口库存（Wind）.xlsx`, "【2】煤炭港口库存"),
@@ -80,8 +82,8 @@ export const weeklyReport0809: WeeklyReportPage = {
     },
     {
       id: "prices", title: "价格指标及通胀变化",
-      summary: "国际原油回落、黄金价格上行，国内原材料价格多数回撤；农产品指数小幅上行，蔬菜和水果价格走高而猪肉价格回落。",
-      detail: "布伦特原油周环比下行7.3%至83.6美元/桶，COMEX黄金上行7.4%；螺纹钢和水泥价格回落、铜价小幅上行；聚乙烯、丁苯橡胶及化肥价格回落；农产品价格表现分化。",
+      summary: "国际原油回落，国内原材料价格多数回撤；农产品指数小幅上行，蔬菜和水果价格走高而猪肉价格回落。",
+      detail: "布伦特原油周环比下行7.3%至83.6美元/桶；螺纹钢和水泥价格回落、铜价小幅上行；聚乙烯、丁苯橡胶及尿素价格回落；农产品价格表现分化。",
       charts: [
         chart(35, "prices", "brent-oil", "上周布伦特原油环比下行7.3%", `${part2}/【35-36】周报-价格指标及通胀变化-油价大宗商品（iFind）.xlsx`, "【35】布伦特原油"),
         chart(36, "prices", "industrial-material-prices", "上周国内铜价环比上行0.8%，螺纹钢价格环比下行2.0%", `${part2}/【35-36】周报-价格指标及通胀变化-油价大宗商品（iFind）.xlsx`, "【36】铜与螺纹钢价格"),
