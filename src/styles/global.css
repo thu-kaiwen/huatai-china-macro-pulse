@@ -335,3 +335,42 @@ nav a:focus-visible { color: var(--ht-red); }
 :root[data-theme="dark"] .weekly-dashboard-card, :root[data-theme="dark"] .weekly-key-changes { border-color: var(--line); }
 :root[data-theme="dark"] .weekly-policy-calendar { background: var(--panel-muted); }
 :root[data-theme="dark"] .weekly-policy-calendar span { color: var(--ink-muted); }
+
+/* Monthly report — long-cycle visual dashboard */
+.monthly-report { margin-top: 2rem; }
+.monthly-report-lead { position: relative; overflow: hidden; padding: clamp(2rem, 5vw, 4.5rem); border-top: 5px solid #d9272e; border-radius: 0.8rem; background: linear-gradient(130deg, #102f50, #174a7e 68%, #24689c); box-shadow: 0 20px 50px color-mix(in srgb, #0c2d50 20%, transparent); }
+.monthly-report-lead::after { position: absolute; right: -5rem; bottom: -9rem; width: 28rem; height: 28rem; border: 1px solid color-mix(in srgb, white 18%, transparent); border-radius: 50%; content: ""; }
+.monthly-kicker { position: relative; z-index: 1; color: #c5dbed; letter-spacing: 0.12em; }
+.monthly-report-lead h1 { position: relative; z-index: 1; display: grid; gap: 0.3rem; margin: 1rem 0; }
+.monthly-report-lead h1 span { color: #fff; font-size: clamp(2.7rem, 7vw, 5.5rem); font-weight: 850; letter-spacing: -0.055em; }
+.monthly-report-lead h1 b { color: #fff; font-size: clamp(1.4rem, 3.5vw, 2.7rem); font-weight: 650; letter-spacing: -0.035em; }
+.monthly-overview { position: relative; z-index: 1; max-width: 70rem; color: #e4eef6; font-size: 1.02rem; line-height: 1.95; }
+.monthly-version-bar { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 0.7rem 1.5rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); color: #dceaf5; font-size: 0.78rem; }
+.monthly-version-bar strong { color: #fff; }
+.monthly-version-bar em { padding: 0.12rem 0.48rem; border-radius: 999px; background: #d9272e; color: #fff; font-style: normal; font-weight: 750; }
+.monthly-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1.25rem; }
+.monthly-summary-grid article { display: grid; min-height: 7.5rem; align-content: space-between; padding: 1rem; border: 1px solid #d8e1e8; border-top: 3px solid #d9272e; border-radius: 0.45rem; background: var(--panel); }
+.monthly-summary-grid span { color: var(--ink-muted); font-size: 0.75rem; }
+.monthly-summary-grid strong { color: #102f50; font-size: 1.05rem; line-height: 1.35; }
+.monthly-summary-grid small { color: #174a7e; font-size: 0.68rem; }
+.monthly-section-list { display: grid; gap: 1.2rem; margin-top: 2rem; }
+.monthly-data-section { padding: clamp(1.2rem, 3vw, 2.2rem); border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+.monthly-section-heading { display: grid; grid-template-columns: 4rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.monthly-section-heading > p { margin: 0; color: #6c89a3; font-size: 2.7rem; font-weight: 850; line-height: 1; }
+.monthly-section-heading div > span { color: #d9272e; font-size: 0.7rem; font-weight: 750; }
+.monthly-section-heading h2 { margin: 0.18rem 0; color: #102f50; font-size: clamp(1.35rem, 2.8vw, 2rem); }
+.monthly-section-heading div > strong { color: var(--ink-muted); font-size: 0.82rem; font-weight: 500; }
+.monthly-section-heading > b { max-width: 16rem; color: #d9272e; font-size: 1rem; text-align: right; }
+.monthly-chart-card { margin-top: 1rem; padding: 1rem; border-left: 4px solid #174a7e; background: color-mix(in srgb, #174a7e 3%, var(--panel)); }
+.monthly-chart-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.monthly-chart-header h3 { margin: 0; color: var(--ink); font-size: 1.05rem; }
+.monthly-chart-header p { margin: 0.3rem 0 0; color: var(--ink-muted); font-size: 0.72rem; }
+.monthly-chart-header > div:last-child { flex: 0 0 auto; text-align: right; }
+.monthly-chart-header > div:last-child strong, .monthly-chart-header > div:last-child span { display: block; }
+.monthly-chart-header > div:last-child strong { color: #102f50; }
+.monthly-chart-header > div:last-child span { margin-top: 0.2rem; color: #d9272e; font-size: 0.72rem; font-weight: 750; }
+.monthly-disclosure { margin-top: 1rem; text-align: center; }
+.monthly-disclosure button { padding: 0.58rem 1rem; border: 1px solid #174a7e; border-radius: 999px; background: transparent; color: #174a7e; cursor: pointer; font-size: 0.78rem; font-weight: 750; }
+.monthly-disclosure button:hover { background: #174a7e; color: #fff; }
+.monthly-disclosure p { max-width: 68rem; margin: 0.9rem auto 0; padding: 0.9rem 1rem; background: var(--panel-muted); color: var(--ink-muted); text-align: left; font-size: 0.84rem; line-height: 1.75; }
+:root[data-theme="dark"] .monthly-summary-grid strong, :root[data-theme="dark"] .monthly-section-heading h2, :root[data-theme="dark"] .monthly-chart-header > div:last-child strong { color: var(--ink); }

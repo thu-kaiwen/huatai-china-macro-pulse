@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { BackToTop } from "../components/BackToTop";
 import { Header } from "../components/Header";
 import { SectionErrorBoundary } from "../components/SectionErrorBoundary";
-import { SectionHeading } from "../components/SectionHeading";
-import { TickerTape } from "../components/TickerTape";
+import { LatestTickerTape } from "../components/TickerTape";
 import { ViewFilter } from "../components/ViewFilter";
-import { macroDataset } from "../data/dataset";
-import { weeklyReport0809 } from "../data/weeklyReports";
+import { monthlyReport0831 } from "../data/monthlyReport";
+import { weeklyReport0906 } from "../data/weeklyReports";
 import type { ViewMode } from "../domain/types";
-import { MacroOverview } from "../sections/MacroOverview";
-import { MonthlyFundamentals } from "../sections/MonthlyFundamentals";
+import { MonthlyReport } from "../sections/MonthlyReport";
 import { WeeklyReport } from "../sections/WeeklyReport";
 
 const weeklySectionIds = ["weekly"];
@@ -49,25 +47,17 @@ export function App() {
 
   return (
     <>
-      <Header activeSection={activeSection} onNavigate={setActiveSection} TickerComponent={TickerTape} visibleSectionIds={visibleSectionIds} />
+      <Header activeSection={activeSection} onNavigate={setActiveSection} TickerComponent={LatestTickerTape} visibleSectionIds={visibleSectionIds} />
       <main className="terminal-main">
         <ViewFilter onChange={changeView} value={view} />
         {view === "weekly" ? (
           <SectionErrorBoundary sectionId="weekly" sectionName="周报">
-            <WeeklyReport report={weeklyReport0809} />
+            <WeeklyReport report={weeklyReport0906} />
           </SectionErrorBoundary>
         ) : (
           <>
-            <section aria-labelledby="terminal-title" className="terminal-intro" id="overview">
-              <SectionHeading as="h1" eyebrow="华泰证券宏观团队" id="terminal-title" title="中国宏观脉搏">
-                连接月度与周度数据，呈现中国宏观经济的最新脉动。
-              </SectionHeading>
-              <SectionErrorBoundary sectionName="宏观总览">
-                <MacroOverview dataset={macroDataset} view={view} />
-              </SectionErrorBoundary>
-            </section>
-            <SectionErrorBoundary sectionId="monthly" sectionName="月度基本面">
-              <MonthlyFundamentals dataset={macroDataset} view={view} />
+            <SectionErrorBoundary sectionId="monthly" sectionName="国内月报">
+              <MonthlyReport report={monthlyReport0831} />
             </SectionErrorBoundary>
           </>
         )}

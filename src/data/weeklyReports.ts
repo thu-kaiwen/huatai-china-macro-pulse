@@ -1,9 +1,9 @@
 import type { WeeklyChart, WeeklyReportPage } from "../domain/weeklyReport";
-import { weeklyDashboard0809 } from "./weeklyDashboard";
+import { weeklyDashboard0906 } from "./weeklyDashboard";
 
-const reportDate = "2026-08-09";
+const reportDate = "2026-09-06";
 const reportSource = "华泰研究；图表数据来自 Wind、iFind、CEIC、CAPA、Mysteel 等，详见图表来源";
-const reportPeriod = "2026 年 8 月 9 日发布；各指标截至 8 月 7–9 日";
+const reportPeriod = "2026 年 9 月 6 日发布；各指标截至 9 月 4–6 日";
 const image = (number: number) => {
   const extension = [41, 43, 47, 68].includes(number) ? "jpg" : "png";
   return `/weekly-reports/${reportDate}/charts/chart-${String(number).padStart(2, "0")}.${extension}`;
@@ -25,24 +25,24 @@ const part1 = "data-excel/国内周报Part1";
 const part2 = "data-excel/国内周报Part2";
 const part3 = "data-excel/国内周报Part3";
 
-export const weeklyReport0809: WeeklyReportPage = {
-  id: "weekly-2026-08-09",
-  dashboard: weeklyDashboard0809,
+export const weeklyReport0906: WeeklyReportPage = {
+  id: "weekly-2026-09-06",
+  dashboard: weeklyDashboard0906,
   publishedAt: reportDate,
-  title: "天气因素对消费与开工的扰动减弱",
-  overview: "台风和洪涝等极端天气的扰动减弱，居民暑期出行和建筑及基建活动边际改善，利率债发行同比持续少增显示财政发力仍待提速。去哪儿数据显示7月下半月后暑期出游热度逐周攀升，国内航班数同比回升；8月7日北京进一步优化调整房地产政策，楼市传统淡季中一线城市成交相对稳健。7月出口增速放缓或显示全球贸易活动边际减速，7月除AI产品外的进口增速及核心CPI均有所下行或反映内需走弱，后续需关注财政政策力度能否提升。",
+  title: "能源供给压力的挤压效应有所上升",
+  overview: "美伊冲突升级再度推升国际油价，国内原材料及农产品价格普遍上涨。居民市内交通出行景气度边际回落，基建与建筑活动持续承压，工业生产或因原材料涨价而受到压制。地产成交淡季呈现低位改善，一线城市维持相对韧性。地方债发行同比略多增、后续重点关注财政发力的可持续性。",
   keyMetrics: [
-    { id: "domestic-flights", label: "国内航班数同比", valueText: "+4.3%", changeText: "环比 +0.9%", interpretation: "暑期出行热度边际升温", sourceText: "8月2日–8日，国内航班数同比上行4.3%、环比上行0.9%。" },
-    { id: "construction-steel", label: "建筑钢材成交量", valueText: "+10.7%", changeText: "环比上行", interpretation: "建筑及基建活动边际改善", sourceText: "8月1日–7日，建筑钢材周均成交量环比上行10.7%，同比仍下行12.1%。" },
-    { id: "tier-one-new-home", label: "一线新房成交同比", valueText: "+28.2%", changeText: "同比上行", interpretation: "一线城市成交相对稳健", sourceText: "一线城市新房成交面积同比由前一周的-6.5%转正至28.2%。" },
-    { id: "government-bond-issuance", label: "利率债发行同比", valueText: "-12.0%", changeText: "同比少增", interpretation: "财政发力仍待提速", sourceText: "8月3日–9日利率债总发行量同比少增12.0%，总额同比少增967亿元。" },
+    { id: "brent-oil", label: "Brent原油", valueText: "96.3美元/桶", changeText: "周环比 +7.8%", interpretation: "能源供给压力再度上升", sourceText: "截至9月4日，Brent原油价格周环比上涨7.8%至96.3美元/桶。" },
+    { id: "metro-ridership", label: "18城地铁客运量", valueText: "-1.8%", changeText: "周同比", interpretation: "市内交通景气度回落", sourceText: "8月28日至9月3日，18城地铁客运量同比下降1.8%、环比下降5.7%。" },
+    { id: "tier-one-property", label: "一线城市住房成交", valueText: "+22.7% / +12.5%", changeText: "新房 / 二手房周同比", interpretation: "一线城市维持相对韧性", sourceText: "一线城市新房、二手房成交面积同比分别增长22.7%和12.5%。" },
+    { id: "government-bond-issuance", label: "利率债发行同比", valueText: "+4.7%", changeText: "同比多增264亿元", interpretation: "地方债发行同比略多增", sourceText: "8月31日至9月6日利率债总发行5893亿元，同比多增264亿元。" },
   ],
   heroCharts: ["domestic-flights", "construction-steel-transactions", "tier-one-new-home-sales", "government-bond-issuance"],
   sections: [
     {
       id: "activity", title: "高频经济活动跟踪",
-      summary: "极端天气扰动退坡后暑期出行热度边际升温，建筑活动边际改善，生产活动仍偏弱，一线地产成交维持韧性。",
-      detail: "出行方面，国内航班数同比回升4.3%；建筑钢材成交量环比上行10.7%，沥青开工率环比上行2.3个百分点；焦化与半钢胎开工率回落，高炉开工率小幅回升；一线城市新房和二手房成交同比保持韧性。",
+      summary: "居民市内交通出行景气度边际回落，基建与建筑活动持续承压；工业生产分化，一线城市地产成交保持韧性。",
+      detail: "居民市内交通出行景气度边际回落：18城地铁客运量同比下降1.8%，百城拥堵指数同比下降2.5%；国内、国际航班数同比分别增长2.1%和0.3%。生产端焦化企业开工率同比下降8.2个百分点，高炉开工率同比上升2.3个百分点；建筑钢材成交量同比下降5.3%、环比下降3.5%。一线城市新房和二手房成交同比分别增长22.7%和12.5%。",
       charts: [
         chart(1, "activity", "power-generation", "全国重点电厂日均发电量同比下行5.9%", `${part1}/【1,5,6,9,12,14】电厂&螺纹钢产量&水泥发运率（Wind+iFind）.xlsx`, "【1】重点电厂日均发电量"),
         chart(2, "activity", "coal-port-inventory", "主流港口煤炭库存同比增加557.1万吨", `${part1}/【2,3,4】周报-投资活动跟踪-焦化&高炉开工率&煤炭港口库存（Wind）.xlsx`, "【2】煤炭港口库存"),
@@ -82,8 +82,8 @@ export const weeklyReport0809: WeeklyReportPage = {
     },
     {
       id: "prices", title: "价格指标及通胀变化",
-      summary: "国际原油回落，国内原材料价格多数回撤；农产品指数小幅上行，蔬菜和水果价格走高而猪肉价格回落。",
-      detail: "布伦特原油周环比下行7.3%至83.6美元/桶；螺纹钢和水泥价格回落、铜价小幅上行；聚乙烯、丁苯橡胶及尿素价格回落；农产品价格表现分化。",
+      summary: "国际油价显著上行，国内原材料与农产品价格普遍上涨，能源供给压力对工业生产和通胀的挤压效应上升。",
+      detail: "Brent原油周环比上涨7.8%至96.3美元/桶；铜和螺纹钢价格分别上涨0.5%和1.6%，动力煤和焦煤上涨0.4%和6.2%，水泥上涨0.5%。聚乙烯、丁苯橡胶分别上涨9.1%和7.5%。农产品价格指数上涨0.7%，蔬菜、水果和猪肉分别上涨2.2%、2.0%和0.6%。",
       charts: [
         chart(35, "prices", "brent-oil", "上周布伦特原油环比下行7.3%", `${part2}/【35-36】周报-价格指标及通胀变化-油价大宗商品（iFind）.xlsx`, "【35】布伦特原油"),
         chart(36, "prices", "industrial-material-prices", "上周国内铜价环比上行0.8%，螺纹钢价格环比下行2.0%", `${part2}/【35-36】周报-价格指标及通胀变化-油价大宗商品（iFind）.xlsx`, "【36】铜与螺纹钢价格"),
@@ -100,8 +100,8 @@ export const weeklyReport0809: WeeklyReportPage = {
     },
     {
       id: "financial", title: "利率、汇率及金融市场环境",
-      summary: "银行间流动性偏松，人民币兑美元升值，政府债发行仍偏慢；国债收益率曲线趋平，沪深300指数周环比上升。",
-      detail: "DR007/R007环比下行5.9/5.3bp；1年期国债收益率上行5.8bp、10年期下行0.3bp；利率债发行额同比少增，地产债融资上升而股权融资回落。",
+      summary: "银行间流动性维持宽松，国债收益率曲线趋平，人民币兑美元升值；利率债发行同比小幅多增。",
+      detail: "DR007和R007环比分别下降1.3和0.5个基点；1年期国债收益率上行2.1个基点，10年期下行1.5个基点。沪深300指数周环比下跌1.33%。在岸、离岸人民币兑美元分别升值0.22%和0.33%。本周利率债总发行5893亿元，同比多增264亿元，其中地方政府债同比多增626亿元。",
       charts: [
         chart(46, "financial", "rate-dashboard", "主要利率指标（截至2026年8月7日，单位：%）", `${part3}/【47】利率汇总表（wind）.xlsx`, "【46】利率汇总表"),
         chart(47, "financial", "repo-rate", "央行质押式回购加权利率环比下行5.3个基点", `${part3}/【48】央行逆回购与银行间利率.xlsx`, "【47】回购加权利率"),
@@ -127,14 +127,16 @@ export const weeklyReport0809: WeeklyReportPage = {
     },
     {
       id: "policy", title: "宏观政策跟踪",
-      summary: "7月出口、进口、CPI和PPI增速均放缓；北京进一步优化房地产政策。市场将关注7月社融数据及央行二季度货币政策执行报告。",
-      detail: "报告跟踪新型电力系统建设“十五五”规划、商务部对美反制措施、光伏行业反内卷倡议，以及北京优化住房限购、公积金与赠与政策。",
+      summary: "稳增长政策进入观察窗口，关注中小企业发展规划、保险法修订以及后续财政发力的持续性。",
+      detail: "8月31日国务院常务会议研究促进高质量发展有关工作；9月1日工信部等十部门印发中小企业发展“十五五”规划；9月4日国家金融监督管理总局就保险法修订草案征求意见。本周重点关注8月进出口、通胀和金融数据。",
       charts: [
         chart(67, "policy", "policy-events", "上周重要政策及会议一览（8月3日–8月7日）", `${part3}/【68】本周政策跟踪.xlsx`, "【67】上周政策及会议"),
         chart(68, "policy", "weekly-data-calendar", "本周重要数据一览（8月10日–8月14日）", `${part3}/【68】本周政策跟踪.xlsx`, "【68】本周重要数据"),
       ],
     },
   ],
-  watchPoints: ["关注7月社融数据及央行二季度货币政策执行报告。", "关注财政政策力度能否提升及利率债发行节奏。", "关注出口增速放缓、核心CPI回落所反映的内需变化。"],
+  watchPoints: ["关注财政发力的可持续性。", "关注能源价格上行对工业生产及通胀的传导。", "关注8月进出口、通胀和金融数据。"],
   risks: ["能源价格波动超预期。", "地产成交修复不及预期，内需超预期下行。"],
 };
+
+export const weeklyReport0809 = weeklyReport0906;

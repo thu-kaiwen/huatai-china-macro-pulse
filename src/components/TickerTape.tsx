@@ -84,3 +84,29 @@ export function TickerTape({ dataset }: TickerTapeProps) {
     </div>
   );
 }
+
+const latestTickerItems = [
+  { label: "PMI", value: "49.8", frequency: "月度", period: "截至 2026-08" },
+  { label: "CPI", value: "+0.5%", frequency: "月度", period: "截至 2026-07" },
+  { label: "出口", value: "+23.9%", frequency: "月度", period: "截至 2026-07" },
+  { label: "社融", value: "1.4万亿元", frequency: "月度", period: "截至 2026-07" },
+  { label: "Brent", value: "96.3美元/桶", frequency: "周度", period: "截至 2026-09-04" },
+  { label: "18城地铁同比", value: "-1.8%", frequency: "周度", period: "截至 2026-09-03" },
+  { label: "利率债同比", value: "+4.7%", frequency: "周度", period: "截至 2026-09-06" },
+  { label: "人民币对美元周环比", value: "+0.22%", frequency: "周度", period: "截至 2026-09-04" },
+];
+
+export function LatestTickerTape() {
+  const renderLatestItems = (isDuplicate: boolean) => (
+    <div aria-hidden={isDuplicate ? "true" : undefined} className={`ticker-items${isDuplicate ? " ticker-copy" : ""}`}>
+      {latestTickerItems.map((item) => (
+        <span className="ticker-item" key={`${item.label}-${item.period}`}>
+          <span>{item.label}</span><strong>{item.value}</strong>
+          <span className="ticker-item-meta">{item.frequency}</span><span className="ticker-item-meta">{item.period}</span>
+        </span>
+      ))}
+    </div>
+  );
+
+  return <div aria-label="最新宏观指标" className="ticker-tape" role="region" tabIndex={0}><div className="ticker-track">{renderLatestItems(false)}{renderLatestItems(true)}</div></div>;
+}
