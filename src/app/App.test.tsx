@@ -23,15 +23,15 @@ describe("research atlas app", () => {
 
     expect(screen.getByRole("heading", { name: "华泰宏观研究图谱" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "首页" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "全球研究图谱" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "中国宏观脉搏" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "专题研究" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "海外经济变化" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "中国基本面脉搏" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "主题研究" })).toBeInTheDocument();
   });
 
   it("keeps the current weekly and monthly reports in China Macro Pulse", async () => {
     const { user } = renderApp(<App />);
 
-    await user.click(screen.getByRole("link", { name: "中国宏观脉搏" }));
+    await user.click(screen.getByRole("link", { name: "中国基本面脉搏" }));
     expect(screen.getByRole("heading", { name: "国内周报｜能源供给压力的挤压效应有所上升" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "月报" }));
     expect(screen.getByRole("heading", { name: "国内月报｜政策再次进入稳增长观察窗口期" })).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("research atlas app", () => {
     renderApp(<App />);
 
     expect(screen.getByRole("heading", { name: "国内月报｜政策再次进入稳增长观察窗口期" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "中国宏观脉搏" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "中国基本面脉搏" })).toHaveAttribute("aria-current", "page");
     expect(document.querySelector("#monthly-pmi")).toContainElement(screen.getByRole("heading", { name: "PMI" }));
   });
 
@@ -60,36 +60,36 @@ describe("research atlas app", () => {
     window.history.replaceState({}, "", "#topic-research");
     fireEvent(window, new Event("hashchange"));
 
-    expect(await screen.findByRole("heading", { name: "专题研究" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "专题研究" })).toHaveAttribute("aria-current", "page");
+    expect(await screen.findByRole("heading", { name: "主题研究" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "主题研究" })).toHaveAttribute("aria-current", "page");
   });
 
   it("opens the global and topic research surfaces", async () => {
     const { user } = renderApp(<App />);
 
-    await user.click(screen.getByRole("link", { name: "全球研究图谱" }));
-    expect(screen.getByRole("heading", { name: "全球研究图谱" })).toBeInTheDocument();
-    await user.click(screen.getByRole("link", { name: "专题研究" }));
-    expect(screen.getByRole("heading", { name: "专题研究" })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "海外经济变化" }));
+    expect(screen.getByRole("heading", { name: "海外经济变化", level: 1 })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "主题研究" }));
+    expect(screen.getByRole("heading", { name: "主题研究", level: 1 })).toBeInTheDocument();
   });
 
   it("links global research navigation to the rendered global section", async () => {
     const { user } = renderApp(<App />);
-    const globalLink = screen.getByRole("link", { name: "全球研究图谱" });
+    const globalLink = screen.getByRole("link", { name: "海外经济变化" });
 
     await user.click(globalLink);
 
     expect(globalLink).toHaveAttribute("href", "#global-research");
     expect(document.querySelector("#global-research")).toContainElement(
-      screen.getByRole("heading", { name: "全球研究图谱" }),
+      screen.getByRole("heading", { name: "海外经济变化", level: 1 }),
     );
   });
 
   it("returns home when the brand link is clicked from another primary view", async () => {
     const { user } = renderApp(<App />);
 
-    await user.click(screen.getByRole("link", { name: "全球研究图谱" }));
-    expect(screen.getByRole("heading", { name: "全球研究图谱" })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "海外经济变化" }));
+    expect(screen.getByRole("heading", { name: "海外经济变化", level: 1 })).toBeInTheDocument();
     await user.click(screen.getByRole("link", { name: "华泰证券宏观研究图谱首页" }));
 
     expect(screen.getByRole("heading", { name: "华泰宏观研究图谱" })).toBeInTheDocument();

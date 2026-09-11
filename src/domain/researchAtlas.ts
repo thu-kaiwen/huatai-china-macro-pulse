@@ -1,5 +1,5 @@
 export type PrimaryView = "home" | "global" | "china" | "topics";
-export type ResearchStage = "context" | "driver" | "channel" | "outcome";
+export type ResearchStage = "china" | "overseas" | "themes";
 
 export interface ResearchNode {
   id: string;
@@ -21,12 +21,12 @@ export interface ResearchFocus {
   finding: string;
   updatedAt: string;
   evidencePath: string[];
-  systemId: "structure" | "transmission" | "china";
+  systemId: "china" | "overseas" | "themes";
   targetView: PrimaryView;
 }
 
 export interface ResearchSystem {
-  id: "structure" | "transmission" | "china";
+  id: "china" | "overseas" | "themes";
   number: string;
   title: string;
   summary: string;

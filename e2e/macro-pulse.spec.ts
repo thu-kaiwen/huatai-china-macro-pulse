@@ -18,7 +18,7 @@ test("opens the Huatai research atlas and explores a transmission node", async (
 
 test("keeps weekly and monthly reports under China Macro Pulse", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "中国宏观脉搏" }).click();
+  await page.getByRole("link", { name: "中国基本面脉搏" }).click();
   await expect(page.getByRole("heading", { name: /国内周报.*能源供给压力/ })).toBeVisible();
   await page.getByRole("button", { name: "月报" }).click();
   await expect(page.getByRole("heading", { name: /国内月报.*政策再次进入稳增长观察窗口期/ })).toBeVisible();
@@ -31,31 +31,32 @@ test("navigates every primary view with an active fragment state", async ({ page
   await page.goto("/");
   for (const [label, heading, hash] of [
     ["首页", "华泰宏观研究图谱", "#research-home"],
-    ["全球研究图谱", "全球研究图谱", "#global-research"],
-    ["中国宏观脉搏", /国内周报.*能源供给压力/, "#china-macro"],
-    ["专题研究", "专题研究", "#topic-research"],
+    ["中国基本面脉搏", /国内周报.*能源供给压力/, "#china-macro"],
+    ["海外经济变化", "海外经济变化", "#global-research"],
+    ["主题研究", "主题研究", "#topic-research"],
   ] as const) {
     await page.getByRole("link", { name: label, exact: true }).click();
-    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
     await expect(page.getByRole("link", { name: label, exact: true })).toHaveAttribute("aria-current", "page");
     await expect(page).toHaveURL(new RegExp(`${hash}$`));
   }
 });
 
-test("supports keyboard transmission selection and keeps mobile connectors inside their grid gap", async ({ page }) => {
+test("supports keyboard research selection and keeps the three pillars within the mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.getByRole("button", { name: "AI" }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("button", { name: "AI" })).toHaveAttribute("aria-pressed", "true");
-  const connectorFits = await page.locator(".research-layer-arrow").first().evaluate((arrow) => {
-    const nextLayer = arrow.parentElement?.nextElementSibling;
-    const arrowBox = arrow.getBoundingClientRect();
-    const nextBox = nextLayer?.getBoundingClientRect();
-    return Boolean(nextBox && arrowBox.bottom <= nextBox.top);
-  });
-  expect(connectorFits).toBe(true);
+  await expect(page.getByRole("group", { name: /研究板块/ })).toHaveCount(3);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});
+
+test("uses three full-width research columns on desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const columns = await page.locator(".research-layer-grid").evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(" "));
+  expect(columns).toHaveLength(3);
 });
 
 test("research homepage has no automatically detectable accessibility violations", async ({ page }) => {

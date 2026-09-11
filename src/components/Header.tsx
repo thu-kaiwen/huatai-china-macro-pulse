@@ -14,9 +14,9 @@ interface HeaderProps {
 
 const navigationItems: Array<{ id: PrimaryView; label: string }> = [
   { id: "home", label: "首页" },
-  { id: "global", label: "全球研究图谱" },
-  { id: "china", label: "中国宏观脉搏" },
-  { id: "topics", label: "专题研究" },
+  { id: "china", label: "中国基本面脉搏" },
+  { id: "global", label: "海外经济变化" },
+  { id: "topics", label: "主题研究" },
 ];
 
 const navigationHrefs: Record<PrimaryView, string> = {

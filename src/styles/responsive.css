@@ -18,7 +18,6 @@
   .research-home-lead { grid-template-columns: minmax(0, 1fr); }
   .research-home-lead strong { max-width: 52rem; }
   .research-layer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .research-layer-arrow { display: none; }
   .research-focus-grid, .research-system-grid { grid-template-columns: minmax(0, 1fr); }
   .research-focus-grid article { min-height: 0; }
   .research-system-grid article { display: grid; grid-template-columns: 3rem minmax(0, 1fr); column-gap: 1rem; }
@@ -105,7 +104,6 @@
   .research-transmission-map { margin-right: -1rem; margin-left: -1rem; padding: 1.25rem 1rem; }
   .research-transmission-map header { grid-template-columns: minmax(0, 1fr); gap: 0.65rem; }
   .research-layer-grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.5rem; }
-  .research-layer-arrow { display: grid; top: auto; right: auto; bottom: -1.4rem; left: calc(50% - 0.65rem); transform: rotate(90deg); }
   .research-layer { padding-bottom: 1rem; }
   .research-layer button, .research-focus-grid button, .china-entry-section > button { min-height: 2.75rem; }
   .research-node-detail { grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }

@@ -7,17 +7,18 @@ interface GlobalResearchAtlasProps {
 }
 
 export function GlobalResearchAtlas({ data, onNavigate }: GlobalResearchAtlasProps) {
-  const globalSystems = data.systems.filter((system) => system.id === "structure" || system.id === "transmission");
+  const overseasLayer = data.layers.filter((layer) => layer.stage === "overseas");
+  const overseasSystems = data.systems.filter((system) => system.id === "overseas");
 
   return (
     <section aria-labelledby="global-research-atlas-title" className="global-research-atlas" id="global-research">
       <header>
-        <p>GLOBAL RESEARCH ATLAS</p>
-        <h1 id="global-research-atlas-title">全球研究图谱</h1>
+        <p>OVERSEAS ECONOMIES</p>
+        <h1 id="global-research-atlas-title">海外经济变化</h1>
       </header>
-      <ResearchTransmissionMap layers={data.layers} onNavigate={onNavigate} />
-      <section aria-label="全球研究体系" className="global-research-systems">
-        {globalSystems.map((system) => (
+      <ResearchTransmissionMap layers={overseasLayer} onNavigate={onNavigate} title="重点经济体" />
+      <section aria-label="海外经济研究" className="global-research-systems">
+        {overseasSystems.map((system) => (
           <article key={system.id}>
             <p>{system.number}</p>
             <h2>{system.title}</h2>

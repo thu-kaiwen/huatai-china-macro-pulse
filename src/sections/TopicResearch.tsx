@@ -10,8 +10,8 @@ export function TopicResearch({ data }: TopicResearchProps) {
   return (
     <section aria-labelledby="topic-research-title" className="topic-research" id="topic-research">
       <header>
-        <p>RESEARCH QUESTIONS</p>
-        <h1 id="topic-research-title">专题研究</h1>
+        <p>THEMATIC RESEARCH</p>
+        <h1 id="topic-research-title">主题研究</h1>
       </header>
       <div className="research-topic-grid">
         {data.topics.map((topic) => (
