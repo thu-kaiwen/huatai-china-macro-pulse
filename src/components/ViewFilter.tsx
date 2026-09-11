@@ -1,14 +1,13 @@
-import type { ViewMode } from "../domain/types";
+import type { Frequency } from "../domain/types";
 
 interface ViewFilterProps {
-  value: ViewMode;
-  onChange: (view: ViewMode) => void;
+  value: Frequency;
+  onChange: (view: Frequency) => void;
 }
 
-const options: Array<{ value: ViewMode; label: string }> = [
-  { value: "combined", label: "综合" },
-  { value: "monthly", label: "月报" },
+const options: Array<{ value: Frequency; label: string }> = [
   { value: "weekly", label: "周报" },
+  { value: "monthly", label: "月报" },
 ];
 
 export function ViewFilter({ value, onChange }: ViewFilterProps) {

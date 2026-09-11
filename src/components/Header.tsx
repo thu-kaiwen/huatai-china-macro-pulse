@@ -4,41 +4,43 @@ import { SourceBadge } from "./SourceBadge";
 import { SectionErrorBoundary } from "./SectionErrorBoundary";
 import { ThemeToggle } from "./ThemeToggle";
 import { TickerTape } from "./TickerTape";
+import type { PrimaryView } from "../domain/researchAtlas";
 
 interface HeaderProps {
-  activeSection: string;
-  onNavigate: (section: string) => void;
+  activeView: PrimaryView;
+  onNavigate: (view: PrimaryView) => void;
   TickerComponent?: typeof TickerTape;
-  visibleSectionIds: readonly string[];
 }
 
-const navigationItems = [
-  { id: "overview", label: "总览" },
-  { id: "monthly", label: "月度" },
-  { id: "weekly", label: "周度" },
-  { id: "markets", label: "价格·金融" },
-  { id: "industry", label: "行业" },
-  { id: "policy", label: "政策" },
-  { id: "outlook", label: "展望" },
-  { id: "sources", label: "来源" },
+const navigationItems: Array<{ id: PrimaryView; label: string }> = [
+  { id: "home", label: "首页" },
+  { id: "global", label: "全球研究图谱" },
+  { id: "china", label: "中国宏观脉搏" },
+  { id: "topics", label: "专题研究" },
 ];
 
+const navigationHrefs: Record<PrimaryView, string> = {
+  home: "#research-home",
+  global: "#global-research",
+  china: "#china-macro",
+  topics: "#topic-research",
+};
+
 export function Header({
-  activeSection,
+  activeView,
   onNavigate,
   TickerComponent = TickerTape,
-  visibleSectionIds,
 }: HeaderProps) {
   return (
     <header className="terminal-header">
       <div className="command-bar">
         <BrandLockup />
         <nav aria-label="章节导航">
-          {navigationItems.filter((item) => visibleSectionIds.includes(item.id)).map((item) => (
+          {navigationItems.map((item) => (
             <a
-              href={`#${item.id}`}
+              href={navigationHrefs[item.id]}
               key={item.id}
-              aria-current={activeSection === item.id ? "location" : undefined}
+              aria-current={activeView === item.id ? "page" : undefined}
               onClick={() => onNavigate(item.id)}
             >
               {item.label}
