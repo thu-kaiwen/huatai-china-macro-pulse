@@ -46,6 +46,27 @@ describe("weekly report app", () => {
     expect(screen.getByRole("button", { name: "月报" })).toHaveAttribute("aria-pressed", "true");
   });
 
+  it("adds a clickable mini trend to every monthly summary", async () => {
+    const { user } = renderApp(<App />);
+
+    await user.click(screen.getByRole("button", { name: "月报" }));
+
+    expect(screen.getAllByRole("img", { name: /趋势$/ })).toHaveLength(8);
+    expect(screen.getByRole("link", { name: "查看PMI完整趋势" })).toHaveAttribute("href", "#monthly-pmi");
+    expect(screen.getByRole("link", { name: "查看进出口数据完整趋势" })).toHaveAttribute("href", "#monthly-trade");
+  });
+
+  it("links monthly commentary to Huatai Macro Research", async () => {
+    const { user } = renderApp(<App />);
+
+    await user.click(screen.getByRole("button", { name: "月报" }));
+
+    const inflationArticle = screen.getByRole("link", { name: "阅读通胀点评原文" });
+    expect(inflationArticle).toHaveAttribute("href", "https://mp.weixin.qq.com/s/KjbwZeFhfQjXboUAGpYF_w");
+    expect(inflationArticle).toHaveAttribute("target", "_blank");
+    expect(screen.getAllByRole("link", { name: "进入华泰证券宏观研究" })).toHaveLength(7);
+  });
+
   it("switches to dark theme and persists the preference", async () => {
     const { user } = renderApp(<App />);
     await user.click(screen.getByRole("button", { name: "切换至深色主题" }));

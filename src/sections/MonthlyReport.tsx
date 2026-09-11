@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WeeklyLineChart } from "../components/WeeklyCharts";
+import { Sparkline, WeeklyLineChart } from "../components/WeeklyCharts";
 import type { MonthlyReportPage } from "../data/monthlyReport";
 
 export function MonthlyReport({ report }: { report: MonthlyReportPage }) {
@@ -19,13 +19,19 @@ export function MonthlyReport({ report }: { report: MonthlyReportPage }) {
       </header>
 
       <div className="monthly-summary-grid" aria-label="月度核心数据">
-        {report.sections.map((section) => (
-          <article key={`summary-${section.id}`}>
-            <span>{section.title}</span>
-            <strong>{section.latestValue}</strong>
-            <small>{section.dataPeriod}</small>
-          </article>
-        ))}
+        {report.sections.map((section) => {
+          const trend = section.chart.series[0]?.values.filter((value): value is number => value !== null) ?? [];
+          return (
+            <article key={`summary-${section.id}`}>
+              <a aria-label={`查看${section.title}完整趋势`} href={`#monthly-${section.id}`}>
+                <span>{section.title}</span>
+                <strong>{section.latestValue}</strong>
+                <Sparkline ariaLabel={`${section.title}趋势`} values={trend} />
+                <small>{section.dataPeriod}</small>
+              </a>
+            </article>
+          );
+        })}
       </div>
 
       <div className="monthly-section-list">
@@ -55,9 +61,14 @@ export function MonthlyReport({ report }: { report: MonthlyReportPage }) {
                 <small className="weekly-chart-source">来源：{section.chart.source}</small>
               </article>
               <div className="monthly-disclosure">
-                <button aria-controls={`monthly-detail-${section.id}`} aria-expanded={expanded} onClick={() => setExpandedId(expanded ? null : section.id)} type="button">
-                  {expanded ? "收起完整解读" : "展开完整解读"}
-                </button>
+                <div className="monthly-actions">
+                  <button aria-controls={`monthly-detail-${section.id}`} aria-expanded={expanded} onClick={() => setExpandedId(expanded ? null : section.id)} type="button">
+                    {expanded ? "收起完整解读" : "展开完整解读"}
+                  </button>
+                  <a href={section.articleUrl ?? report.accountUrl} rel="noreferrer" target="_blank">
+                    {section.articleUrl ? `阅读${section.title}点评原文` : "进入华泰证券宏观研究"}
+                  </a>
+                </div>
                 {expanded && <p id={`monthly-detail-${section.id}`}>{section.detail}</p>}
               </div>
             </section>

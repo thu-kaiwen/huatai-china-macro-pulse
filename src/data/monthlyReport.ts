@@ -10,6 +10,7 @@ export interface MonthlySection {
   headline: string;
   latestValue: string;
   detail: string;
+  articleUrl?: string;
   chart: WeeklyLineDashboardChart;
 }
 
@@ -19,6 +20,7 @@ export interface MonthlyReportPage {
   updatedAt: string;
   title: string;
   overview: string;
+  accountUrl: string;
   sections: MonthlySection[];
 }
 
@@ -121,9 +123,10 @@ export const monthlyReport0831: MonthlyReportPage = {
   updatedAt: "2026年9月9日",
   title: "政策再次进入稳增长观察窗口期",
   overview: "能源冲击与极端天气对国内生产和消费形成扰动，7月工业增加值、社零和固定资产投资均边际走弱，房地产活动继续放缓；外需仍具韧性。后续重点观察财政支出提速、政策性金融工具落地以及稳增长政策的持续性。",
+  accountUrl: "https://mp.weixin.qq.com/s/KjbwZeFhfQjXboUAGpYF_w",
   sections: [
     { id: "pmi", number: "01", title: "PMI", dataPeriod: "2026年8月", headline: "制造业景气度环比修复", latestValue: "49.8", detail: "8月制造业PMI较7月回升0.6个百分点至49.8，生产和新订单指数均有所回升；非制造业PMI为49.0，与7月持平。", chart: pmi },
-    { id: "inflation", number: "02", title: "通胀", dataPeriod: "2026年7月", headline: "CPI与PPI同比均回落", latestValue: "CPI 0.5%｜PPI 3.5%", detail: "7月CPI同比从1.0%回落至0.5%，食品CPI同比改善至-1.5%；PPI同比从4.1%回落至3.5%，上游价格涨幅有所收窄。", chart: inflation },
+    { id: "inflation", number: "02", title: "通胀", dataPeriod: "2026年7月", headline: "CPI与PPI同比均回落", latestValue: "CPI 0.5%｜PPI 3.5%", detail: "7月CPI同比从1.0%回落至0.5%，食品CPI同比改善至-1.5%；PPI同比从4.1%回落至3.5%，上游价格涨幅有所收窄。", articleUrl: "https://mp.weixin.qq.com/s/KjbwZeFhfQjXboUAGpYF_w", chart: inflation },
     { id: "retail", number: "03", title: "社会消费品零售总额", dataPeriod: "2026年7月", headline: "消费修复动能仍偏弱", latestValue: "+0.6%", detail: "7月社会消费品零售总额同比增速从6月的1.0%放缓至0.6%，线上零售额同比增速降至0.7%。", chart: retail },
     { id: "investment", number: "04", title: "固定资产投资", dataPeriod: "2026年7月", headline: "主要投资分项降幅扩大", latestValue: "-12.9%", detail: "7月固定资产投资单月同比降幅扩大至12.9%，基建、制造业和房地产投资同比分别为-14.7%、-4.4%和-27.4%。", chart: investment },
     { id: "industrial", number: "05", title: "工业增加值", dataPeriod: "2026年7月", headline: "工业生产增速放缓", latestValue: "+4.5%", detail: "7月规模以上工业增加值同比增长4.5%，较6月的5.3%回落；同期发电量同比由2.0%转为-0.1%。", chart: industrial },

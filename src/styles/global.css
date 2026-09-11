@@ -349,10 +349,14 @@ nav a:focus-visible { color: var(--ht-red); }
 .monthly-version-bar strong { color: #fff; }
 .monthly-version-bar em { padding: 0.12rem 0.48rem; border-radius: 999px; background: #d9272e; color: #fff; font-style: normal; font-weight: 750; }
 .monthly-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1.25rem; }
-.monthly-summary-grid article { display: grid; min-height: 7.5rem; align-content: space-between; padding: 1rem; border: 1px solid #d8e1e8; border-top: 3px solid #d9272e; border-radius: 0.45rem; background: var(--panel); }
+.monthly-summary-grid article { min-width: 0; border: 1px solid #d8e1e8; border-top: 3px solid #d9272e; border-radius: 0.45rem; background: var(--panel); overflow: hidden; }
+.monthly-summary-grid article > a { display: grid; min-height: 9.5rem; align-content: space-between; gap: 0.35rem; padding: 1rem; color: inherit; text-decoration: none; }
+.monthly-summary-grid article > a:hover { background: color-mix(in srgb, #174a7e 4%, var(--panel)); }
+.monthly-summary-grid article > a:focus-visible { outline: 3px solid color-mix(in srgb, #174a7e 55%, transparent); outline-offset: -3px; }
 .monthly-summary-grid span { color: var(--ink-muted); font-size: 0.75rem; }
 .monthly-summary-grid strong { color: #102f50; font-size: 1.05rem; line-height: 1.35; }
 .monthly-summary-grid small { color: #174a7e; font-size: 0.68rem; }
+.monthly-summary-grid .weekly-sparkline { width: 100%; height: 2.35rem; }
 .monthly-section-list { display: grid; gap: 1.2rem; margin-top: 2rem; }
 .monthly-data-section { padding: clamp(1.2rem, 3vw, 2.2rem); border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
 .monthly-section-heading { display: grid; grid-template-columns: 4rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
@@ -370,7 +374,10 @@ nav a:focus-visible { color: var(--ht-red); }
 .monthly-chart-header > div:last-child strong { color: #102f50; }
 .monthly-chart-header > div:last-child span { margin-top: 0.2rem; color: #d9272e; font-size: 0.72rem; font-weight: 750; }
 .monthly-disclosure { margin-top: 1rem; text-align: center; }
-.monthly-disclosure button { padding: 0.58rem 1rem; border: 1px solid #174a7e; border-radius: 999px; background: transparent; color: #174a7e; cursor: pointer; font-size: 0.78rem; font-weight: 750; }
+.monthly-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.65rem; }
+.monthly-disclosure button, .monthly-actions a { display: inline-flex; align-items: center; justify-content: center; padding: 0.58rem 1rem; border: 1px solid #174a7e; border-radius: 999px; background: transparent; color: #174a7e; cursor: pointer; font-size: 0.78rem; font-weight: 750; text-decoration: none; }
 .monthly-disclosure button:hover { background: #174a7e; color: #fff; }
+.monthly-actions a { border-color: #d9272e; background: #d9272e; color: #fff; }
+.monthly-actions a:hover { border-color: #b51d24; background: #b51d24; }
 .monthly-disclosure p { max-width: 68rem; margin: 0.9rem auto 0; padding: 0.9rem 1rem; background: var(--panel-muted); color: var(--ink-muted); text-align: left; font-size: 0.84rem; line-height: 1.75; }
 :root[data-theme="dark"] .monthly-summary-grid strong, :root[data-theme="dark"] .monthly-section-heading h2, :root[data-theme="dark"] .monthly-chart-header > div:last-child strong { color: var(--ink); }
