@@ -34,7 +34,7 @@ export function Header({
   return (
     <header className="terminal-header">
       <div className="command-bar">
-        <BrandLockup />
+        <BrandLockup onNavigate={() => onNavigate("home")} />
         <nav aria-label="章节导航">
           {navigationItems.map((item) => (
             <a

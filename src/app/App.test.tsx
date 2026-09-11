@@ -45,6 +45,28 @@ describe("research atlas app", () => {
     expect(screen.getByRole("heading", { name: "专题研究" })).toBeInTheDocument();
   });
 
+  it("links global research navigation to the rendered global section", async () => {
+    const { user } = renderApp(<App />);
+    const globalLink = screen.getByRole("link", { name: "全球研究图谱" });
+
+    await user.click(globalLink);
+
+    expect(globalLink).toHaveAttribute("href", "#global-research");
+    expect(document.querySelector("#global-research")).toContainElement(
+      screen.getByRole("heading", { name: "全球研究图谱" }),
+    );
+  });
+
+  it("returns home when the brand link is clicked from another primary view", async () => {
+    const { user } = renderApp(<App />);
+
+    await user.click(screen.getByRole("link", { name: "全球研究图谱" }));
+    expect(screen.getByRole("heading", { name: "全球研究图谱" })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "华泰证券宏观研究图谱首页" }));
+
+    expect(screen.getByRole("heading", { name: "华泰宏观研究图谱" })).toBeInTheDocument();
+  });
+
   it("switches to dark theme and persists the preference", async () => {
     const { user } = renderApp(<App />);
     await user.click(screen.getByRole("button", { name: "切换至深色主题" }));

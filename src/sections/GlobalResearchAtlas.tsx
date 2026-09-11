@@ -9,7 +9,7 @@ export function GlobalResearchAtlas({ data }: GlobalResearchAtlasProps) {
   const globalSystems = data.systems.filter((system) => system.id === "structure" || system.id === "transmission");
 
   return (
-    <section aria-labelledby="global-research-atlas-title" className="global-research-atlas" id="global-research-atlas">
+    <section aria-labelledby="global-research-atlas-title" className="global-research-atlas" id="global-research">
       <header>
         <p>GLOBAL RESEARCH ATLAS</p>
         <h1 id="global-research-atlas-title">全球研究图谱</h1>
