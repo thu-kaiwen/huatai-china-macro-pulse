@@ -41,7 +41,10 @@ export function Header({
               href={navigationHrefs[item.id]}
               key={item.id}
               aria-current={activeView === item.id ? "page" : undefined}
-              onClick={() => onNavigate(item.id)}
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigate(item.id);
+              }}
             >
               {item.label}
             </a>

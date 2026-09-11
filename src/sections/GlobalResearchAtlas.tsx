@@ -1,11 +1,12 @@
 import { ResearchTransmissionMap } from "../components/ResearchTransmissionMap";
-import type { ResearchAtlasData } from "../domain/researchAtlas";
+import type { PrimaryView, ResearchAtlasData } from "../domain/researchAtlas";
 
 interface GlobalResearchAtlasProps {
   data: ResearchAtlasData;
+  onNavigate?: (view: PrimaryView) => void;
 }
 
-export function GlobalResearchAtlas({ data }: GlobalResearchAtlasProps) {
+export function GlobalResearchAtlas({ data, onNavigate }: GlobalResearchAtlasProps) {
   const globalSystems = data.systems.filter((system) => system.id === "structure" || system.id === "transmission");
 
   return (
@@ -14,7 +15,7 @@ export function GlobalResearchAtlas({ data }: GlobalResearchAtlasProps) {
         <p>GLOBAL RESEARCH ATLAS</p>
         <h1 id="global-research-atlas-title">全球研究图谱</h1>
       </header>
-      <ResearchTransmissionMap layers={data.layers} />
+      <ResearchTransmissionMap layers={data.layers} onNavigate={onNavigate} />
       <section aria-label="全球研究体系" className="global-research-systems">
         {globalSystems.map((system) => (
           <article key={system.id}>

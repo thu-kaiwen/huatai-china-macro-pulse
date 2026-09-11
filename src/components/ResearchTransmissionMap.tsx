@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { ResearchLayer } from "../domain/researchAtlas";
+import type { PrimaryView, ResearchLayer } from "../domain/researchAtlas";
 
-export function ResearchTransmissionMap({ layers }: { layers: ResearchLayer[] }) {
+export function ResearchTransmissionMap({ layers, onNavigate }: { layers: ResearchLayer[]; onNavigate?: (view: PrimaryView) => void }) {
   const firstNode = layers[0]?.nodes[0];
   const [selectedId, setSelectedId] = useState(firstNode?.id ?? "");
   const selected = layers.flatMap((layer) => layer.nodes).find((node) => node.id === selectedId) ?? firstNode;
@@ -20,7 +20,7 @@ export function ResearchTransmissionMap({ layers }: { layers: ResearchLayer[] })
           </div>
         ))}
       </div>
-      {selected && <aside aria-live="polite" className="research-node-detail"><strong>{selected.label}</strong><p>{selected.summary}</p></aside>}
+      {selected && <aside aria-live="polite" className="research-node-detail"><strong>{selected.label}</strong><p>{selected.summary}</p>{onNavigate && <button onClick={() => onNavigate("global")} type="button">查看相关研究</button>}</aside>}
     </section>
   );
 }

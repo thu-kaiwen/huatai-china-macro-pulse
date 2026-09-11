@@ -1,10 +1,11 @@
-import { cleanup, fireEvent, screen } from "@testing-library/react";
+import { cleanup, fireEvent, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { renderApp } from "../test/renderApp";
 
 describe("research atlas app", () => {
   beforeEach(() => {
+    window.history.replaceState({}, "", "/");
     localStorage.clear();
     document.documentElement.removeAttribute("data-theme");
     vi.stubGlobal("scrollTo", vi.fn());
@@ -34,6 +35,33 @@ describe("research atlas app", () => {
     expect(screen.getByRole("heading", { name: "国内周报｜能源供给压力的挤压效应有所上升" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "月报" }));
     expect(screen.getByRole("heading", { name: "国内月报｜政策再次进入稳增长观察窗口期" })).toBeInTheDocument();
+    const monthlyReport = screen.getByRole("heading", { name: "国内月报｜政策再次进入稳增长观察窗口期" }).closest("section");
+    expect(monthlyReport).not.toBeNull();
+    expect(within(monthlyReport!).getAllByRole("link", { name: /查看.*完整趋势/ })).toHaveLength(8);
+    const publicLinks = within(monthlyReport!).getAllByRole("link", { name: /点评原文|华泰证券宏观研究/ });
+    expect(publicLinks).toHaveLength(8);
+    publicLinks.forEach((link) => {
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("href", expect.any(String));
+    });
+  });
+
+  it("opens a directly linked monthly China Macro view and preserves its chart fragment", () => {
+    window.history.replaceState({}, "", "#monthly-pmi");
+    renderApp(<App />);
+
+    expect(screen.getByRole("heading", { name: "国内月报｜政策再次进入稳增长观察窗口期" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "中国宏观脉搏" })).toHaveAttribute("aria-current", "page");
+    expect(document.querySelector("#monthly-pmi")).toContainElement(screen.getByRole("heading", { name: "PMI" }));
+  });
+
+  it("updates the rendered view when browser fragment navigation changes", async () => {
+    renderApp(<App />);
+    window.history.replaceState({}, "", "#topic-research");
+    fireEvent(window, new Event("hashchange"));
+
+    expect(await screen.findByRole("heading", { name: "专题研究" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "专题研究" })).toHaveAttribute("aria-current", "page");
   });
 
   it("opens the global and topic research surfaces", async () => {

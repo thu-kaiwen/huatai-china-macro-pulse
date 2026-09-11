@@ -58,8 +58,9 @@ a, button, summary, .metric-card, .market-reading, .industry-matrix-cell {
 
 nav { display: flex; min-width: 0; gap: 0.25rem; overflow-x: auto; }
 nav a { padding: 0.4rem 0.5rem; border-radius: 0.2rem; color: var(--ink-muted); font-size: 0.82rem; text-decoration: none; white-space: nowrap; }
-nav a:hover, nav a[aria-current="location"] { background: var(--panel-muted); color: var(--ht-red); }
-nav a[aria-current="location"] { color: #b91f29; font-weight: 750; }
+nav a:hover, nav a[aria-current="page"] { background: var(--panel-muted); color: var(--ht-red); }
+nav a[aria-current="page"] { color: #b91f29; font-weight: 750; }
+:root[data-theme="dark"] nav a[aria-current="page"] { color: var(--ht-red); }
 nav a:focus-visible { color: var(--ht-red); }
 
 .header-utilities { display: flex; flex: 0 0 auto; align-items: center; gap: 0.7rem; margin-left: auto; }
@@ -279,9 +280,9 @@ nav a:focus-visible { color: var(--ht-red); }
 .research-node-detail p { margin: 0; color: #d6e4ee; font-size: 1rem; line-height: 1.65; }
 @keyframes research-node-emphasis { from { opacity: 0.35; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-.research-focus-section, .research-system-section, .china-entry-section { margin-top: 3.5rem; }
-.research-focus-section > header, .research-system-section > header, .china-entry-section > header, .global-research-atlas > header, .topic-research > header { max-width: 48rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
-.research-focus-section h2, .research-system-section h2, .china-entry-section h2, .global-research-atlas > header h1, .topic-research > header h1 { margin: 0; color: var(--ink); font-size: clamp(1.75rem, 3.4vw, 2.7rem); letter-spacing: -0.04em; }
+.research-focus-section, .research-system-section, .research-original-section, .china-entry-section { margin-top: 3.5rem; }
+.research-focus-section > header, .research-system-section > header, .research-original-section > header, .china-entry-section > header, .global-research-atlas > header, .topic-research > header { max-width: 48rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.research-focus-section h2, .research-system-section h2, .research-original-section h2, .china-entry-section h2, .global-research-atlas > header h1, .topic-research > header h1 { margin: 0; color: var(--ink); font-size: clamp(1.75rem, 3.4vw, 2.7rem); letter-spacing: -0.04em; }
 .research-focus-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.25rem; }
 .research-focus-grid article { display: flex; min-width: 0; flex-direction: column; padding: 1.15rem; border: 1px solid var(--line); border-top: 3px solid var(--ht-red); background: var(--panel); box-shadow: 0 8px 20px color-mix(in srgb, var(--ink) 5%, transparent); }
 .research-focus-grid article > p { margin: 0; color: var(--ht-red); font-size: 0.875rem; font-weight: 750; letter-spacing: 0.06em; }
@@ -296,10 +297,10 @@ nav a:focus-visible { color: var(--ht-red); }
 .research-focus-grid button:focus-visible, .china-entry-section > button:focus-visible { outline-color: var(--ht-red); }
 
 .research-system-grid, .research-topic-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.25rem; }
-.research-system-grid article, .global-research-systems article, .topic-research-grid article { min-width: 0; padding: 1.1rem; border: 1px solid var(--line); border-top: 3px solid var(--cyan); background: var(--panel); }
+.research-system-grid article, .global-research-systems article, .research-topic-grid article { min-width: 0; padding: 1.1rem; border: 1px solid var(--line); border-top: 3px solid var(--cyan); background: var(--panel); }
 .research-system-grid article > p, .global-research-systems article > p { margin: 0; color: var(--ht-red); font-size: 1.35rem; font-weight: 800; letter-spacing: -0.05em; }
-.research-system-grid h3, .global-research-systems h2, .topic-research-grid h2 { margin: 0.4rem 0 0.7rem; color: var(--ink); font-size: 1.08rem; }
-.research-system-grid strong, .global-research-systems strong, .topic-research-grid strong { color: var(--ink-muted); font-size: 1rem; font-weight: 500; line-height: 1.65; }
+.research-system-grid h3, .global-research-systems h2, .research-topic-grid h2, .research-topic-grid h3 { margin: 0.4rem 0 0.7rem; color: var(--ink); font-size: 1.08rem; }
+.research-system-grid strong, .global-research-systems strong, .research-topic-grid strong { color: var(--ink-muted); font-size: 1rem; font-weight: 500; line-height: 1.65; }
 .research-system-grid ul, .global-research-systems ul { display: grid; gap: 0.35rem; margin: 1rem 0 0; padding: 0.85rem 0 0; border-top: 1px solid var(--line); list-style: none; }
 .research-system-grid li, .global-research-systems li { color: var(--ink-muted); font-size: 0.875rem; line-height: 1.45; }
 .research-system-grid li::before, .global-research-systems li::before { margin-right: 0.45rem; color: var(--ht-red); content: "—"; }
@@ -316,11 +317,11 @@ nav a:focus-visible { color: var(--ht-red); }
 
 .global-research-atlas > .research-transmission-map { margin-top: 1.5rem; }
 .global-research-systems { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
-.topic-research-grid { margin-top: 1.5rem; }
-.topic-research-grid article { display: grid; min-height: 12rem; align-content: start; }
-.topic-research-grid article > p { margin: 0; color: var(--ht-red); font-size: 0.875rem; font-weight: 750; }
-.topic-research-grid h2 { font-size: 1.1rem; line-height: 1.45; }
-:root[data-theme="dark"] .research-focus-grid article, :root[data-theme="dark"] .research-system-grid article, :root[data-theme="dark"] .global-research-systems article, :root[data-theme="dark"] .topic-research-grid article, :root[data-theme="dark"] .china-entry-section article { box-shadow: none; }
+.research-topic-grid { margin-top: 1.5rem; }
+.research-topic-grid article { display: grid; min-height: 12rem; align-content: start; }
+.research-topic-grid article > p { margin: 0; color: var(--ht-red); font-size: 0.875rem; font-weight: 750; }
+.research-topic-grid h2 { font-size: 1.1rem; line-height: 1.45; }
+:root[data-theme="dark"] .research-focus-grid article, :root[data-theme="dark"] .research-system-grid article, :root[data-theme="dark"] .global-research-systems article, :root[data-theme="dark"] .research-topic-grid article, :root[data-theme="dark"] .china-entry-section article { box-shadow: none; }
 
 /* Weekly report V4 — Huatai Macro blue/red editorial system */
 .weekly-report { margin-top: 2rem; }

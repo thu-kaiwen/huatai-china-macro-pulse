@@ -22,6 +22,8 @@ describe("research surfaces", () => {
 
     expect(screen.getByRole("heading", { name: "华泰宏观研究图谱" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "本周研究重点" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "原创研究精选" })).toBeInTheDocument();
+    expect(screen.getAllByRole("article", { name: /原创研究专题/ })).toHaveLength(6);
     expect(screen.getAllByRole("article", { name: /研究重点/ })).toHaveLength(3);
 
     await user.click(screen.getByRole("button", { name: "进入中国宏观脉搏" }));
@@ -39,6 +41,6 @@ describe("research surfaces", () => {
     expect(screen.getByRole("heading", { name: "全球研究图谱" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "专题研究" })).toBeInTheDocument();
     expect(within(screen.getByRole("region", { name: "全球研究体系" })).getAllByRole("article")).toHaveLength(2);
-    expect(screen.getAllByRole("article", { name: /专题/ })).toHaveLength(6);
+    expect(within(screen.getByRole("region", { name: "专题研究" })).getAllByRole("article", { name: /专题/ })).toHaveLength(6);
   });
 });

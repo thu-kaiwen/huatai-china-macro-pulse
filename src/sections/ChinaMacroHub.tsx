@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ViewFilter } from "../components/ViewFilter";
 import { SectionErrorBoundary } from "../components/SectionErrorBoundary";
 import type { MonthlyReportPage } from "../data/monthlyReport";
@@ -10,14 +9,14 @@ import { WeeklyReport } from "./WeeklyReport";
 interface ChinaMacroHubProps {
   weeklyReport: WeeklyReportPage;
   monthlyReport: MonthlyReportPage;
+  frequency: Frequency;
+  onFrequencyChange: (frequency: Frequency) => void;
 }
 
-export function ChinaMacroHub({ weeklyReport, monthlyReport }: ChinaMacroHubProps) {
-  const [frequency, setFrequency] = useState<Frequency>("weekly");
-
+export function ChinaMacroHub({ weeklyReport, monthlyReport, frequency, onFrequencyChange }: ChinaMacroHubProps) {
   return (
     <section className="china-macro-hub" id="china-macro">
-      <ViewFilter onChange={setFrequency} value={frequency} />
+      <ViewFilter onChange={onFrequencyChange} value={frequency} />
       {frequency === "weekly" ? (
         <SectionErrorBoundary sectionId="weekly" sectionName="周报">
           <WeeklyReport report={weeklyReport} />
