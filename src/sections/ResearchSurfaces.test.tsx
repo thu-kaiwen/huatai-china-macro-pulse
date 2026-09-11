@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { monthlyReport0831 } from "../data/monthlyReport";
 import { researchAtlasData } from "../data/researchAtlas";
@@ -28,7 +28,7 @@ describe("research surfaces", () => {
     expect(onNavigate).toHaveBeenCalledWith("china");
   });
 
-  it("shows three global systems and six thematic questions", () => {
+  it("shows two global systems and six thematic questions", () => {
     renderApp(
       <>
         <GlobalResearchAtlas data={researchAtlasData} />
@@ -38,6 +38,7 @@ describe("research surfaces", () => {
 
     expect(screen.getByRole("heading", { name: "全球研究图谱" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "专题研究" })).toBeInTheDocument();
+    expect(within(screen.getByRole("region", { name: "全球研究体系" })).getAllByRole("article")).toHaveLength(2);
     expect(screen.getAllByRole("article", { name: /专题/ })).toHaveLength(6);
   });
 });
