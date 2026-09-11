@@ -272,6 +272,7 @@ nav a:focus-visible { color: var(--ht-red); }
 .research-layer button:hover { border-color: #9fc4de; background: rgb(159 196 222 / 12%); }
 .research-layer button:focus-visible { outline-color: #fff; outline-offset: 2px; }
 .research-layer button[aria-pressed="true"] { border-color: var(--ht-red); background: var(--ht-red); color: #fff; }
+:root[data-theme="dark"] .research-layer button[aria-pressed="true"] { color: var(--panel); }
 .research-layer-arrow { position: absolute; z-index: 1; top: 50%; right: -1.15rem; display: grid; width: 1.3rem; height: 1.3rem; place-items: center; transform: translateY(-50%); border: 1px solid rgb(255 255 255 / 26%); border-radius: 50%; background: #13263a; color: #fff; font-size: 0.9rem; line-height: 1; }
 .research-node-detail { display: grid; grid-template-columns: minmax(8rem, auto) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; padding: 0.9rem 1rem; border-left: 3px solid var(--ht-red); background: rgb(255 255 255 / 8%); animation: research-node-emphasis 240ms ease-out; }
 .research-node-detail strong { color: #fff; font-size: 0.95rem; }
@@ -310,6 +311,7 @@ nav a:focus-visible { color: var(--ht-red); }
 .china-entry-section article h3 { margin: 0.55rem 0; color: var(--ink); font-size: 1rem; line-height: 1.45; }
 .china-entry-section article p { margin: 0; color: var(--ink-muted); font-size: 1rem; line-height: 1.65; }
 .china-entry-section > header > p { color: #d0212a; }
+:root[data-theme="dark"] .china-entry-section > header > p { color: var(--ht-red); }
 .china-entry-section > button { min-width: 12rem; margin-top: 1rem; text-align: center; }
 
 .global-research-atlas > .research-transmission-map { margin-top: 1.5rem; }
