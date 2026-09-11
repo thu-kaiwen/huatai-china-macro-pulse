@@ -101,7 +101,7 @@
   .policy-day > time { padding-top: 0; }
 
   .research-home-lead h1 { font-size: clamp(2.4rem, 13vw, 3.7rem); }
-  .research-home-lead strong { padding-left: 1rem; font-size: 0.98rem; }
+  .research-home-lead strong { padding-left: 1rem; font-size: 1rem; }
   .research-transmission-map { margin-right: -1rem; margin-left: -1rem; padding: 1.25rem 1rem; }
   .research-transmission-map header { grid-template-columns: minmax(0, 1fr); gap: 0.65rem; }
   .research-layer-grid { grid-template-columns: minmax(0, 1fr); }
