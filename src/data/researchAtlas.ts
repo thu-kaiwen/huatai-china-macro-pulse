@@ -3,10 +3,10 @@ import type { ResearchAtlasData } from "../domain/researchAtlas";
 export const researchAtlasData: ResearchAtlasData = {
   layers: [
     { stage: "china", eyebrow: "01 CHINA FUNDAMENTALS", title: "中国基本面脉搏", nodes: [
+      { id: "regular-tracking", label: "定期跟踪", summary: "承接国内周报和国内月报，保留完整图表、数据与解读。" },
       { id: "activity", label: "经济活动", summary: "从生产、投资、消费、地产与高频指标观察经济运行。" },
       { id: "rates-fx", label: "利率汇率", summary: "跟踪利率曲线、流动性、人民币汇率和金融市场环境。" },
       { id: "policy-change", label: "政策变化", summary: "持续梳理宏观政策进展、重要会议与政策落地节奏。" },
-      { id: "regular-tracking", label: "定期跟踪", summary: "承接国内周报和国内月报，保留完整图表、数据与解读。" },
     ] },
     { stage: "overseas", eyebrow: "02 OVERSEAS ECONOMIES", title: "海外经济变化", nodes: [
       { id: "us", label: "美国", summary: "从增长、劳动力、财政和金融条件观察美国经济结构。" },

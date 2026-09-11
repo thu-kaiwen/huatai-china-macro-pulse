@@ -30,6 +30,7 @@ describe("research surfaces", () => {
     expect(screen.getAllByRole("article", { name: /原创研究专题/ })).toHaveLength(7);
     expect(screen.getAllByRole("article", { name: /研究重点/ })).toHaveLength(3);
     expect(screen.getByRole("button", { name: "黄金" })).toBeInTheDocument();
+    expect(within(screen.getByRole("group", { name: "中国基本面脉搏研究板块" })).getAllByRole("button")[0]).toHaveTextContent("定期跟踪");
 
     await user.click(within(screen.getByRole("region", { name: "中国基本面脉搏" })).getByRole("button", { name: "进入中国基本面脉搏" }));
     expect(onNavigate).toHaveBeenCalledWith("china");

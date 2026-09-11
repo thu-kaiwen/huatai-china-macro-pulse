@@ -11,7 +11,7 @@ describe("research atlas", () => {
       "中国基本面脉搏", "海外经济变化", "主题研究",
     ]);
     expect(researchAtlasData.layers[0]?.nodes.map((node) => node.label)).toEqual([
-      "经济活动", "利率汇率", "政策变化", "定期跟踪",
+      "定期跟踪", "经济活动", "利率汇率", "政策变化",
     ]);
     expect(researchAtlasData.layers[1]?.nodes.map((node) => node.label)).toEqual([
       "美国", "欧洲", "日本", "韩国", "新兴市场",
