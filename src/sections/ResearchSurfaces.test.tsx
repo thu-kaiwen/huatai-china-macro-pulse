@@ -23,7 +23,8 @@ describe("research surfaces", () => {
     );
 
     expect(screen.getByRole("heading", { name: "华泰宏观研究图谱" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "三大研究主线" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "三大研究主线" })).not.toBeInTheDocument();
+    expect(screen.getByText("HUATAI MACRO RESEARCH")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "本周研究重点" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "原创研究精选" })).toBeInTheDocument();
     expect(screen.getAllByRole("article", { name: /原创研究专题/ })).toHaveLength(7);

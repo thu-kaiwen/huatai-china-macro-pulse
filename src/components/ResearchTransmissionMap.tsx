@@ -22,8 +22,8 @@ export function ResearchTransmissionMap({ layers, onNavigate, title = "三大研
       : "查看海外经济变化";
 
   return (
-    <section aria-labelledby="research-map-title" className="research-transmission-map">
-      <header><p>HUATAI MACRO RESEARCH</p><h2 id="research-map-title">{title}</h2></header>
+    <section aria-label={title ? undefined : "华泰宏观研究"} aria-labelledby={title ? "research-map-title" : undefined} className="research-transmission-map">
+      <header><p>HUATAI MACRO RESEARCH</p>{title && <h2 id="research-map-title">{title}</h2>}</header>
       <div className="research-layer-grid">
         {layers.map((layer) => (
           <div aria-label={`${layer.title}研究板块`} className="research-layer" key={layer.stage} role="group">

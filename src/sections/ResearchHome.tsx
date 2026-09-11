@@ -21,7 +21,7 @@ export function ResearchHome({ data, weeklyReport, monthlyReport, onNavigate }: 
         </div>
         <strong>以全球视野和原创框架，持续跟踪中国基本面、海外经济与重要宏观主题。</strong>
       </header>
-      <ResearchTransmissionMap layers={data.layers} onNavigate={onNavigate} />
+      <ResearchTransmissionMap layers={data.layers} onNavigate={onNavigate} title="" />
       <section aria-labelledby="research-focus-title" className="research-focus-section">
         <header>
           <p>EDITOR&apos;S PICKS</p>
